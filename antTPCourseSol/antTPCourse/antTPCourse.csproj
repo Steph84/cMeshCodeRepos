@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FourmiChef.cs" />
+    <Compile Include="FourmiSoldat.cs" />
     <Compile Include="Fourmi.cs" />
     <Compile Include="FourmiReine.cs" />
+    <Compile Include="Oeufs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -6,14 +6,25 @@ using System.Threading.Tasks;
 
 namespace antTPCourse
 {
-    abstract class Fourmi
+    abstract class Fourmi : Oeufs
     {
-        public int id;
-        int hp;
-        int attack;
-        int defence;
+        protected string name;
+        protected int id;
+        protected int hp;
+        protected int attack;
+        protected int defence;
+        protected int coordX;
+        protected int coordY;
 
+        public void ShowName()
+        {
+            Console.WriteLine("My name is " + name + " number " + id);
+        }
 
-
+        void Oeufs.Eclore()
+        {
+            //creation of threads
+            throw new NotImplementedException();
+        }
     }
 }

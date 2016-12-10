@@ -15,7 +15,8 @@ namespace antTPCourse
 
             FourmiReine myQueen = new FourmiReine(1);
 
-            Console.WriteLine(myQueen.name + myQueen.id);
+            myQueen.ShowName();
+            
 
 
             Console.Read();
