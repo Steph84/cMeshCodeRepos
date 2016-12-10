@@ -12,19 +12,14 @@ namespace antTPCourse
     {
         static void Main(string[] args)
         {
-
-            Console.WriteLine("Hello !");
-
-            FourmiReine myQueen = new FourmiReine(1, 10);
+            Console.WriteLine("This is an ant hill");
+            Console.WriteLine("===================");
+            
+            FourmiReine myQueen = new FourmiReine(1, 25);
             Thread queenThread = new Thread ( new ThreadStart ( myQueen.queenRun ) ); // thread object
             queenThread.Start(); // start the thread
             while (!queenThread.IsAlive);
-
-
-            myQueen.ShowName();
             
-
-
             Console.Read();
 
         }

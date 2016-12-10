@@ -22,18 +22,28 @@ namespace antTPCourse
             coordX = 0;
             coordY = 0;
             numEggs = pNumEggs;
+            ShowName();
         }
 
         internal void Ponte(int pEggs, int pX, int pY)
         {
+            Random antChoice = new Random();
+            int masterNum;
             int i = 0;
+
+            masterNum = pEggs / 20 + 1;
+
+            for (i = 0; i < masterNum; i++)
+            {
+                FourmiChef myMaster = new FourmiChef(( i + 1 ), pX, pY);
+            }
+
             for (i = 0; i < pEggs; i++)
             {
-                FourmiSoldat monSoldat = new FourmiSoldat(( i + 1 ), pX, pY);
+                int thisMasId = antChoice.Next(1, masterNum + 1);
+                FourmiSoldat monSoldat = new FourmiSoldat(( i + 1 ), thisMasId, pX, pY);
                 eggsList.Add(monSoldat);
-                Console.WriteLine("Warrior egg number " + (i + 1) + " laid !");
             }
-            
             
         }
 
@@ -41,11 +51,20 @@ namespace antTPCourse
         {
             Console.WriteLine("I am alive as an ant queen !");
             Ponte(numEggs, coordX, coordY);
+            sendHatch();
             while (true)
             {
 
                 Thread.Sleep(500);
                 Console.WriteLine("Ant Queen alive ...");
+            }
+        }
+
+        private void sendHatch()
+        {
+            foreach(Oeufs thisEgg in eggsList)
+            {
+                thisEgg.Eclore();
             }
         }
         

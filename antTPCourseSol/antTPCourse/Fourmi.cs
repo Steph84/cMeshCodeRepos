@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace antTPCourse
 {
@@ -24,7 +25,16 @@ namespace antTPCourse
         void Oeufs.Eclore()
         {
             //creation of threads
-            throw new NotImplementedException();
+            new Thread(antRun()).Start();
+
+            //Thread antThread = new Thread(new ThreadStart(this.id.antRun())); // thread object
+            //antThread.Start(); // start the thread
+            Console.WriteLine("________________________ yahooooooooooooooo");
+        }
+
+        private ThreadStart antRun()
+        {
+            Console.WriteLine("thread abstract");
         }
     }
 }
