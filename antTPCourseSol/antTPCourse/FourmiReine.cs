@@ -20,12 +20,12 @@ namespace antTPCourse
         private List<Thread> antThreads = new List<Thread>();
 
 
-        public FourmiReine(int pId, int pNumEggs)
+        public FourmiReine(int pId, int pNumEggs, int pX, int pY)
         {
             name = "Queen";
             id = pId;
-            coordX = 0;
-            coordY = 0;
+            coordX = pX;
+            coordY = pY;
             numEggs = pNumEggs;
             //ShowName();
         }
@@ -38,7 +38,7 @@ namespace antTPCourse
             while (true)
             {
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
                 Console.WriteLine("Ant Queen alive ...");
             }
         }
@@ -55,14 +55,14 @@ namespace antTPCourse
 
             for (i = 0; i < masterNum; i++)
             {
-                FourmiChef myMaster = new FourmiChef((i + 1), pX, pY);
+                FourmiChef myMaster = new FourmiChef((i + 1), this.id, pX, pY);
                 masterList.Add(myMaster);
             }
 
             for (i = 0; i < pEggs; i++)
             {
                 int thisMasId = antChoice.Next(1, masterNum + 1);
-                FourmiSoldat monSoldat = new FourmiSoldat((i + 1), thisMasId, pX, pY);
+                FourmiSoldat monSoldat = new FourmiSoldat((i + 1), thisMasId, this.id, pX, pY);
                 warriorList.Add(monSoldat);
             }
         }

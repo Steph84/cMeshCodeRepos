@@ -10,12 +10,15 @@ namespace antTPCourse
 {
     class FourmiChef : Fourmi
     {
-        internal FourmiChef(int pId, int pX, int pY)
+        protected int queenId;
+
+        internal FourmiChef(int pId, int pQueId, int pX, int pY)
         {
             name = "Master";
             id = pId;
             coordX = pX;
             coordY = pY;
+            queenId = pQueId;
             //Console.WriteLine("Master egg number " + id + " has been laid !");
         }
 
@@ -24,8 +27,9 @@ namespace antTPCourse
             while (true)
             {
 
-                Thread.Sleep(1000);
-                Console.WriteLine("Ant Master " + this.id + " alive ...");
+                Thread.Sleep(2000);
+                Console.WriteLine("Ant Master " + this.id + " from the queen " +  queenId + " alive ...");
+                
             }
         }
 
