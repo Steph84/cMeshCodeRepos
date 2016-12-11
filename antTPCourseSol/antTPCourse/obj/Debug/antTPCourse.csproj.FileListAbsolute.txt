@@ -1,6 +1,6 @@
 C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\bin\Debug\antTPCourse.exe.config
 C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\bin\Debug\antTPCourse.exe
 C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\bin\Debug\antTPCourse.pdb
-C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\obj\Debug\antTPCourse.csprojResolveAssemblyReference.cache
 C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\obj\Debug\antTPCourse.exe
 C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\obj\Debug\antTPCourse.pdb
+C:\Users\Stephane\Documents\GitHub\cMeshCodeRepos\antTPCourseSol\antTPCourse\obj\Debug\antTPCourse.csprojResolveAssemblyReference.cache

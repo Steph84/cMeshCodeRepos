@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+
 
 namespace antTPCourse
 {
@@ -14,12 +16,17 @@ namespace antTPCourse
             id = pId;
             coordX = pX;
             coordY = pY;
-            Console.WriteLine("Master egg number " + id + " has been laid !");
+            //Console.WriteLine("Master egg number " + id + " has been laid !");
         }
 
         internal void antRun()
         {
-            Console.WriteLine("I am alive as an ant master !");
+            while (true)
+            {
+
+                Thread.Sleep(1000);
+                Console.WriteLine("Ant Master " + this.id + " alive ...");
+            }
         }
 
 

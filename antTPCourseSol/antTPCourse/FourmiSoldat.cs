@@ -20,12 +20,17 @@ namespace antTPCourse
             coordX = pX;
             coordY = pY;
             masterId = pMasId;
-            Console.WriteLine("Warrior egg number " + id + " has been laid ! Its Master is number " + masterId);
+            //Console.WriteLine("Warrior egg number " + id + " has been laid ! Its Master is number " + masterId);
         }
 
-        private ThreadStart antRun()
+        internal void antRun()
         {
-            Console.WriteLine("thread ant warrior !");
+            while (true)
+            {
+
+                Thread.Sleep(2000);
+                Console.WriteLine("Ant Warrior " + this.id + " of the master " + this.masterId + " alive ...");
+            }
         }
 
 

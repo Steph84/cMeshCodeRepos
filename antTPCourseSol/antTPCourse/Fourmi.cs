@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace antTPCourse
 {
-    abstract class Fourmi : Oeufs
+    abstract class Fourmi //: Oeufs
     {
         protected string name;
         protected int id;
@@ -22,19 +22,19 @@ namespace antTPCourse
             Console.WriteLine("My name is " + name + " number " + id);
         }
 
+
+        /*
         void Oeufs.Eclore()
         {
             //creation of threads
-            new Thread(antRun()).Start();
-
-            //Thread antThread = new Thread(new ThreadStart(this.id.antRun())); // thread object
-            //antThread.Start(); // start the thread
-            Console.WriteLine("________________________ yahooooooooooooooo");
+            this.antRun();
+            //Console.WriteLine("________________________ yahooooooooooooooo");
         }
 
-        private ThreadStart antRun()
+        private void antRun()
         {
             Console.WriteLine("thread abstract");
         }
+        */
     }
 }
