@@ -28,7 +28,7 @@ namespace antTPCourse
             {
 
                 Thread.Sleep(2000);
-                Console.WriteLine("Ant Master " + this.id + " from the queen " +  queenId + " alive ...");
+                //Console.WriteLine("Ant Master " + this.id + " from the queen " +  queenId + " alive ...");
                 
             }
         }

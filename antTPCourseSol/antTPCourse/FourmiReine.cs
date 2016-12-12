@@ -10,15 +10,10 @@ namespace antTPCourse
 {
     class FourmiReine : Fourmi
     {
-
         private int numEggs;
 
         internal List<FourmiChef> masterList = new List<FourmiChef>();
         internal List<FourmiSoldat> warriorList = new List<FourmiSoldat>();
-
-        //private List<Oeufs> eggsList = new List<Oeufs>();
-        private List<Thread> antThreads = new List<Thread>();
-
 
         public FourmiReine(int pId, int pNumEggs, int pX, int pY)
         {
@@ -39,7 +34,7 @@ namespace antTPCourse
             {
 
                 Thread.Sleep(5000);
-                Console.WriteLine("Ant Queen alive ...");
+                //Console.WriteLine("Ant Queen alive ...");
             }
         }
 
@@ -51,7 +46,7 @@ namespace antTPCourse
 
             masterNum = pEggs / 20 + 1;
 
-            Console.WriteLine("I'm laying " + pEggs + " warrior Eggs. And " + masterNum + " master Egg(s) to manage them");
+            //Console.WriteLine("I'm laying " + pEggs + " warrior Eggs. And " + masterNum + " master Egg(s) to manage them");
 
             for (i = 0; i < masterNum; i++)
             {

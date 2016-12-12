@@ -11,12 +11,32 @@ namespace antTPCourse
         internal int mapWidth;
         internal int mapHeight;
         internal int tileSize;
+        internal int nbColumns;
+        internal int nbLines;
+
 
         internal Terrain(int pWidth, int pHeight, int pTileSize)
         {
             mapWidth = pWidth;
             mapHeight = pHeight;
             tileSize = pTileSize;
+
+            nbColumns = mapWidth/tileSize;
+            nbLines = mapHeight/tileSize;
+
+            int i, j, tempId ;
+
+            Tile[,] floor = new Tile[nbColumns, nbLines];
+            for(i = 0; i < nbColumns; i++)
+            {
+                for(j = 0; j < nbLines; j++)
+                {
+                    tempId = Convert.ToInt32(string.Format("{0}{1}", i, j)); // concatenate 2 numbers for the id .NET-ish
+                    floor[i, j] = new Tile(tempId, i, j, "NOTHING", 0, 0);
+                }
+            }
+
+
         }
 
     }

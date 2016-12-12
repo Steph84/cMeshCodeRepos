@@ -47,7 +47,6 @@
     <Compile Include="FourmiSoldat.cs" />
     <Compile Include="Fourmi.cs" />
     <Compile Include="FourmiReine.cs" />
-    <Compile Include="Oeufs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Terrain.cs" />

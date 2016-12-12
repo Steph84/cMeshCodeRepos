@@ -8,16 +8,26 @@ using System.Threading;
 
 namespace antTPCourse
 {
+    static class Constants
+    {
+        public static int windowWidth = 800;
+        public static int windowHeight = 800;
+        public static int tileSize = 32;
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
             Console.WriteLine("This is an ant hill");
             Console.WriteLine("===================");
-            
+
+            // creation of the ;ap
+            Terrain myMap = new Terrain(Constants.windowWidth, Constants.windowHeight, Constants.tileSize);
+
             // creation of the first queen
-            FourmiReine myQueen = new FourmiReine(1, 25, 0, 0);
-            Thread queenThread = new Thread ( new ThreadStart ( myQueen.queenRun ) ); // thread object
+            FourmiReine myQueen = new FourmiReine(1, 10, 0, 0);
+            Thread queenThread = new Thread ( new ThreadStart ( myQueen.queenRun ) ); // creation of the thread object
             if (!queenThread.IsAlive)
             {
                 queenThread.Start(); // start the thread
