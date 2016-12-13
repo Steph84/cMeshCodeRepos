@@ -40,11 +40,11 @@ namespace antTPCourse
 
         internal void Ponte(int pEggs, int pX, int pY)
         {
-            Random antChoice = new Random();
+            Random antChoice = new Random(); // creation of the random object
             int masterNum;
             int i = 0;
 
-            masterNum = pEggs / 20 + 1;
+            masterNum = pEggs / 20 + 1; // calc of the number of master to create
 
             //Console.WriteLine("I'm laying " + pEggs + " warrior Eggs. And " + masterNum + " master Egg(s) to manage them");
 
@@ -62,6 +62,7 @@ namespace antTPCourse
             }
         }
 
+        // creation of the threads for all the ants
         private void sendHatch()
         {
             Console.WriteLine("Come into life my minions !");

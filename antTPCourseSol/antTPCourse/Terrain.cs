@@ -26,8 +26,10 @@ namespace antTPCourse
 
             int i, j, tempId ;
 
-            Tile[,] floor = new Tile[nbColumns, nbLines];
-            for(i = 0; i < nbColumns; i++)
+            Tile[,] floor = new Tile[nbColumns, nbLines]; // creation of the array of Tile objects
+
+            // initialization of each Tile
+            for (i = 0; i < nbColumns; i++)
             {
                 for(j = 0; j < nbLines; j++)
                 {

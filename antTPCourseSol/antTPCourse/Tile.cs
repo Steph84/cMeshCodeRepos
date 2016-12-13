@@ -25,6 +25,7 @@ namespace antTPCourse
             pheroRate = pPhero;
         }
 
+        //manage the evaporation of the pheromon
         internal void Evaporation()
         {
             if (pheroRate > 0)
