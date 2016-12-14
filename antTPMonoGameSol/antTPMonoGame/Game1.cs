@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace antTPMonoGame
 {
@@ -15,7 +16,13 @@ namespace antTPMonoGame
         int picHeight;
         Vector2 picOrigin;
         Vector2 antPosition;
-        int antRot;
+        float antRot;
+        string antDir;
+        int antSpeed;
+        string antMov;
+        Random antChoice;
+        int antRdSeed;
+        float myPI = 3.14159f;
 
         public Game1()
         {
@@ -49,6 +56,9 @@ namespace antTPMonoGame
 
             antPosition = new Vector2(GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
             antRot = 0;
+            antDir = "North";
+            antSpeed = 2;
+            antMov = "OnTheMove";
 
         }
         
@@ -64,7 +74,92 @@ namespace antTPMonoGame
                 Exit();
 
             // TODO: Add your update logic here
+            antRdSeed = Environment.TickCount + (int)antPosition.X;
+            antChoice = new Random(antRdSeed);
+            
+            if (antMov == "OnTheMove")
+            {
+                if (antDir == "North")
+                {
+                    antRot = 0;
+                    antPosition.Y = antPosition.Y - antSpeed;
+                    if (antPosition.Y < (0 + picOrigin.Y + 10))
+                    {
+                        antMov = "Stopped";
+                    }
+                }
 
+                if (antDir == "South")
+                {
+                    antRot = myPI;
+                    antPosition.Y = antPosition.Y + antSpeed;
+                    if (antPosition.Y > (GraphicsDevice.Viewport.Height - picOrigin.Y - 10))
+                    {
+                        antMov = "Stopped";
+                    }
+                }
+
+                if (antDir == "West")
+                {
+                    antRot = - myPI/2;
+                    antPosition.X = antPosition.X - antSpeed;
+                    if (antPosition.X < (0 + picOrigin.X + 10))
+                    {
+                        antMov = "Stopped";
+                    }
+                }
+
+                if (antDir == "East")
+                {
+                    antRot = myPI/2;
+                    antPosition.X = antPosition.X + antSpeed;
+                    if (antPosition.X > (GraphicsDevice.Viewport.Width - picOrigin.X - 10))
+                    {
+                        antMov = "Stopped";
+                    }
+                }
+            }
+
+            if (antMov == "Stopped")
+            {
+                int tempRd = antChoice.Next(1, (8 + 1));
+                switch (tempRd)
+                {
+                    case 1:
+                        antDir = "North";
+                        antMov = "OnTheMove";
+                        break;
+                    case 2:
+                        antDir = "NorthEast";
+                        antMov = "OnTheMove";
+                        break;
+                    case 3:
+                        antDir = "East";
+                        antMov = "OnTheMove";
+                        break;
+                    case 4:
+                        antDir = "SouthEast";
+                        antMov = "OnTheMove";
+                        break;
+                    case 5:
+                        antDir = "South";
+                        antMov = "OnTheMove";
+                        break;
+                    case 6:
+                        antDir = "SouthWest";
+                        antMov = "OnTheMove";
+                        break;
+                    case 7:
+                        antDir = "West";
+                        antMov = "OnTheMove";
+                        break;
+                    case 8:
+                        antDir = "NorthWest";
+                        antMov = "OnTheMove";
+                        break;
+                }
+            }
+            
 
             base.Update(gameTime);
         }
