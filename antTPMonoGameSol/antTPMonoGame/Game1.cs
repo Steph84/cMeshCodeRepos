@@ -23,6 +23,7 @@ namespace antTPMonoGame
         Random antChoice;
         int antRdSeed;
         float myPI = 3.14159f;
+        string sideBumped;
 
         public Game1()
         {
@@ -59,6 +60,7 @@ namespace antTPMonoGame
             antDir = "North";
             antSpeed = 2;
             antMov = "OnTheMove";
+            sideBumped = null;
 
         }
         
@@ -79,86 +81,100 @@ namespace antTPMonoGame
             
             if (antMov == "OnTheMove")
             {
-                if (antDir == "North")
+                if (antPosition.Y < (0 + picOrigin.Y + 10))
                 {
-                    antRot = 0;
-                    antPosition.Y = antPosition.Y - antSpeed;
-                    if (antPosition.Y < (0 + picOrigin.Y + 10))
-                    {
-                        antMov = "Stopped";
-                    }
+                    antMov = "Stopped";
+                    sideBumped = "North";
+                }
+                if (antPosition.Y > (GraphicsDevice.Viewport.Height - picOrigin.Y - 10))
+                {
+                    antMov = "Stopped";
+                    sideBumped = "South";
+                }
+                if (antPosition.X < (0 + picOrigin.X + 10))
+                {
+                    antMov = "Stopped";
+                    sideBumped = "West";
+                }
+                if (antPosition.X > (GraphicsDevice.Viewport.Width - picOrigin.X - 10))
+                {
+                    antMov = "Stopped";
+                    sideBumped = "East";
                 }
 
-                if (antDir == "South")
+
+
+                switch (antDir)
                 {
-                    antRot = myPI;
-                    antPosition.Y = antPosition.Y + antSpeed;
-                    if (antPosition.Y > (GraphicsDevice.Viewport.Height - picOrigin.Y - 10))
-                    {
-                        antMov = "Stopped";
-                    }
+                    case "North":
+                        antRot = 0;
+                        antPosition.Y = antPosition.Y - antSpeed;
+                        break;
+                    case "South":
+                        antRot = myPI;
+                        antPosition.Y = antPosition.Y + antSpeed;
+                        break;
+                    case "West":
+                        antRot = -myPI / 2;
+                        antPosition.X = antPosition.X - antSpeed;
+                        break;
+                    case "East":
+                        antRot = myPI / 2;
+                        antPosition.X = antPosition.X + antSpeed;
+                        break;
+                    case "NorthEast":
+                        break;
                 }
 
-                if (antDir == "West")
-                {
-                    antRot = - myPI/2;
-                    antPosition.X = antPosition.X - antSpeed;
-                    if (antPosition.X < (0 + picOrigin.X + 10))
-                    {
-                        antMov = "Stopped";
-                    }
-                }
-
-                if (antDir == "East")
-                {
-                    antRot = myPI/2;
-                    antPosition.X = antPosition.X + antSpeed;
-                    if (antPosition.X > (GraphicsDevice.Viewport.Width - picOrigin.X - 10))
-                    {
-                        antMov = "Stopped";
-                    }
-                }
             }
 
             if (antMov == "Stopped")
             {
-                int tempRd = antChoice.Next(1, (8 + 1));
-                switch (tempRd)
+                int tempRd = 7; // antChoice.Next(1, (8 + 1));
+
+                switch (sideBumped)
                 {
-                    case 1:
-                        antDir = "North";
-                        antMov = "OnTheMove";
+                    case "North":
+                        switch (tempRd)
+                        {
+                            case 1:
+                                antDir = "North";
+                                antMov = "Stopped";
+                                break;
+                            case 2:
+                                antDir = "NorthEast";
+                                antMov = "Stopped";
+                                break;
+                            case 3:
+                                antDir = "East";
+                                antMov = "OnTheMove";
+                                break;
+                            case 4:
+                                antDir = "SouthEast";
+                                antMov = "OnTheMove";
+                                break;
+                            case 5:
+                                antDir = "South";
+                                antMov = "OnTheMove";
+                                break;
+                            case 6:
+                                antDir = "SouthWest";
+                                antMov = "OnTheMove";
+                                break;
+                            case 7:
+                                antDir = "West";
+                                antMov = "OnTheMove";
+                                break;
+                            case 8:
+                                antDir = "NorthWest";
+                                antMov = "Stopped";
+                                break;
+                        }
                         break;
-                    case 2:
-                        antDir = "NorthEast";
-                        antMov = "OnTheMove";
-                        break;
-                    case 3:
-                        antDir = "East";
-                        antMov = "OnTheMove";
-                        break;
-                    case 4:
-                        antDir = "SouthEast";
-                        antMov = "OnTheMove";
-                        break;
-                    case 5:
-                        antDir = "South";
-                        antMov = "OnTheMove";
-                        break;
-                    case 6:
-                        antDir = "SouthWest";
-                        antMov = "OnTheMove";
-                        break;
-                    case 7:
-                        antDir = "West";
-                        antMov = "OnTheMove";
-                        break;
-                    case 8:
-                        antDir = "NorthWest";
-                        antMov = "OnTheMove";
-                        break;
-                }
-            }
+                 }
+
+                
+              }
             
 
             base.Update(gameTime);
