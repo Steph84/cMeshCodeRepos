@@ -16,9 +16,12 @@ namespace raceGame01
         Vector2 posCar;
         Vector2 originCar;
         Vector2 speed = Vector2.Zero;
+        Vector2 gForce = Vector2.Zero;
         int spriteSize = 128;
         float carDir = 0;
         int maxSpeed = 10;
+        float gForcePond = 0.1f;
+
 
         public Game1()
         {
@@ -33,7 +36,7 @@ namespace raceGame01
             float initY = -6.5f;
             posMap = new Vector2(initX*spriteSize, initY*spriteSize);
             posCar = new Vector2(GraphicsDevice.Viewport.Width/2, GraphicsDevice.Viewport.Height/2);
-            originCar = new Vector2(car01.Width / 2, car01.Height / 4);
+            originCar = new Vector2(car01.Width / 2, 0);
         }
         
         protected override void LoadContent()
@@ -57,21 +60,46 @@ namespace raceGame01
             
             KeyboardState state = Keyboard.GetState();
             
-            if (state.IsKeyDown(Keys.Right))
+           
+            if (state.IsKeyDown(Keys.Down))
+            {
+                speed.X = (float)(maxSpeed * Math.Sin(-carDir));
+                speed.Y = (float)(maxSpeed * Math.Cos(-carDir));
+                posMap.X = posMap.X - speed.X;
+                posMap.Y = posMap.Y - speed.Y;
+                originCar.Y = 3 * car01.Height / 5;
+            }
+
+            
+            if (state.IsKeyDown(Keys.Right) && state.IsKeyDown(Keys.Up))
+            {
+                speed.X = (float)(maxSpeed * Math.Sin(-carDir));
+                speed.Y = (float)(maxSpeed * Math.Cos(-carDir));
+                posMap.X = posMap.X + speed.X + gForce.X;
+                posMap.Y = posMap.Y + speed.Y + gForce.Y;
+                originCar.Y = 2 * car01.Height / 5;
                 carDir += 0.1f;
-            if (state.IsKeyDown(Keys.Left))
+                gForce.X = speed.X * gForcePond;
+                gForce.Y = -speed.Y * gForcePond;
+            }
+            else if(state.IsKeyDown(Keys.Left) && state.IsKeyDown(Keys.Up))
+            {
+                speed.X = (float)(maxSpeed * Math.Sin(-carDir));
+                speed.Y = (float)(maxSpeed * Math.Cos(-carDir));
+                posMap.X = posMap.X + speed.X + gForce.X;
+                posMap.Y = posMap.Y + speed.Y + gForce.Y;
+                originCar.Y = 2 * car01.Height / 5;
                 carDir -= 0.1f;
-            if (state.IsKeyDown(Keys.Up))
+                gForce.X = -speed.X * gForcePond;
+                gForce.Y = speed.Y * gForcePond;
+            }
+            else if (state.IsKeyDown(Keys.Up))
             {
                 speed.X = (float)(maxSpeed * Math.Sin(-carDir));
                 speed.Y = (float)(maxSpeed * Math.Cos(-carDir));
                 posMap.X = posMap.X + speed.X;
                 posMap.Y = posMap.Y + speed.Y;
             }
-                
-            if (state.IsKeyDown(Keys.Down))
-                posMap.Y -= maxSpeed;
-
 
 
 
