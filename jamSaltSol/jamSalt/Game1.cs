@@ -12,6 +12,13 @@ namespace jamSalt
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Texture2D riverParticle;
+        int riverWidth;
+        int riverHeight;
+        int riverX;
+        int riverY;
+        Rectangle river;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -27,6 +34,10 @@ namespace jamSalt
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            riverWidth = GraphicsDevice.Viewport.Width;
+            riverHeight = GraphicsDevice.Viewport.Height/5;
+            riverX = 0;
+            riverY = GraphicsDevice.Viewport.Height/2 - riverHeight/2;
 
             base.Initialize();
         }
@@ -41,6 +52,8 @@ namespace jamSalt
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            riverParticle = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            riverParticle.SetData(new[] { Color.White });
         }
 
         /// <summary>
@@ -50,6 +63,7 @@ namespace jamSalt
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+            riverParticle.Dispose();
         }
 
         /// <summary>
@@ -73,9 +87,16 @@ namespace jamSalt
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.SeaGreen);
+
+            river = new Rectangle(riverX, riverY, riverWidth, riverHeight);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(riverParticle, river, Color.RoyalBlue);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
