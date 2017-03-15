@@ -78,7 +78,7 @@ namespace raceGame01
                 posMap.X = posMap.X + speed.X + gForce.X;
                 posMap.Y = posMap.Y + speed.Y + gForce.Y;
                 originCar.Y = 2 * car01.Height / 5;
-                carDir += 0.1f;
+                carDir += 0.07f;
                 gForce.X = speed.X * gForcePond;
                 gForce.Y = -speed.Y * gForcePond;
             }
@@ -89,7 +89,7 @@ namespace raceGame01
                 posMap.X = posMap.X + speed.X + gForce.X;
                 posMap.Y = posMap.Y + speed.Y + gForce.Y;
                 originCar.Y = 2 * car01.Height / 5;
-                carDir -= 0.1f;
+                carDir -= 0.07f;
                 gForce.X = -speed.X * gForcePond;
                 gForce.Y = speed.Y * gForcePond;
             }
