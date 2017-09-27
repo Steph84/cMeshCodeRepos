@@ -9,10 +9,11 @@ namespace blockMenu
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        GameWindow gameWindow;
-        int windowWidth = 8000; // default
-        int windowHeight = 480; // default
+        
+        //int windowWidth = 800; // default
+        //int windowHeight = 480; // default
+        int windowWidth = 960; // optimize
+        int windowHeight = 576; // optimize
         SpriteFont font;
         string title1 = "Title 01 oooooooooooooooooooooooooooooooooooooooooooooooooo";
 
@@ -35,18 +36,24 @@ namespace blockMenu
             font = Content.Load<SpriteFont>("title01");
             Vector2 size = font.MeasureString(title1);
             Console.WriteLine(size);
-
-
-
-
-            graphics.IsFullScreen = true;
+            
+            graphics.PreferredBackBufferWidth = windowWidth;
+            graphics.PreferredBackBufferHeight = windowHeight;
+            Window.AllowAltF4 = true;
+            //Window.IsBorderless = true;
+            Window.Title = "Fuckt It !";
+            Window.Position = new Point(0, 0);
+            //graphics.IsFullScreen = true;
             graphics.ApplyChanges();
 
+            int ScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            int ScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            Console.WriteLine(ScreenWidth.ToString() + " : " +  ScreenHeight.ToString());
             //Console.WriteLine(GraphicsDevice.Viewport.Height);
             //Console.WriteLine(GraphicsDevice.Viewport.Width);
 
         }
-        
+
         protected override void UnloadContent()
         {
         }
