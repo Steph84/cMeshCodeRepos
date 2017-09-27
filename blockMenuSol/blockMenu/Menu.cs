@@ -20,7 +20,6 @@ namespace blockMenu
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            Window.Position = new Point(200, 50);
         }
 
         protected override void Initialize()
@@ -36,15 +35,15 @@ namespace blockMenu
             font = Content.Load<SpriteFont>("title01");
             Vector2 size = font.MeasureString(title1);
             Console.WriteLine(size);
-            
 
 
 
-            //graphics.IsFullScreen = true;
-            //graphics.ApplyChanges();
 
-            Console.WriteLine(GraphicsDevice.Viewport.Height);
-            Console.WriteLine(GraphicsDevice.Viewport.Width);
+            graphics.IsFullScreen = true;
+            graphics.ApplyChanges();
+
+            //Console.WriteLine(GraphicsDevice.Viewport.Height);
+            //Console.WriteLine(GraphicsDevice.Viewport.Width);
 
         }
         
