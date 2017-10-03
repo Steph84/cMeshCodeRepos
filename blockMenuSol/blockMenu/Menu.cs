@@ -25,7 +25,11 @@ namespace blockMenu
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            WindowDimension MyWindow =
+                new WindowDimension(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode,
+                                    GraphicsDevice.Viewport,
+                                    Window,
+                                    graphics);
 
             base.Initialize();
         }
@@ -33,24 +37,11 @@ namespace blockMenu
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
             font = Content.Load<SpriteFont>("title01");
             Vector2 size = font.MeasureString(title1);
-            Console.WriteLine(size);
             
-            graphics.PreferredBackBufferWidth = windowWidth;
-            graphics.PreferredBackBufferHeight = windowHeight;
-            Window.AllowAltF4 = true;
-            //Window.IsBorderless = true;
-            Window.Title = "Fuckt It !";
-            Window.Position = new Point(0, 0);
-            //graphics.IsFullScreen = true;
-            graphics.ApplyChanges();
 
-            int ScreenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int ScreenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            Console.WriteLine(ScreenWidth.ToString() + " : " +  ScreenHeight.ToString());
-            //Console.WriteLine(GraphicsDevice.Viewport.Height);
-            //Console.WriteLine(GraphicsDevice.Viewport.Width);
 
         }
 
