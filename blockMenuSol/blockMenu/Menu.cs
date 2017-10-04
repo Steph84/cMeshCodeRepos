@@ -10,10 +10,6 @@ namespace blockMenu
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         
-        //int windowWidth = 800; // default
-        //int windowHeight = 480; // default
-        int windowWidth = 960; // optimize
-        int windowHeight = 576; // optimize
         SpriteFont font;
         string title1 = "Title 01 oooooooooooooooooooooooooooooooooooooooooooooooooo";
 
