@@ -19,3 +19,8 @@
 /processorParam:TextureFormat=Compressed
 /build:title01.spritefont
 
+#begin NewXmlContent.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:NewXmlContent.xml
+

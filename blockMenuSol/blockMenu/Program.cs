@@ -14,7 +14,7 @@ namespace blockMenu
         [STAThread]
         static void Main()
         {
-            using (var menu = new Menu())
+            using (var menu = new MenuBlock())
                 menu.Run();
         }
     }

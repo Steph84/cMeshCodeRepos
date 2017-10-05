@@ -24,7 +24,7 @@ namespace blockMenu
                                                             { 1920, 1080, 1728, 864 },
                                                             { 2560, 1440, 2304, 1152 },
                                                             { 3840, 2160, 3456, 1728 }
-                                                       };
+                                                        };
 
         #region WindowDimension Constructor
         public WindowDimension(DisplayMode pCurrentDisplayMode, Viewport pViewport, GameWindow pGameWindow, GraphicsDeviceManager pGraphics)
@@ -67,12 +67,13 @@ namespace blockMenu
             // foreach height value of display, choose the correct resolution
             for (int line = 0; line < ArrayResolution.GetLength(0); line++)
             {
-                if(DisplayHeight >= ArrayResolution[line, 1])
+                if (DisplayHeight >= ArrayResolution[line, 1])
                 {
                     newGameWindowWidth = ArrayResolution[line, 2];
                     newGameWindowHeight = ArrayResolution[line, 3];
-                    break;
                 }
+                else
+                    break;
             }
 
             // check if the GameWindow overlap the Display
