@@ -5,7 +5,7 @@ using System;
 
 namespace blockMenu
 {
-    public class MenuBlock : Game
+    public class Main : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -15,7 +15,7 @@ namespace blockMenu
 
         Tuple<int, int> GameWindowSize;
         
-        public MenuBlock()
+        public Main()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
