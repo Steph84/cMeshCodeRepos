@@ -1,13 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace blockMenu
@@ -25,13 +20,14 @@ namespace blockMenu
         
         public class LineProperties
         {
-            //public SpriteFont Font { get; }
+            //public SpriteFont Font { get; set; }
             public string Value { get; set; }
             public Vector2 AnchorPosition { get; set; }
             //public Color Color { get; set; }
-            public LineAlignment Alignment { get; }
+            public LineAlignment Alignment { get; set; }
         }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public enum LineAlignment
         {
             Left = 1,
