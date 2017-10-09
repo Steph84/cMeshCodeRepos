@@ -1,0 +1,11 @@
+﻿{
+  "MaintTitle": {
+    "Value": "un",
+    "AnchorPosition": "1, 2",
+    "Alignment": "Center"
+    },
+  "SubTitle": {
+    "Value": "deux"
+  }
+
+}

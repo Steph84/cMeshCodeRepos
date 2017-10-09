@@ -23,6 +23,9 @@ namespace blockMenu
             Font = pContent.Load<SpriteFont>("title01");
             SpriteBatch = pSpriteBatch;
 
+            LoadMenuData truc = new LoadMenuData();
+            truc.LoadJson();
+
         }
 
         public void MenuDraw(GameTime pGameTime)
