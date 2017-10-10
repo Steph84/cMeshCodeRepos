@@ -97,6 +97,10 @@ namespace blockMenu
             // update the GameWindow
             Graphics.PreferredBackBufferWidth = newGameWindowWidth;
             Graphics.PreferredBackBufferHeight = newGameWindowHeight;
+
+            // update the size in the object
+            GameWindowWidth = newGameWindowWidth;
+            GameWindowHeight = newGameWindowHeight;
         }
         #endregion
     }

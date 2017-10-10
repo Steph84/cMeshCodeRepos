@@ -3,7 +3,7 @@
     {
       "ItemName": "MainTitle",
       "Value": "This is the main title",
-      "AnchorPosition": "50, 50",
+      "AnchorPosition": "0, 50",
       "Alignment": "Center",
       "Color": "Red",
       "FontFileName": "title01"
@@ -11,10 +11,20 @@
     {
       "ItemName": "SubTitle",
       "Value": "That is the sub title",
-      "AnchorPosition": "50, 100",
+      "AnchorPosition": "0, 100",
+      "Alignment": "Right",
+      "Color": "Chartreuse",
+      "FontFileName": "title01",
+      "WidthLimit":  "0.9"
+    },
+    {
+      "ItemName": "SubSubTitle",
+      "Value": "It is another sub sub title",
+      "AnchorPosition": "0, 200",
       "Alignment": "Left",
       "Color": "Chartreuse",
-      "FontFileName": "title01"
+      "FontFileName": "title01",
+      "WidthLimit":  "0.9"
     }
   ]
 }

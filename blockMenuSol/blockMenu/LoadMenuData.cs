@@ -18,12 +18,13 @@ namespace blockMenu
         public class LineProperties
         {
             public string ItemName { get; set; }
-            public string FontFileName { get; set; }
-            public string Value { get; set; }
+            public string Value { get; set; } // the title itself
             public Vector2 AnchorPosition { get; set; }
             public ColorName Color { get; set; }
+            public string FontFileName { get; set; }
+            public SpriteFont Font { get; set; } // loaded after with the FontFileName
             public LineAlignment Alignment { get; set; }
-            public SpriteFont Font { get; set; }
+            public float WidthLimit { get; set; } // percentage for Left and Right offset
         }
 
         [JsonConverter(typeof(StringEnumConverter))]
