@@ -1,0 +1,20 @@
+﻿{
+  "MenuItems": [
+    {
+      "ItemName": "MainTitle",
+      "Value": "This is the main title",
+      "AnchorPosition": "50, 50",
+      "Alignment": "Center",
+      "Color": "Red",
+      "FontFileName": "title01"
+    },
+    {
+      "ItemName": "SubTitle",
+      "Value": "That is the sub title",
+      "AnchorPosition": "50, 100",
+      "Alignment": "Left",
+      "Color": "Chartreuse",
+      "FontFileName": "title01"
+    }
+  ]
+}

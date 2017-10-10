@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using static blockMenu.LoadMenuData;
 
 namespace blockMenu
 {
@@ -11,26 +12,30 @@ namespace blockMenu
         public int GameWindowHeight { get; private set; }
 
         SpriteBatch SpriteBatch;
-        SpriteFont Font;
-        string title1 = "Title 01 oooooooooooooooooooooooooooooooooooooooooooooooooo";
-
-        
+        MenuDto MyMenuData;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
             GameWindowHeight = pGameWindowSize.Item2;
-            Font = pContent.Load<SpriteFont>("title01");
             SpriteBatch = pSpriteBatch;
 
-            LoadMenuData truc = new LoadMenuData();
-            truc.LoadJson();
+            LoadMenuData LoadMenuData = new LoadMenuData();
+            MyMenuData = LoadMenuData.LoadJson();
+
+            foreach(LineProperties item in MyMenuData.MenuItems)
+            {
+                item.Font = pContent.Load<SpriteFont>(item.FontFileName);
+            }
 
         }
 
         public void MenuDraw(GameTime pGameTime)
         {
-            SpriteBatch.DrawString(Font, title1, new Vector2(100, 100), Color.Black);
+            foreach (LineProperties item in MyMenuData.MenuItems)
+            {
+                SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, Color.Black);
+            }
         }
 
         //Vector2 size = font.MeasureString(title1);
