@@ -6,7 +6,7 @@
       "AnchorPosition": "0, 50",
       "Alignment": "Center",
       "EnumColor": "Red",
-      "FontFileName": "title01"
+      "FontFileName": "Pacifico"
     },
     {
       "ItemName": "SubTitle",
@@ -14,7 +14,7 @@
       "AnchorPosition": "0, 100",
       "Alignment": "Right",
       "EnumColor": "Blue",
-      "FontFileName": "title01",
+      "FontFileName": "AlexBrush",
       "WidthLimit":  "0.9"
     },
     {
@@ -23,7 +23,7 @@
       "AnchorPosition": "0, 200",
       "Alignment": "Left",
       "EnumColor": "Green",
-      "FontFileName": "title01",
+      "FontFileName": "Capture_it",
       "WidthLimit":  "0.9"
     }
   ]

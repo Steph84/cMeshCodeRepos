@@ -13,14 +13,32 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin title01.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:title01.spritefont
-
 #begin NewXmlContent.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
 /build:NewXmlContent.xml
+
+#begin TimesNewRoman.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:TimesNewRoman.spritefont
+
+#begin Pacifico.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Pacifico.spritefont
+
+#begin AlexBrush.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:AlexBrush.spritefont
+
+#begin Capture_it.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Capture_it.spritefont
 
