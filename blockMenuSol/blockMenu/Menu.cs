@@ -59,6 +59,15 @@ namespace blockMenu
                 // set the color of each item
                 Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
                 item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
+
+                // manage the version
+                if(item.ItemName == "Version")
+                {
+                    Vector2 sizeVersion = item.Font.MeasureString(item.Value);
+                    float tempOldXVersion = item.AnchorPosition.X;
+                    float tempNewYVersion = GameWindowHeight - sizeVersion.Y;
+                    item.AnchorPosition = new Vector2(tempOldXVersion, tempNewYVersion);
+                }
             }
 
         }

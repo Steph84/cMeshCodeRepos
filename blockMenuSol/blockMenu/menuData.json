@@ -2,29 +2,29 @@
   "MenuItems": [
     {
       "ItemName": "MainTitle",
-      "Value": "This is the main title",
-      "AnchorPosition": "0, 50",
+      "Value": "Salem",
+      "AnchorPosition": "0, 0",
       "Alignment": "Center",
       "EnumColor": "Red",
       "FontFileName": "Pacifico"
     },
     {
       "ItemName": "SubTitle",
-      "Value": "That is the sub title",
-      "AnchorPosition": "0, 100",
-      "Alignment": "Right",
+      "Value": "Story",
+      "AnchorPosition": "0, 150",
+      "Alignment": "Center",
       "EnumColor": "Blue",
       "FontFileName": "AlexBrush",
       "WidthLimit":  "0.9"
     },
     {
-      "ItemName": "SubSubTitle",
-      "Value": "It is another sub sub title",
-      "AnchorPosition": "0, 200",
-      "Alignment": "Left",
+      "ItemName": "Version",
+      "Value": "V 1.0",
+      "AnchorPosition": "0, 0",
+      "Alignment": "Right",
       "EnumColor": "Green",
-      "FontFileName": "Capture_it",
-      "WidthLimit":  "0.9"
+      "FontFileName": "TimesNewRoman",
+      "WidthLimit":  "0.99"
     }
   ]
 }
