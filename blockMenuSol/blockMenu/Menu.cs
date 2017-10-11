@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
 using static blockMenu.LoadMenuData;
 
 namespace blockMenu
@@ -58,7 +59,10 @@ namespace blockMenu
 
                 // set the color of each item
                 Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
-                item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
+                if (item.EnumColor == PersonnalColors.EnumColorName.White)
+                    item.Color = Color.White;
+                else
+                    item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
 
                 // manage the version
                 if(item.ItemName == "Version")
@@ -68,6 +72,13 @@ namespace blockMenu
                     float tempNewYVersion = GameWindowHeight - sizeVersion.Y;
                     item.AnchorPosition = new Vector2(tempOldXVersion, tempNewYVersion);
                 }
+
+                // manage the selection
+                if(item.ItemName == "Selection")
+                {
+                    item.SelectionItems = new List<string>(item.Value.Split('*'));
+                }
+
             }
 
         }
@@ -80,7 +91,19 @@ namespace blockMenu
         public void MenuDraw(GameTime pGameTime)
         {
             foreach (LineProperties item in MyMenuData.MenuItems)
-                SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+            {
+                if (item.ItemName == "Selection")
+                {
+                    for (int i = 0; i < item.SelectionItems.Count; i++)
+                    {
+                        SpriteBatch.DrawString(item.Font, item.SelectionItems[i], item.AnchorPosition, item.Color);
+                    }
+                }
+                else
+                {
+                    SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+                }
+            }
         }
 
         

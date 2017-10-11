@@ -3,10 +3,10 @@
     {
       "ItemName": "MainTitle",
       "Value": "Salem",
-      "AnchorPosition": "0, 0",
+      "AnchorPosition": "0, 50",
       "Alignment": "Center",
       "EnumColor": "Red",
-      "FontFileName": "Pacifico"
+      "FontFileName": "Capture_it"
     },
     {
       "ItemName": "SubTitle",
@@ -25,6 +25,14 @@
       "EnumColor": "Green",
       "FontFileName": "TimesNewRoman",
       "WidthLimit":  "0.99"
+    },
+    {
+      "ItemName": "Selection",
+      "Value": "New game*Credits*Quit",
+      "AnchorPosition": "0, 300",
+      "Alignment": "Center",
+      "EnumColor": "White",
+      "FontFileName": "Pacifico"
     }
   ]
 }

@@ -21,11 +21,13 @@ namespace blockMenu
             public string Value { get; set; } // the title itself
             public Vector2 AnchorPosition { get; set; }
             public EnumColorName EnumColor { get; set; }
-            public Color Color { get; set; } // setted after with the EnumColor
             public string FontFileName { get; set; }
-            public SpriteFont Font { get; set; } // loaded after with the FontFileName
             public EnumLineAlignment Alignment { get; set; }
             public float WidthLimit { get; set; } // percentage for Left and Right offset
+
+            public Color Color { get; set; } // setted after with the EnumColor
+            public SpriteFont Font { get; set; } // loaded after with the FontFileName
+            public List<string> SelectionItems { get; set; } // setted after if Selection
         }
 
         [JsonConverter(typeof(StringEnumConverter))]

@@ -21,6 +21,7 @@ namespace blockMenu
             Amber = 10,
             Orange = 11,
             Vermilion = 12,
+            White = 13
         };
 
         // Array of the RGBA values foreach Color
@@ -82,6 +83,8 @@ namespace blockMenu
                     break;
                 case EnumColorName.Vermilion:
                     ColorToReturn = (ArrayColors[(int)EnumColorName.Vermilion - 1]);
+                    break;
+                case EnumColorName.White:
                     break;
                 default:
                     break;
