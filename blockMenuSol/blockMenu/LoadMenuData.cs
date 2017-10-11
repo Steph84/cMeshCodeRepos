@@ -20,15 +20,16 @@ namespace blockMenu
             public string ItemName { get; set; }
             public string Value { get; set; } // the title itself
             public Vector2 AnchorPosition { get; set; }
-            public ColorName Color { get; set; }
+            public EnumColorName EnumColor { get; set; }
+            public Color Color { get; set; } // setted after with the EnumColor
             public string FontFileName { get; set; }
             public SpriteFont Font { get; set; } // loaded after with the FontFileName
-            public LineAlignment Alignment { get; set; }
+            public EnumLineAlignment Alignment { get; set; }
             public float WidthLimit { get; set; } // percentage for Left and Right offset
         }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public enum LineAlignment
+        public enum EnumLineAlignment
         {
             Left = 1,
             Center = 2,

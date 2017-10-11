@@ -5,7 +5,7 @@
       "Value": "This is the main title",
       "AnchorPosition": "0, 50",
       "Alignment": "Center",
-      "Color": "Red",
+      "EnumColor": "Red",
       "FontFileName": "title01"
     },
     {
@@ -13,7 +13,7 @@
       "Value": "That is the sub title",
       "AnchorPosition": "0, 100",
       "Alignment": "Right",
-      "Color": "Chartreuse",
+      "EnumColor": "Blue",
       "FontFileName": "title01",
       "WidthLimit":  "0.9"
     },
@@ -22,7 +22,7 @@
       "Value": "It is another sub sub title",
       "AnchorPosition": "0, 200",
       "Alignment": "Left",
-      "Color": "Chartreuse",
+      "EnumColor": "Green",
       "FontFileName": "title01",
       "WidthLimit":  "0.9"
     }
