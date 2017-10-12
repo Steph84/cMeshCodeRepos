@@ -16,6 +16,7 @@ namespace blockMenu
         MenuData MyMenuData;
         List<LineProperties> MyMenuTitles;
         MenuSelection MyMenuSelection;
+        Color tempColor;
         
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -29,7 +30,7 @@ namespace blockMenu
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
-
+            
             foreach(LineProperties item in MyMenuTitles)
             {
                 // Load the Font
@@ -78,6 +79,19 @@ namespace blockMenu
                 }
             }
 
+            // Load the Font for the Selection
+            MyMenuSelection.Font = pContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
+
+            // Manage the position of each selection item
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            {
+                string selectionItem = MyMenuSelection.SelectionItems[i];
+                float availableSpaceCenter = (GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
+                Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(selectionItem);
+                float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
+                float tempNewYCenter = 300 + (i-1) * 75;
+                MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
+            }
         }
 
         public void MenuUpdate(GameTime pGameTime)
@@ -90,8 +104,17 @@ namespace blockMenu
             foreach (LineProperties item in MyMenuTitles)
                 SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
 
-        }
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            {
+                tempColor = Color.SlateGray;
+                if (MyMenuSelection.ItemSelected == i)
+                {
+                    tempColor = Color.White;
+                    //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
+                }
 
-        
+                SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
+            }
+        }
     }
 }

@@ -33,9 +33,15 @@
       "Credits",
       "Quit"
     ],
-    "AnchorPosition": "0, 150",
+    "AnchorItems": [
+      "0, 0",
+      "0, 0",
+      "0, 0"
+    ],
+    "AnchorPosition": "0, 300",
     "Alignment": "Center",
     "EnumColor": "White",
-    "FontFileName": "Pacifico"
+    "FontFileName": "Pacifico",
+    "ItemSelected": "0"
   }
 }
