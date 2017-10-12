@@ -10,9 +10,10 @@ namespace blockMenu
 {
     public class LoadMenuData
     {
-        public class MenuDto
+        public class MenuData
         {
-            public List<LineProperties> MenuItems { get; set; }
+            public List<LineProperties> ListeMenuTitles { get; set; }
+            public MenuSelection MenuSelection { get; set; }
         }
         
         public class LineProperties
@@ -27,7 +28,19 @@ namespace blockMenu
 
             public Color Color { get; set; } // setted after with the EnumColor
             public SpriteFont Font { get; set; } // loaded after with the FontFileName
-            public List<string> SelectionItems { get; set; } // setted after if Selection
+        }
+
+        public class MenuSelection
+        {
+            public List<string> SelectionItems { get; set; }
+            public Vector2 AnchorPosition { get; set; }
+            public EnumColorName EnumColor { get; set; }
+            public string FontFileName { get; set; }
+            public EnumLineAlignment Alignment { get; set; }
+            public float WidthLimit { get; set; } // percentage for Left and Right offset
+
+            public Color Color { get; set; } // setted after with the EnumColor
+            public SpriteFont Font { get; set; } // loaded after with the FontFileName
         }
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -38,16 +51,16 @@ namespace blockMenu
             Right = 3
         };
 
-        public MenuDto LoadJson()
+        public MenuData LoadJsonData()
         {
-            MenuDto temp = new MenuDto();
+            MenuData temp = new MenuData();
 
             string filename = "../../../../menuData.json";
 
             using (StreamReader streamReader = new StreamReader(filename))
             {
                 string json = streamReader.ReadToEnd();
-                temp = JsonConvert.DeserializeObject<MenuDto>(json);
+                temp = JsonConvert.DeserializeObject<MenuData>(json);
             }
             return temp;
         }

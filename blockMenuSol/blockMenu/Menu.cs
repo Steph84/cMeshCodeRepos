@@ -13,8 +13,10 @@ namespace blockMenu
         public int GameWindowHeight { get; private set; }
 
         SpriteBatch SpriteBatch;
-        MenuDto MyMenuData;
-
+        MenuData MyMenuData;
+        List<LineProperties> MyMenuTitles;
+        MenuSelection MyMenuSelection;
+        
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
@@ -24,9 +26,11 @@ namespace blockMenu
             LoadMenuData LoadMenuData = new LoadMenuData();
             PersonnalColors PersonnalColors = new PersonnalColors();
 
-            MyMenuData = LoadMenuData.LoadJson();
+            MyMenuData = LoadMenuData.LoadJsonData();
+            MyMenuTitles = MyMenuData.ListeMenuTitles;
+            MyMenuSelection = MyMenuData.MenuSelection;
 
-            foreach(LineProperties item in MyMenuData.MenuItems)
+            foreach(LineProperties item in MyMenuTitles)
             {
                 // Load the Font
                 item.Font = pContent.Load<SpriteFont>(item.FontFileName);
@@ -72,13 +76,6 @@ namespace blockMenu
                     float tempNewYVersion = GameWindowHeight - sizeVersion.Y;
                     item.AnchorPosition = new Vector2(tempOldXVersion, tempNewYVersion);
                 }
-
-                // manage the selection
-                if(item.ItemName == "Selection")
-                {
-                    item.SelectionItems = new List<string>(item.Value.Split('*'));
-                }
-
             }
 
         }
@@ -90,20 +87,9 @@ namespace blockMenu
 
         public void MenuDraw(GameTime pGameTime)
         {
-            foreach (LineProperties item in MyMenuData.MenuItems)
-            {
-                if (item.ItemName == "Selection")
-                {
-                    for (int i = 0; i < item.SelectionItems.Count; i++)
-                    {
-                        SpriteBatch.DrawString(item.Font, item.SelectionItems[i], item.AnchorPosition, item.Color);
-                    }
-                }
-                else
-                {
-                    SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
-                }
-            }
+            foreach (LineProperties item in MyMenuTitles)
+                SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+
         }
 
         

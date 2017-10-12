@@ -1,5 +1,5 @@
 ﻿{
-  "MenuItems": [
+  "ListeMenuTitles": [
     {
       "ItemName": "MainTitle",
       "Value": "Salem",
@@ -15,24 +15,27 @@
       "Alignment": "Center",
       "EnumColor": "Blue",
       "FontFileName": "AlexBrush",
-      "WidthLimit":  "0.9"
+      "WidthLimit": "0.9"
     },
     {
       "ItemName": "Version",
       "Value": "V 1.0",
       "AnchorPosition": "0, 0",
       "Alignment": "Right",
-      "EnumColor": "Green",
-      "FontFileName": "TimesNewRoman",
-      "WidthLimit":  "0.99"
-    },
-    {
-      "ItemName": "Selection",
-      "Value": "New game*Credits*Quit",
-      "AnchorPosition": "0, 300",
-      "Alignment": "Center",
       "EnumColor": "White",
-      "FontFileName": "Pacifico"
+      "FontFileName": "TimesNewRoman",
+      "WidthLimit": "0.99"
     }
-  ]
+  ],
+  "MenuSelection": {
+    "SelectionItems": [
+      "New game",
+      "Credits",
+      "Quit"
+    ],
+    "AnchorPosition": "0, 150",
+    "Alignment": "Center",
+    "EnumColor": "White",
+    "FontFileName": "Pacifico"
+  }
 }
