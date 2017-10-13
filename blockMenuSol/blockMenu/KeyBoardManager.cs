@@ -1,9 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace blockMenu
 {
@@ -21,6 +16,7 @@ namespace blockMenu
             Up = 3
         }
 
+        #region Method to determine the action depend on the keyboard inputs
         public EnumKeyBoard KeyBoardAction(Keys pKey)
         {
             temp = EnumKeyBoard.NoAction;
@@ -41,7 +37,6 @@ namespace blockMenu
             oldState = newState;
             return temp;
         }
-
-
+        #endregion
     }
 }

@@ -14,7 +14,8 @@ namespace blockMenu
         Menu MyMenu;
 
         Tuple<int, int> GameWindowSize;
-        
+        private string MyTitleGameWindow = "This is a game !";
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -23,13 +24,15 @@ namespace blockMenu
 
         protected override void Initialize()
         {
+            Window.Title = MyTitleGameWindow;
+
             MyWindow = new WindowDimension(GraphicsAdapter.DefaultAdapter.CurrentDisplayMode,
                                            GraphicsDevice.Viewport,
                                            Window,
                                            graphics);
 
             GameWindowSize = new Tuple<int, int>(MyWindow.GameWindowWidth, MyWindow.GameWindowHeight);
-            
+
             base.Initialize();
         }
 
@@ -50,8 +53,7 @@ namespace blockMenu
                 Exit();
 
             MyMenu.MenuUpdate(gameTime);
-
-
+            
             base.Update(gameTime);
         }
 

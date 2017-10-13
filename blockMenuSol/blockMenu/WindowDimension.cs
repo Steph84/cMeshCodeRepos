@@ -5,6 +5,7 @@ namespace blockMenu
 {
     public class WindowDimension
     {
+        #region Properties
         public int DisplayWidth { get; set; }
         public int DisplayHeight { get; set; }
         public int GameWindowWidth { get; private set; }
@@ -16,7 +17,6 @@ namespace blockMenu
         private bool AllowAltF4 = true;
         private bool IsBorderless = false;
         private bool IsFullScreen = false;
-        private string MyTitleGameWindow = "This is a game !";
 
         // Array for the GameWindow in relation to the resolution
         private int [,] ArrayResolution = new int [4,4] {  // displayRes / gameWindowRes
@@ -25,6 +25,7 @@ namespace blockMenu
                                                             { 2560, 1440, 2304, 1152 },
                                                             { 3840, 2160, 3456, 1728 }
                                                         };
+        #endregion
 
         #region WindowDimension Constructor
         public WindowDimension(DisplayMode pCurrentDisplayMode, Viewport pViewport, GameWindow pGameWindow, GraphicsDeviceManager pGraphics)
@@ -42,7 +43,6 @@ namespace blockMenu
             // initialize gameWindow parameters
             pGameWindow.AllowAltF4 = AllowAltF4;
             pGameWindow.IsBorderless = IsBorderless;
-            pGameWindow.Title = MyTitleGameWindow;
 
             if(IsFullScreen == true)
             {

@@ -24,6 +24,7 @@ namespace blockMenu
             White = 13
         };
 
+        #region RGBA values
         // Array of the RGBA values foreach Color
         public Tuple<int, int, int, int>[] ArrayColors =
             new Tuple<int, int, int, int>[12] {
@@ -40,7 +41,9 @@ namespace blockMenu
                                             new Tuple<int, int, int, int>(255, 128, 0, 255),
                                             new Tuple<int, int, int, int>(255, 64, 0, 255)
                                         };
+        #endregion
 
+        #region Method to set color in relation to the enum
         // Method to get the RGBA values from the EnumColor
         public Tuple<int, int, int, int> SetPersonnalColor(EnumColorName pColorName)
         {
@@ -91,5 +94,6 @@ namespace blockMenu
             }
             return ColorToReturn;
         }
+        #endregion
     }
 }

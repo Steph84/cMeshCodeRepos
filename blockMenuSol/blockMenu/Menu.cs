@@ -17,8 +17,10 @@ namespace blockMenu
         List<LoadMenuData.LineProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
         Color tempColor;
-        KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
-        
+        //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
+        KeyboardState oldState = new KeyboardState();
+        KeyboardState newState = new KeyboardState();
+
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
@@ -27,42 +29,21 @@ namespace blockMenu
 
             LoadMenuData LoadMenuData = new LoadMenuData();
             PersonnalColors PersonnalColors = new PersonnalColors();
+            TextAlignment TextAlignment = new TextAlignment(GameWindowWidth);
 
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
-            
+
+            #region Manage the titles on the main screen
             foreach(LoadMenuData.LineProperties item in MyMenuTitles)
             {
                 // Load the Font
                 item.Font = pContent.Load<SpriteFont>(item.FontFileName);
 
                 // Manage the alignment
-                switch (item.Alignment)
-                {
-                    case TextAlignment.EnumLineAlignment.Left:
-                        float tempNewXLeft = GameWindowWidth * (1 - item.WidthLimit);
-                        float tempOldYLeft = item.AnchorPosition.Y;
-                        item.AnchorPosition = new Vector2(tempNewXLeft, tempOldYLeft);
-                        break;
-                    case TextAlignment.EnumLineAlignment.Center:
-                        float availableSpaceCenter = (GameWindowWidth - item.AnchorPosition.X);
-                        Vector2 sizeCenter = item.Font.MeasureString(item.Value);
-                        float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
-                        float tempOldYCenter = item.AnchorPosition.Y;
-                        item.AnchorPosition = new Vector2(tempNewXCenter, tempOldYCenter);
-                        break;
-                    case TextAlignment.EnumLineAlignment.Right:
-                        float availableSpaceRight = (GameWindowWidth - item.AnchorPosition.X) * item.WidthLimit;
-                        Vector2 sizeRight = item.Font.MeasureString(item.Value);
-                        float tempNewXRight = (availableSpaceRight - sizeRight.X);
-                        float tempOldYRight = item.AnchorPosition.Y;
-                        item.AnchorPosition = new Vector2(tempNewXRight, tempOldYRight);
-                        break;
-                    default:
-                        break;
-                }
-
+                TextAlignment.ApplyAlignment(item);
+                
                 // set the color of each item
                 Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
                 if (item.EnumColor == PersonnalColors.EnumColorName.White)
@@ -79,7 +60,9 @@ namespace blockMenu
                     item.AnchorPosition = new Vector2(tempOldXVersion, tempNewYVersion);
                 }
             }
+            #endregion
 
+            #region Manage the Selection part
             // Load the Font for the Selection
             MyMenuSelection.Font = pContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
 
@@ -93,28 +76,41 @@ namespace blockMenu
                 float tempNewYCenter = 300 + (i-1) * 75;
                 MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
             }
+            #endregion
         }
 
         public void MenuUpdate(GameTime pGameTime)
         {
-            if (MyKeyBoardManager.KeyBoardAction(Keys.Down) == KeyBoardManager.EnumKeyBoard.Press)
-                MyMenuSelection.ItemSelected += 1;
+            #region Manage the move through the selection menu
+            newState = Keyboard.GetState();
 
-            if (MyKeyBoardManager.KeyBoardAction(Keys.Up) == KeyBoardManager.EnumKeyBoard.Up)
+            if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
+                MyMenuSelection.ItemSelected += 1;
+            if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
                 MyMenuSelection.ItemSelected -= 1;
+
+            //if (MyKeyBoardManager.KeyBoardAction(Keys.Down) == KeyBoardManager.EnumKeyBoard.Press)
+            //    MyMenuSelection.ItemSelected += 1;
+            //if (MyKeyBoardManager.KeyBoardAction(Keys.Up) == KeyBoardManager.EnumKeyBoard.Press)
+            //    MyMenuSelection.ItemSelected -= 1;
             
             if (MyMenuSelection.ItemSelected < 0)
                 MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
-
             if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
                 MyMenuSelection.ItemSelected = 0;
+
+            oldState = newState;
+            #endregion
         }
 
         public void MenuDraw(GameTime pGameTime)
         {
+            #region Draw the Titles of the main menu
             foreach (LoadMenuData.LineProperties item in MyMenuTitles)
                 SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+            #endregion
 
+            #region Draw the selection menu
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
                 tempColor = Color.SlateGray;
@@ -126,6 +122,7 @@ namespace blockMenu
 
                 SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
             }
+            #endregion
         }
     }
 }
