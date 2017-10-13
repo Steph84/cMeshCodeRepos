@@ -48,7 +48,8 @@ namespace blockMenu
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-      
+
+            MyMenu.MenuUpdate(gameTime);
 
 
             base.Update(gameTime);

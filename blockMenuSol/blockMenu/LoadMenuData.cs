@@ -24,7 +24,7 @@ namespace blockMenu
             public Vector2 AnchorPosition { get; set; }
             public EnumColorName EnumColor { get; set; }
             public string FontFileName { get; set; }
-            public EnumLineAlignment Alignment { get; set; }
+            public TextAlignment.EnumLineAlignment Alignment { get; set; }
             public float WidthLimit { get; set; } // percentage for Left and Right offset
 
             public Color Color { get; set; } // setted after with the EnumColor
@@ -38,22 +38,14 @@ namespace blockMenu
             public Vector2 AnchorPosition { get; set; }
             public EnumColorName EnumColor { get; set; }
             public string FontFileName { get; set; }
-            public EnumLineAlignment Alignment { get; set; }
+            public TextAlignment.EnumLineAlignment Alignment { get; set; }
             public float WidthLimit { get; set; } // percentage for Left and Right offset
             public int ItemSelected { get; set; }
 
             public Color Color { get; set; } // setted after with the EnumColor
             public SpriteFont Font { get; set; } // loaded after with the FontFileName
         }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        public enum EnumLineAlignment
-        {
-            Left = 1,
-            Center = 2,
-            Right = 3
-        };
-
+        
         public MenuData LoadJsonData()
         {
             MenuData temp = new MenuData();

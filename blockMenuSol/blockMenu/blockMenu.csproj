@@ -66,12 +66,14 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="KeyBoardManager.cs" />
     <Compile Include="LoadMenuData.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="PersonnalColors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextAlignment.cs" />
     <Compile Include="WindowDimension.cs" />
   </ItemGroup>
   <ItemGroup>
