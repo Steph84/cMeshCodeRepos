@@ -114,8 +114,11 @@ namespace blockMenu
             {
                 soundValidateSelect.Play();
 
-                if(MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                {
+                    System.Threading.Thread.Sleep(soundValidateSelect.Duration);
                     pMyState = Main.EnumMainState.MenuQuit;
+                }
 
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
                     pMyState = Main.EnumMainState.MenuCredits;
