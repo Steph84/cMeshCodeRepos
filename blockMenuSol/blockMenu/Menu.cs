@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,7 +13,9 @@ namespace blockMenu
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
 
+        ContentManager Content;
         SpriteBatch SpriteBatch;
+
         LoadMenuData.MenuData MyMenuData;
         List<LoadMenuData.LineProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
@@ -20,12 +23,14 @@ namespace blockMenu
         //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
+        SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
             GameWindowHeight = pGameWindowSize.Item2;
             SpriteBatch = pSpriteBatch;
+            Content = pContent;
 
             LoadMenuData LoadMenuData = new LoadMenuData();
             PersonnalColors PersonnalColors = new PersonnalColors();
@@ -34,12 +39,15 @@ namespace blockMenu
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
+            soundHeadBack = Content.Load<SoundEffect>("headBack");
+            soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
+            soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
 
             #region Manage the titles on the main screen
-            foreach(LoadMenuData.LineProperties item in MyMenuTitles)
+            foreach (LoadMenuData.LineProperties item in MyMenuTitles)
             {
                 // Load the Font
-                item.Font = pContent.Load<SpriteFont>(item.FontFileName);
+                item.Font = Content.Load<SpriteFont>(item.FontFileName);
 
                 // Manage the alignment
                 TextAlignment.ApplyAlignment(item);
@@ -64,7 +72,7 @@ namespace blockMenu
 
             #region Manage the Selection part
             // Load the Font for the Selection
-            MyMenuSelection.Font = pContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
+            MyMenuSelection.Font = Content.Load<SpriteFont>(MyMenuSelection.FontFileName);
 
             // Manage the position of each selection item
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
@@ -85,9 +93,15 @@ namespace blockMenu
             newState = Keyboard.GetState();
 
             if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
+            {
+                soundMoveSelect.Play();
                 MyMenuSelection.ItemSelected += 1;
+            }
             if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
+            {
+                soundMoveSelect.Play();
                 MyMenuSelection.ItemSelected -= 1;
+            }
             
             if (MyMenuSelection.ItemSelected < 0)
                 MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
@@ -98,6 +112,8 @@ namespace blockMenu
             #region Manage the MainState status
             if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
             {
+                soundValidateSelect.Play();
+
                 if(MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
                     pMyState = Main.EnumMainState.MenuQuit;
 
