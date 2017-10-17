@@ -15,6 +15,17 @@ namespace blockMenu
 
         Tuple<int, int> GameWindowSize;
         private string MyTitleGameWindow = "This is a game !";
+        private EnumMainState MyState = EnumMainState.MenuTitle;
+
+        enum EnumMainState
+        {
+            MenuTitle = 1,
+            MenuCredits = 2,
+            MenuQuit = 3,
+            GameAnimation = 4,
+            GamePlayable = 5
+        }
+
 
         public Main()
         {
@@ -50,7 +61,17 @@ namespace blockMenu
         protected override void Update(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+                MyState = EnumMainState.MenuQuit;
+
+            switch (MyState)
+            {
+                case EnumMainState.MenuQuit:
+                    Exit();
+                    break;
+
+                default:
+                    break;
+            }
 
             MyMenu.MenuUpdate(gameTime);
             

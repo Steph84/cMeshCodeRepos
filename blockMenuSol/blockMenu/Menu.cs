@@ -88,16 +88,20 @@ namespace blockMenu
                 MyMenuSelection.ItemSelected += 1;
             if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
                 MyMenuSelection.ItemSelected -= 1;
-
-            //if (MyKeyBoardManager.KeyBoardAction(Keys.Down) == KeyBoardManager.EnumKeyBoard.Press)
-            //    MyMenuSelection.ItemSelected += 1;
-            //if (MyKeyBoardManager.KeyBoardAction(Keys.Up) == KeyBoardManager.EnumKeyBoard.Press)
-            //    MyMenuSelection.ItemSelected -= 1;
             
             if (MyMenuSelection.ItemSelected < 0)
                 MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
             if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
                 MyMenuSelection.ItemSelected = 0;
+
+            if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
+            {
+                if(MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                {
+                    // return exit to main
+                }
+             }
+
 
             oldState = newState;
             #endregion
