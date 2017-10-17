@@ -17,7 +17,7 @@ namespace blockMenu
         private string MyTitleGameWindow = "This is a game !";
         private EnumMainState MyState = EnumMainState.MenuTitle;
 
-        enum EnumMainState
+        public enum EnumMainState
         {
             MenuTitle = 1,
             MenuCredits = 2,
@@ -65,6 +65,22 @@ namespace blockMenu
 
             switch (MyState)
             {
+                case EnumMainState.MenuTitle:
+                    MyState = MyMenu.MenuUpdate(gameTime, MyState);
+                    break;
+
+                case EnumMainState.MenuCredits:
+                    // the credits
+                    break;
+
+                case EnumMainState.GameAnimation:
+                    // animation
+                    break;
+
+                case EnumMainState.GamePlayable:
+                    // let's play
+                    break;
+
                 case EnumMainState.MenuQuit:
                     Exit();
                     break;
@@ -72,8 +88,6 @@ namespace blockMenu
                 default:
                     break;
             }
-
-            MyMenu.MenuUpdate(gameTime);
             
             base.Update(gameTime);
         }
@@ -84,10 +98,28 @@ namespace blockMenu
 
             spriteBatch.Begin();
 
+            switch (MyState)
+            {
+                case EnumMainState.MenuTitle:
+                    MyMenu.MenuDraw(gameTime);
+                    break;
 
-            MyMenu.MenuDraw(gameTime);
+                case EnumMainState.MenuCredits:
+                    // the credits
+                    break;
 
+                case EnumMainState.GameAnimation:
+                    // animation
+                    break;
 
+                case EnumMainState.GamePlayable:
+                    // let's play
+                    break;
+
+                default:
+                    break;
+            }
+            
             spriteBatch.End();
         
             base.Draw(gameTime);

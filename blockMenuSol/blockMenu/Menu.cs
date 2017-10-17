@@ -79,7 +79,7 @@ namespace blockMenu
             #endregion
         }
 
-        public void MenuUpdate(GameTime pGameTime)
+        public Main.EnumMainState MenuUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
             #region Manage the move through the selection menu
             newState = Keyboard.GetState();
@@ -93,17 +93,24 @@ namespace blockMenu
                 MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
             if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
                 MyMenuSelection.ItemSelected = 0;
+            #endregion
 
+            #region Manage the MainState status
             if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
             {
                 if(MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
-                {
-                    // return exit to main
-                }
-             }
+                    pMyState = Main.EnumMainState.MenuQuit;
 
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
+                    pMyState = Main.EnumMainState.MenuCredits;
+                
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
+                    pMyState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+            }
 
             oldState = newState;
+
+            return pMyState;
             #endregion
         }
 
