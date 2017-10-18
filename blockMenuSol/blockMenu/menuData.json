@@ -43,5 +43,17 @@
     "EnumColor": "White",
     "FontFileName": "Pacifico",
     "ItemSelected": "0"
-  }
+  },
+  "Credits": [
+    {
+      "Assets": "Background picture",
+      "Name": "Alexander Ovechkin",
+      "Source": "http://"
+    },
+    {
+      "Assets": "Sound effect",
+      "Name": "Teemu Selanne",
+      "Source": "http://"
+    }
+  ]
 }

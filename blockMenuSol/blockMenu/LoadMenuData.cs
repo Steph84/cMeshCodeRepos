@@ -13,6 +13,7 @@ namespace blockMenu
         {
             public List<LineProperties> ListeMenuTitles { get; set; }
             public MenuSelection MenuSelection { get; set; }
+            public List<CreditsProperties> Credits { get; set; }
         }
         
         public class LineProperties
@@ -40,6 +41,13 @@ namespace blockMenu
             public int ItemSelected { get; set; }
             public Color Color { get; set; } // setted after with the EnumColor
             public SpriteFont Font { get; set; } // loaded after with the FontFileName
+        }
+
+        public class CreditsProperties
+        {
+            public string Assets { get; set; }
+            public string Name { get; set; }
+            public string Source { get; set; }
         }
         #endregion
 

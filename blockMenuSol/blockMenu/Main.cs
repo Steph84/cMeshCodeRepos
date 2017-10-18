@@ -66,7 +66,7 @@ namespace blockMenu
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
-                    MyState = MyMenu.MenuUpdate(gameTime, MyState);
+                    MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
                     break;
 
                 case EnumMainState.MenuCredits:
@@ -101,7 +101,7 @@ namespace blockMenu
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
-                    MyMenu.MenuDraw(gameTime);
+                    MyMenu.MenuTitleDraw(gameTime);
                     break;
 
                 case EnumMainState.MenuCredits:

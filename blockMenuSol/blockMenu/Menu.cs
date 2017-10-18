@@ -19,11 +19,15 @@ namespace blockMenu
         LoadMenuData.MenuData MyMenuData;
         List<LoadMenuData.LineProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
+        List<LoadMenuData.CreditsProperties> MyMenuCredits;
+
         Color tempColor;
         //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
+
+        float volumeSoundEffects;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -39,9 +43,12 @@ namespace blockMenu
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
-            soundHeadBack = Content.Load<SoundEffect>("headBack");
+            MyMenuCredits = MyMenuData.Credits;
+
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
+            soundHeadBack = Content.Load<SoundEffect>("headBack");
+            volumeSoundEffects = 0.25f;
 
             #region Manage the titles on the main screen
             foreach (LoadMenuData.LineProperties item in MyMenuTitles)
@@ -87,19 +94,19 @@ namespace blockMenu
             #endregion
         }
 
-        public Main.EnumMainState MenuUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+        public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
             #region Manage the move through the selection menu
             newState = Keyboard.GetState();
 
             if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
             {
-                soundMoveSelect.Play();
+                soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
                 MyMenuSelection.ItemSelected += 1;
             }
             if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
             {
-                soundMoveSelect.Play();
+                soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
                 MyMenuSelection.ItemSelected -= 1;
             }
             
@@ -112,7 +119,7 @@ namespace blockMenu
             #region Manage the MainState status
             if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
             {
-                soundValidateSelect.Play();
+                soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
 
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
                 {
@@ -133,7 +140,12 @@ namespace blockMenu
             #endregion
         }
 
-        public void MenuDraw(GameTime pGameTime)
+        public Main.EnumMainState MenuCreditsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+        {
+            return pMyState;
+        }
+
+        public void MenuTitleDraw(GameTime pGameTime)
         {
             #region Draw the Titles of the main menu
             foreach (LoadMenuData.LineProperties item in MyMenuTitles)
@@ -153,6 +165,11 @@ namespace blockMenu
                 SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
             }
             #endregion
+        }
+
+        public void MenuCreditsDraw(GameTime pGameTime)
+        {
+
         }
     }
 }
