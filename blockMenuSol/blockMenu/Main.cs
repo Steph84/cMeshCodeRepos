@@ -70,7 +70,7 @@ namespace blockMenu
                     break;
 
                 case EnumMainState.MenuCredits:
-                    // the credits
+                    MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
                     break;
 
                 case EnumMainState.GameAnimation:
@@ -105,7 +105,7 @@ namespace blockMenu
                     break;
 
                 case EnumMainState.MenuCredits:
-                    // the credits
+                    MyMenu.MenuCreditsDraw(gameTime);
                     break;
 
                 case EnumMainState.GameAnimation:

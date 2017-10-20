@@ -46,14 +46,34 @@
   },
   "Credits": [
     {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300",
+        "0, 300"
+      ],
+      "TextGap":  "50",
       "Assets": "Background picture",
       "Name": "Alexander Ovechkin",
       "Source": "http://"
     },
     {
-      "Assets": "Sound effect",
-      "Name": "Teemu Selanne",
-      "Source": "http://"
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300",
+        "0, 300"
+      ],
+        "TextGap"
+        :
+        "50",
+        "Assets"
+        :
+        "Sound effect",
+        "Name"
+        :
+        "Teemu Selanne",
+        "Source"
+        :
+        "http://"
     }
   ]
 }

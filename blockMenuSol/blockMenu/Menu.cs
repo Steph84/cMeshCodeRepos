@@ -27,6 +27,10 @@ namespace blockMenu
         KeyboardState newState = new KeyboardState();
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
 
+        string CreditsTitle = "The Credits";
+        Vector2 CreditsTitlePosition = new Vector2();
+        SpriteFont CreditsFont;
+
         float volumeSoundEffects;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
@@ -92,6 +96,23 @@ namespace blockMenu
                 MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
             }
             #endregion
+
+            #region Manage the Credits
+            CreditsFont = Content.Load<SpriteFont>("TimesNewRoman");
+            Vector2 sizeCreditsTitle = CreditsFont.MeasureString(CreditsTitle);
+            float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
+            CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, 20);
+
+            for (int i = 0; i < MyMenuCredits.Count; i++)
+            {
+                var credit = MyMenuCredits[i];
+                for (int j = 0; j < credit.AnchorPosition.Count; j++)
+                {
+                    var anchor = credit.AnchorPosition[j];
+                    MyMenuCredits[i].AnchorPosition[j] = new Vector2(50, 150 + j * credit.TextGap + i * credit.TextGap * 4);
+                }
+            }
+            #endregion
         }
 
         public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
@@ -142,6 +163,8 @@ namespace blockMenu
 
         public Main.EnumMainState MenuCreditsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
+            // wait for escape
+
             return pMyState;
         }
 
@@ -169,7 +192,14 @@ namespace blockMenu
 
         public void MenuCreditsDraw(GameTime pGameTime)
         {
+            SpriteBatch.DrawString(CreditsFont, CreditsTitle, CreditsTitlePosition, Color.White);
 
+            foreach (var credit in MyMenuCredits)
+            {
+                SpriteBatch.DrawString(CreditsFont, credit.Assets, credit.AnchorPosition[0], Color.White);
+                SpriteBatch.DrawString(CreditsFont, credit.Name, credit.AnchorPosition[1], Color.White);
+                SpriteBatch.DrawString(CreditsFont, credit.Source, credit.AnchorPosition[2], Color.White);
+            }
         }
     }
 }
