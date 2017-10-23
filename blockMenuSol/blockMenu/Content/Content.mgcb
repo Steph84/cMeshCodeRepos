@@ -18,12 +18,6 @@
 /processor:PassThroughProcessor
 /build:NewXmlContent.xml
 
-#begin TimesNewRoman.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:TextureFormat=Compressed
-/build:TimesNewRoman.spritefont
-
 #begin Pacifico.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -59,4 +53,16 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:validateSelect.wav
+
+#begin TimesNewRoman24.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:TimesNewRoman24.spritefont
+
+#begin TimesNewRoman12.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:TimesNewRoman12.spritefont
 

@@ -29,7 +29,7 @@ namespace blockMenu
 
         string CreditsTitle = "The Credits";
         Vector2 CreditsTitlePosition = new Vector2();
-        SpriteFont CreditsFont;
+        SpriteFont CreditsFontTitle, CreditsFontLines;
 
         float volumeSoundEffects;
 
@@ -98,18 +98,26 @@ namespace blockMenu
             #endregion
 
             #region Manage the Credits
-            CreditsFont = Content.Load<SpriteFont>("TimesNewRoman");
-            Vector2 sizeCreditsTitle = CreditsFont.MeasureString(CreditsTitle);
+            // Load fonts
+            CreditsFontTitle = Content.Load<SpriteFont>("TimesNewRoman24");
+            CreditsFontLines = Content.Load<SpriteFont>("TimesNewRoman12");
+            // measure size text
+            Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
+            Vector2 sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
+            // manage the centered title
             float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
             CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, 20);
 
+            // manage the positions of the credits
             for (int i = 0; i < MyMenuCredits.Count; i++)
             {
                 var credit = MyMenuCredits[i];
                 for (int j = 0; j < credit.AnchorPosition.Count; j++)
                 {
                     var anchor = credit.AnchorPosition[j];
-                    MyMenuCredits[i].AnchorPosition[j] = new Vector2(50, 150 + j * credit.TextGap + i * credit.TextGap * 4);
+                    MyMenuCredits[i].AnchorPosition[j] = new Vector2(50, sizeCreditsTitle.Y * 3 // anchor of the whole credits
+                                                                         + j * sizeCreditsLine.Y // anchor of each lines
+                                                                         + i * sizeCreditsLine.Y * 4); // anchor of each block
                 }
             }
             #endregion
@@ -192,13 +200,15 @@ namespace blockMenu
 
         public void MenuCreditsDraw(GameTime pGameTime)
         {
-            SpriteBatch.DrawString(CreditsFont, CreditsTitle, CreditsTitlePosition, Color.White);
+            // Draw Credits title
+            SpriteBatch.DrawString(CreditsFontTitle, CreditsTitle, CreditsTitlePosition, Color.White);
 
+            // Draw Credits themselves
             foreach (var credit in MyMenuCredits)
             {
-                SpriteBatch.DrawString(CreditsFont, credit.Assets, credit.AnchorPosition[0], Color.White);
-                SpriteBatch.DrawString(CreditsFont, credit.Name, credit.AnchorPosition[1], Color.White);
-                SpriteBatch.DrawString(CreditsFont, credit.Source, credit.AnchorPosition[2], Color.White);
+                SpriteBatch.DrawString(CreditsFontLines, credit.Assets, credit.AnchorPosition[0], Color.White);
+                SpriteBatch.DrawString(CreditsFontLines, credit.Name, credit.AnchorPosition[1], Color.White);
+                SpriteBatch.DrawString(CreditsFontLines, credit.Source, credit.AnchorPosition[2], Color.White);
             }
         }
     }

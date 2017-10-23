@@ -46,7 +46,6 @@ namespace blockMenu
         public class CreditsProperties
         {
             public List<Vector2> AnchorPosition { get; set; }
-            public float TextGap { get; set; }
             public string Assets { get; set; }
             public string Name { get; set; }
             public string Source { get; set; }
