@@ -10,6 +10,10 @@ namespace blockMenu
 {
     public class Menu
     {
+
+        Vector2 truc = new Vector2(0, 0);
+        Point machin = new Point(0, 0);
+
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
 
@@ -26,12 +30,14 @@ namespace blockMenu
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
+        float volumeSoundEffects;
 
         string CreditsTitle = "The Credits";
         Vector2 CreditsTitlePosition = new Vector2();
         SpriteFont CreditsFontTitle, CreditsFontLines;
 
-        float volumeSoundEffects;
+        Texture2D backArrowPic;
+        Vector2 backArrowPos;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -53,6 +59,9 @@ namespace blockMenu
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
             soundHeadBack = Content.Load<SoundEffect>("headBack");
             volumeSoundEffects = 0.25f;
+
+            backArrowPic = Content.Load<Texture2D>("backArrow");
+            backArrowPos = new Vector2(5, 5);
 
             #region Manage the titles on the main screen
             foreach (LoadMenuData.LineProperties item in MyMenuTitles)
@@ -125,6 +134,10 @@ namespace blockMenu
 
         public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
+            truc.X = truc.X + pGameTime.ElapsedGameTime.Milliseconds;
+            machin.X = machin.X + pGameTime.ElapsedGameTime.Milliseconds;
+            Console.WriteLine(truc.X + " : " + machin.X);
+
             #region Manage the move through the selection menu
             newState = Keyboard.GetState();
 
@@ -162,16 +175,24 @@ namespace blockMenu
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
                     pMyState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
             }
+            #endregion
 
             oldState = newState;
 
             return pMyState;
-            #endregion
         }
 
         public Main.EnumMainState MenuCreditsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            // wait for escape
+            newState = Keyboard.GetState();
+
+            if (newState.IsKeyDown(Keys.Escape) && !oldState.IsKeyDown(Keys.Escape))
+            {
+                soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+                pMyState = Main.EnumMainState.MenuTitle;
+            }
+
+            oldState = newState;
 
             return pMyState;
         }
@@ -210,6 +231,10 @@ namespace blockMenu
                 SpriteBatch.DrawString(CreditsFontLines, credit.Name, credit.AnchorPosition[1], Color.White);
                 SpriteBatch.DrawString(CreditsFontLines, credit.Source, credit.AnchorPosition[2], Color.White);
             }
+
+            // Draw the BackArrow pic
+            //SpriteBatch.Draw(backArrowPic, backArrowPos);
+            SpriteBatch.Draw(backArrowPic, new Rectangle(0, 0, 32, 32), Color.White);
         }
     }
 }

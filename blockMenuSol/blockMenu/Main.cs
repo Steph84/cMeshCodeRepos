@@ -60,9 +60,6 @@ namespace blockMenu
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                MyState = EnumMainState.MenuQuit;
-
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
