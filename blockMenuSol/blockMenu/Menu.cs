@@ -10,10 +10,6 @@ namespace blockMenu
 {
     public class Menu
     {
-
-        Vector2 truc = new Vector2(0, 0);
-        Point machin = new Point(0, 0);
-
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
 
@@ -33,11 +29,13 @@ namespace blockMenu
         float volumeSoundEffects;
 
         string CreditsTitle = "The Credits";
-        Vector2 CreditsTitlePosition = new Vector2();
+        Vector2 CreditsTitlePosition;
         SpriteFont CreditsFontTitle, CreditsFontLines;
 
         Texture2D backArrowPic;
-        Vector2 backArrowPos;
+        Rectangle backArrowTarget;
+        Vector2 backArrowTextPos;
+        string backArrowText;
 
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -61,7 +59,9 @@ namespace blockMenu
             volumeSoundEffects = 0.25f;
 
             backArrowPic = Content.Load<Texture2D>("backArrow");
-            backArrowPos = new Vector2(5, 5);
+            backArrowTarget = new Rectangle(5, 5, 32, 32);
+            backArrowTextPos = new Vector2(50, 5);
+            backArrowText = "Esc";
 
             #region Manage the titles on the main screen
             foreach (LoadMenuData.LineProperties item in MyMenuTitles)
@@ -134,13 +134,10 @@ namespace blockMenu
 
         public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            truc.X = truc.X + pGameTime.ElapsedGameTime.Milliseconds;
-            machin.X = machin.X + pGameTime.ElapsedGameTime.Milliseconds;
-            Console.WriteLine(truc.X + " : " + machin.X);
-
-            #region Manage the move through the selection menu
             newState = Keyboard.GetState();
 
+            #region Manage the move through the selection menu
+            
             if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
             {
                 soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
@@ -233,8 +230,8 @@ namespace blockMenu
             }
 
             // Draw the BackArrow pic
-            //SpriteBatch.Draw(backArrowPic, backArrowPos);
-            SpriteBatch.Draw(backArrowPic, new Rectangle(0, 0, 32, 32), Color.White);
+            SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
+            SpriteBatch.DrawString(CreditsFontTitle, backArrowText, backArrowTextPos, Color.White);
         }
     }
 }
