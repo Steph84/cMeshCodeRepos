@@ -22,7 +22,7 @@ namespace blockMenu
         }
 
         #region Method to apply alignment
-        public void ApplyAlignment(LoadMenuData.LineProperties pItem)
+        public void ApplyAlignment(LoadMenuData.TitleProperties pItem)
         {
             switch (pItem.Alignment)
             {

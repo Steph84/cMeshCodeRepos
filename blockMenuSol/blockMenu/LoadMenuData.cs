@@ -11,12 +11,12 @@ namespace blockMenu
         #region DTO
         public class MenuData
         {
-            public List<LineProperties> ListeMenuTitles { get; set; }
+            public List<TitleProperties> ListeMenuTitles { get; set; }
             public MenuSelection MenuSelection { get; set; }
             public List<CreditsProperties> Credits { get; set; }
         }
         
-        public class LineProperties
+        public class TitleProperties
         {
             public string ItemName { get; set; }
             public string Value { get; set; } // the title itself

@@ -17,18 +17,20 @@ namespace blockMenu
         SpriteBatch SpriteBatch;
 
         LoadMenuData.MenuData MyMenuData;
-        List<LoadMenuData.LineProperties> MyMenuTitles;
+        List<LoadMenuData.TitleProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
         List<LoadMenuData.CreditsProperties> MyMenuCredits;
 
         Color tempColor;
+
         //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
+
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
         float volumeSoundEffects;
 
-        string CreditsTitle = "The Credits";
+        string CreditsTitle;
         Vector2 CreditsTitlePosition;
         SpriteFont CreditsFontTitle, CreditsFontLines;
 
@@ -57,14 +59,10 @@ namespace blockMenu
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
             soundHeadBack = Content.Load<SoundEffect>("headBack");
             volumeSoundEffects = 0.25f;
-
-            backArrowPic = Content.Load<Texture2D>("backArrow");
-            backArrowTarget = new Rectangle(5, 5, 32, 32);
-            backArrowTextPos = new Vector2(50, 5);
-            backArrowText = "Esc";
-
+            
             #region Manage the titles on the main screen
-            foreach (LoadMenuData.LineProperties item in MyMenuTitles)
+            CreditsTitle = "The Credits";
+            foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
             {
                 // Load the Font
                 item.Font = Content.Load<SpriteFont>(item.FontFileName);
@@ -107,12 +105,20 @@ namespace blockMenu
             #endregion
 
             #region Manage the Credits
+            
+            backArrowPic = Content.Load<Texture2D>("backArrow");
+            backArrowTarget = new Rectangle(5, 5, 32, 32);
+            backArrowTextPos = new Vector2(50, 5);
+            backArrowText = "Esc";
+
             // Load fonts
             CreditsFontTitle = Content.Load<SpriteFont>("TimesNewRoman24");
             CreditsFontLines = Content.Load<SpriteFont>("TimesNewRoman12");
+
             // measure size text
             Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
             Vector2 sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
+            
             // manage the centered title
             float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
             CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, 20);
@@ -197,7 +203,7 @@ namespace blockMenu
         public void MenuTitleDraw(GameTime pGameTime)
         {
             #region Draw the Titles of the main menu
-            foreach (LoadMenuData.LineProperties item in MyMenuTitles)
+            foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
                 SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
             #endregion
 

@@ -19,14 +19,13 @@ namespace blockMenu
 
         public enum EnumMainState
         {
-            MenuTitle = 1,
-            MenuCredits = 2,
-            MenuQuit = 3,
-            GameAnimation = 4,
-            GamePlayable = 5
+            MenuTitle,
+            MenuCredits,
+            MenuQuit,
+            GameAnimation,
+            GamePlayable
         }
-
-
+        
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
