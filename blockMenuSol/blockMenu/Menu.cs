@@ -39,6 +39,13 @@ namespace blockMenu
         Vector2 backArrowTextPos;
         string backArrowText;
 
+        Tweening MyTweening;
+        double time = 0;
+        double duration = 1.5;
+        Vector2 tweeningPos;
+        List<float> tweeningTargetPos;
+        List<float> tweeningOriginPos;
+
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
@@ -49,11 +56,13 @@ namespace blockMenu
             LoadMenuData LoadMenuData = new LoadMenuData();
             PersonnalColors PersonnalColors = new PersonnalColors();
             TextAlignment TextAlignment = new TextAlignment(GameWindowWidth);
+            MyTweening = new Tweening();
 
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
             MyMenuCredits = MyMenuData.Credits;
+
 
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
@@ -93,6 +102,8 @@ namespace blockMenu
             MyMenuSelection.Font = Content.Load<SpriteFont>(MyMenuSelection.FontFileName);
 
             // Manage the position of each selection item
+            tweeningTargetPos = new List<float>();
+            tweeningOriginPos = new List<float>();
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
                 string selectionItem = MyMenuSelection.SelectionItems[i];
@@ -101,11 +112,13 @@ namespace blockMenu
                 float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
                 float tempNewYCenter = 300 + (i-1) * 75;
                 MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
+                tweeningTargetPos.Add(MyMenuSelection.AnchorItems[i].X);
+                tweeningOriginPos.Add(-100 * (i + 1));
             }
             #endregion
 
             #region Manage the Credits
-            
+
             backArrowPic = Content.Load<Texture2D>("backArrow");
             backArrowTarget = new Rectangle(5, 5, 32, 32);
             backArrowTextPos = new Vector2(50, 5);
@@ -140,48 +153,68 @@ namespace blockMenu
 
         public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            newState = Keyboard.GetState();
-
-            #region Manage the move through the selection menu
+            bool bMenuStable = true;
             
-            if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
+            if (time < duration)
             {
-                soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
-                MyMenuSelection.ItemSelected += 1;
+                time = time + pGameTime.ElapsedGameTime.TotalSeconds;
+                bMenuStable = false;
             }
-            if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
+
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
-                soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
-                MyMenuSelection.ItemSelected -= 1;
+                MyMenuSelection.AnchorItems[i] =
+                new Vector2(MyTweening.EaseOutSin(time,
+                                                  tweeningOriginPos[i],
+                                                  tweeningTargetPos[i] - tweeningOriginPos[i],
+                                                  duration),
+                            MyMenuSelection.AnchorItems[i].Y);
             }
             
-            if (MyMenuSelection.ItemSelected < 0)
-                MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
-            if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
-                MyMenuSelection.ItemSelected = 0;
-            #endregion
-
-            #region Manage the MainState status
-            if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
+            if (bMenuStable == true)
             {
-                soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                newState = Keyboard.GetState();
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                #region Manage the move through the selection menu
+
+                if (newState.IsKeyDown(Keys.Down) && !oldState.IsKeyDown(Keys.Down))
                 {
-                    System.Threading.Thread.Sleep(soundValidateSelect.Duration);
-                    pMyState = Main.EnumMainState.MenuQuit;
+                    soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                    MyMenuSelection.ItemSelected += 1;
+                }
+                if (newState.IsKeyDown(Keys.Up) && !oldState.IsKeyDown(Keys.Up))
+                {
+                    soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                    MyMenuSelection.ItemSelected -= 1;
                 }
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
-                    pMyState = Main.EnumMainState.MenuCredits;
-                
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
-                    pMyState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                if (MyMenuSelection.ItemSelected < 0)
+                    MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
+                if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
+                    MyMenuSelection.ItemSelected = 0;
+                #endregion
+
+                #region Manage the MainState status
+                if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
+                {
+                    soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+
+                    if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                    {
+                        System.Threading.Thread.Sleep(soundValidateSelect.Duration);
+                        pMyState = Main.EnumMainState.MenuQuit;
+                    }
+
+                    if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
+                        pMyState = Main.EnumMainState.MenuCredits;
+
+                    if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
+                        pMyState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                }
+                #endregion
+
+                oldState = newState;
             }
-            #endregion
-
-            oldState = newState;
-
             return pMyState;
         }
 
@@ -216,9 +249,10 @@ namespace blockMenu
                     tempColor = Color.White;
                     //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
                 }
-
+ 
                 SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
             }
+            //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
             #endregion
         }
 

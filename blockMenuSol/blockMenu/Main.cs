@@ -59,6 +59,15 @@ namespace blockMenu
 
         protected override void Update(GameTime gameTime)
         {
+            //double frameRate = 1.0d / (gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0d);
+            //Console.WriteLine(frameRate);
+
+            //for (int i = 0; i < 1000000; i++)
+            //{
+            //    Tuple<int, double, float, decimal> yoshi = new Tuple<int, double, float, decimal>(1, 2, 3, 4);
+            //}
+            
+
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
