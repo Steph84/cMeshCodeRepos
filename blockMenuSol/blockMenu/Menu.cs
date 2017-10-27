@@ -49,7 +49,9 @@ namespace blockMenu
         List<float> tweeningOriginPosIn;
         List<float> tweeningTargetPosOut;
         List<float> tweeningOriginPosOut;
+        Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle;
 
+        #region Constructor Menu
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindowSize.Item1;
@@ -66,8 +68,7 @@ namespace blockMenu
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
             MyMenuCredits = MyMenuData.Credits;
-
-
+            
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
             soundHeadBack = Content.Load<SoundEffect>("headBack");
@@ -113,12 +114,15 @@ namespace blockMenu
 
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
+                // determine positions for the selection lines
                 string selectionItem = MyMenuSelection.SelectionItems[i];
                 float availableSpaceCenter = (GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
                 Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(selectionItem);
                 float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
                 float tempNewYCenter = 300 + (i - 1) * 75;
                 MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
+
+                // determine positions for the tweening
                 tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
                 tweeningOriginPosIn.Add(-100 * (i + 1));
                 tweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
@@ -159,10 +163,11 @@ namespace blockMenu
             }
             #endregion
         }
+        #endregion
 
+        #region MenuTitleUpdate
         public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            
             if (bMenuStable == true)
             {
                 newState = Keyboard.GetState();
@@ -190,21 +195,20 @@ namespace blockMenu
                 if (newState.IsKeyDown(Keys.Enter) && !oldState.IsKeyDown(Keys.Enter))
                 {
                     soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
-
-
+                    
                     if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
-                    {
+                    { // wait for the sound to end then quit
                         System.Threading.Thread.Sleep(soundValidateSelect.Duration);
                         pMyState = Main.EnumMainState.MenuQuit;
                     }
 
                     if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
-                    {
+                    { // initialize tweening parameters
                         menuOut = true;
                         bMenuStable = false;
                         time = 0;
                         duration = 1.5;
-                        //pMyState = Main.EnumMainState.MenuCredits;
+                        TargetState = Main.EnumMainState.MenuCredits;
                     }
 
                     if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
@@ -215,54 +219,15 @@ namespace blockMenu
                 oldState = newState;
             }
             else
-            {
-                if (menuIn)
-                {
-                    if (time < duration)
-                        time = time + pGameTime.ElapsedGameTime.TotalSeconds;
-                    else
-                    {
-                        bMenuStable = true;
-                        menuIn = false;
-                    }
-
-                    for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
-                    {
-                        MyMenuSelection.AnchorItems[i] =
-                        new Vector2(MyTweening.EaseOutSin(time,
-                                                          tweeningOriginPosIn[i],
-                                                          tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
-                                                          duration),
-                                    MyMenuSelection.AnchorItems[i].Y);
-                    }
-                }
-
-                if (menuOut)
-                {
-                    if (time < duration)
-                        time = time + pGameTime.ElapsedGameTime.TotalSeconds;
-                    else
-                    {
-                        bMenuStable = true;
-                        menuOut = false;
-                        pMyState = Main.EnumMainState.MenuCredits;
-                    }
-
-                    for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
-                    {
-                        MyMenuSelection.AnchorItems[i] =
-                        new Vector2(MyTweening.EaseInSin(time,
-                                                          tweeningOriginPosOut[i],
-                                                          tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
-                                                          duration),
-                                    MyMenuSelection.AnchorItems[i].Y);
-                    }
-                }
-
+            { // call the tweening effect
+                pMyState = TweeningSelectionLines(pGameTime, menuIn, menuOut, pMyState, TargetState);
             }
+
             return pMyState;
         }
+        #endregion
 
+        #region MenuCreditsUpdate
         public Main.EnumMainState MenuCreditsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
             newState = Keyboard.GetState();
@@ -270,6 +235,7 @@ namespace blockMenu
             if (newState.IsKeyDown(Keys.Escape) && !oldState.IsKeyDown(Keys.Escape))
             {
                 soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+                // initialize the tweening parameters
                 time = 0;
                 duration = 1.5;
                 bMenuStable = false;
@@ -281,7 +247,9 @@ namespace blockMenu
 
             return pMyState;
         }
+        #endregion
 
+        #region MenuTitleDraw
         public void MenuTitleDraw(GameTime pGameTime)
         {
             #region Draw the Titles of the main menu
@@ -304,7 +272,9 @@ namespace blockMenu
             //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
             #endregion
         }
+        #endregion
 
+        #region MenuCreditsDraw
         public void MenuCreditsDraw(GameTime pGameTime)
         {
             // Draw Credits title
@@ -322,5 +292,52 @@ namespace blockMenu
             SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
             SpriteBatch.DrawString(CreditsFontTitle, backArrowText, backArrowTextPos, Color.White);
         }
+        #endregion
+
+        #region Methode to do the tweening on the selection lines In and Out
+        private Main.EnumMainState TweeningSelectionLines(GameTime pGameTime, bool pMenuIn, bool pMenuOut,
+                                                          Main.EnumMainState pMyState, Main.EnumMainState pTargetState)
+        {
+            Main.EnumMainState temp = pMyState;
+
+            if (time < duration)
+                time = time + pGameTime.ElapsedGameTime.TotalSeconds;
+            else
+            {
+                bMenuStable = true;
+                if(pMenuIn)
+                    menuIn = false;
+                if (pMenuOut)
+                {
+                    menuOut = false;
+                    temp = pTargetState;
+                }
+            }
+
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            {
+                if (pMenuIn)
+                {
+                    MyMenuSelection.AnchorItems[i] =
+                                        new Vector2(MyTweening.EaseOutSin(time,
+                                                                          tweeningOriginPosIn[i],
+                                                                          tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
+                                                                          duration),
+                                                    MyMenuSelection.AnchorItems[i].Y);
+                }
+
+                if (pMenuOut)
+                {
+                    MyMenuSelection.AnchorItems[i] =
+                                        new Vector2(MyTweening.EaseInSin(time,
+                                                                          tweeningOriginPosOut[i],
+                                                                          tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
+                                                                          duration),
+                                                    MyMenuSelection.AnchorItems[i].Y);
+                }
+            }
+            return temp;
+        }
+        #endregion
     }
 }
