@@ -4,6 +4,15 @@ namespace blockMenu
 {
     public class Tweening
     {
+        public double Time { get; set; }
+        public double Duration { get; set; }
+
+        //public Tweening(double pTime, double pDuration)
+        //{
+        //    Time = pTime;
+        //    Duration = pDuration;
+        //}
+
         // current time, start value, change in value (distance), duration
         public float EaseOutSin(double currentTime, double startValue, double distance, double duration)
         {

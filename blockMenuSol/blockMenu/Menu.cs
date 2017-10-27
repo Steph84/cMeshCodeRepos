@@ -15,7 +15,7 @@ namespace blockMenu
 
         ContentManager Content;
         SpriteBatch SpriteBatch;
-
+        
         LoadMenuData.MenuData MyMenuData;
         List<LoadMenuData.TitleProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
@@ -23,33 +23,38 @@ namespace blockMenu
 
         Color tempColor;
 
+        // keyboard stuff
         //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
 
+        // sound stuff
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
         float volumeSoundEffects;
 
+        // Credits stuff
         string CreditsTitle;
         Vector2 CreditsTitlePosition;
         SpriteFont CreditsFontTitle, CreditsFontLines;
 
+        // backArrow stuff
         Texture2D backArrowPic;
         Rectangle backArrowTarget;
         Vector2 backArrowTextPos;
         string backArrowText;
 
+        // prepare the tweening
         Tweening MyTweening;
-        bool menuIn = true;
-        bool menuOut = false;
-        bool bMenuStable = false;
-        double time = 0;
-        double duration = 1.5;
+        bool menuIn = true; // the selection items arrive
+        bool menuOut = false; // for the selection items to go out
+        bool bMenuStable = false; // at the beginning, the menu is not usable
+        Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
+
+        // List of positions for each selection item
         List<float> tweeningTargetPosIn;
         List<float> tweeningOriginPosIn;
         List<float> tweeningTargetPosOut;
         List<float> tweeningOriginPosOut;
-        Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle;
 
         #region Constructor Menu
         public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
@@ -61,8 +66,10 @@ namespace blockMenu
 
             LoadMenuData LoadMenuData = new LoadMenuData();
             PersonnalColors PersonnalColors = new PersonnalColors();
-            TextAlignment TextAlignment = new TextAlignment(GameWindowWidth);
+            TextAlignment TextAlignment = new TextAlignment(GameWindowWidth, GameWindowHeight);
+
             MyTweening = new Tweening();
+            InitializeTweening();
 
             MyMenuData = LoadMenuData.LoadJsonData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
@@ -81,24 +88,16 @@ namespace blockMenu
                 // Load the Font
                 item.Font = Content.Load<SpriteFont>(item.FontFileName);
 
-                // Manage the alignment
-                TextAlignment.ApplyAlignment(item);
-                
+                // Manage the alignments
+                TextAlignment.ApplyHorizontalAlignment(item);
+                TextAlignment.ApplyVerticalAlignment(item);
+
                 // set the color of each item
                 Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
                 if (item.EnumColor == PersonnalColors.EnumColorName.White)
                     item.Color = Color.White;
                 else
                     item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
-
-                // manage the version
-                if(item.ItemName == "Version")
-                {
-                    Vector2 sizeVersion = item.Font.MeasureString(item.Value);
-                    float tempOldXVersion = item.AnchorPosition.X;
-                    float tempNewYVersion = GameWindowHeight - sizeVersion.Y;
-                    item.AnchorPosition = new Vector2(tempOldXVersion, tempNewYVersion);
-                }
             }
             #endregion
 
@@ -115,12 +114,12 @@ namespace blockMenu
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
                 // determine positions for the selection lines
-                string selectionItem = MyMenuSelection.SelectionItems[i];
                 float availableSpaceCenter = (GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
-                Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(selectionItem);
-                float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
-                float tempNewYCenter = 300 + (i - 1) * 75;
-                MyMenuSelection.AnchorItems[i] = new Vector2(tempNewXCenter, tempNewYCenter);
+                Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(MyMenuSelection.SelectionItems[i]);
+                
+                MyMenuSelection.AnchorItems[i] =
+                    new Vector2((availableSpaceCenter - sizeCenter.X) / 2,
+                                (MyMenuSelection.AnchorPosition.Y / 12) * GameWindowHeight + (i - 1) * sizeCenter.Y);
 
                 // determine positions for the tweening
                 tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
@@ -147,7 +146,7 @@ namespace blockMenu
             
             // manage the centered title
             float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
-            CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, 20);
+            CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, GameWindowHeight/12);
 
             // manage the positions of the credits
             for (int i = 0; i < MyMenuCredits.Count; i++)
@@ -156,9 +155,10 @@ namespace blockMenu
                 for (int j = 0; j < credit.AnchorPosition.Count; j++)
                 {
                     var anchor = credit.AnchorPosition[j];
-                    MyMenuCredits[i].AnchorPosition[j] = new Vector2(50, sizeCreditsTitle.Y * 3 // anchor of the whole credits
-                                                                         + j * sizeCreditsLine.Y // anchor of each lines
-                                                                         + i * sizeCreditsLine.Y * 4); // anchor of each block
+                    MyMenuCredits[i].AnchorPosition[j] =
+                        new Vector2(GameWindowWidth/12, sizeCreditsTitle.Y * 3 // anchor of the whole credits
+                                                        + j * sizeCreditsLine.Y // anchor of each lines
+                                                        + i * sizeCreditsLine.Y * 4); // anchor of each block
                 }
             }
             #endregion
@@ -206,13 +206,18 @@ namespace blockMenu
                     { // initialize tweening parameters
                         menuOut = true;
                         bMenuStable = false;
-                        time = 0;
-                        duration = 1.5;
+                        InitializeTweening();
                         TargetState = Main.EnumMainState.MenuCredits;
                     }
 
                     if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
-                        pMyState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                    { // initialize tweening parameters
+                        menuOut = true;
+                        bMenuStable = false;
+                        InitializeTweening();
+                        TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                    }
+                        
                 }
                 #endregion
 
@@ -236,8 +241,7 @@ namespace blockMenu
             {
                 soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
                 // initialize the tweening parameters
-                time = 0;
-                duration = 1.5;
+                InitializeTweening();
                 bMenuStable = false;
                 menuIn = true;
                 pMyState = Main.EnumMainState.MenuTitle;
@@ -299,9 +303,9 @@ namespace blockMenu
                                                           Main.EnumMainState pMyState, Main.EnumMainState pTargetState)
         {
             Main.EnumMainState temp = pMyState;
-
-            if (time < duration)
-                time = time + pGameTime.ElapsedGameTime.TotalSeconds;
+            
+            if (MyTweening.Time < MyTweening.Duration)
+                MyTweening.Time = MyTweening.Time + pGameTime.ElapsedGameTime.TotalSeconds;
             else
             {
                 bMenuStable = true;
@@ -319,24 +323,35 @@ namespace blockMenu
                 if (pMenuIn)
                 {
                     MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseOutSin(time,
+                                        new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
                                                                           tweeningOriginPosIn[i],
                                                                           tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
-                                                                          duration),
+                                                                          MyTweening.Duration),
                                                     MyMenuSelection.AnchorItems[i].Y);
                 }
 
                 if (pMenuOut)
                 {
                     MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseInSin(time,
+                                        new Vector2(MyTweening.EaseInSin(MyTweening.Time,
                                                                           tweeningOriginPosOut[i],
                                                                           tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
-                                                                          duration),
+                                                                          MyTweening.Duration),
                                                     MyMenuSelection.AnchorItems[i].Y);
                 }
             }
             return temp;
+        }
+        #endregion
+
+        #region Method to initialize parameters of tweening
+        private void InitializeTweening()
+        {
+            double initializeTime = 0;
+            double initializeDuration = 1.5;
+
+            MyTweening.Time = initializeTime;
+            MyTweening.Duration = initializeDuration;
         }
         #endregion
     }

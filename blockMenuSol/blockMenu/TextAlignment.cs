@@ -6,7 +6,8 @@ namespace blockMenu
 {
     public class TextAlignment
     {
-        public int GameWindowWidth { get; set; }
+        public int GameWindowWidth { get; private set; }
+        public int GameWindowHeight { get; private set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public enum EnumLineAlignment
@@ -16,38 +17,40 @@ namespace blockMenu
             Right = 3
         };
         
-        public TextAlignment(int pGameWindowWidth)
+        public TextAlignment(int pGameWindowWidth, int pGameWindowHeight)
         {
             GameWindowWidth = pGameWindowWidth;
+            GameWindowHeight = pGameWindowHeight;
         }
 
-        #region Method to apply alignment
-        public void ApplyAlignment(LoadMenuData.TitleProperties pItem)
+        #region Method to apply horizontal alignment
+        public void ApplyHorizontalAlignment(LoadMenuData.TitleProperties pItem)
         {
             switch (pItem.Alignment)
             {
                 case TextAlignment.EnumLineAlignment.Left:
-                    float tempNewXLeft = GameWindowWidth * (1 - pItem.WidthLimit);
-                    float tempOldYLeft = pItem.AnchorPosition.Y;
-                    pItem.AnchorPosition = new Vector2(tempNewXLeft, tempOldYLeft);
+                    pItem.AnchorPosition = new Vector2(GameWindowWidth * (1 - pItem.WidthLimit), pItem.AnchorPosition.Y);
                     break;
                 case TextAlignment.EnumLineAlignment.Center:
                     float availableSpaceCenter = (GameWindowWidth - pItem.AnchorPosition.X);
                     Vector2 sizeCenter = pItem.Font.MeasureString(pItem.Value);
-                    float tempNewXCenter = (availableSpaceCenter - sizeCenter.X) / 2;
-                    float tempOldYCenter = pItem.AnchorPosition.Y;
-                    pItem.AnchorPosition = new Vector2(tempNewXCenter, tempOldYCenter);
+                    pItem.AnchorPosition = new Vector2((availableSpaceCenter - sizeCenter.X) / 2, pItem.AnchorPosition.Y);
                     break;
                 case TextAlignment.EnumLineAlignment.Right:
                     float availableSpaceRight = (GameWindowWidth - pItem.AnchorPosition.X) * pItem.WidthLimit;
                     Vector2 sizeRight = pItem.Font.MeasureString(pItem.Value);
-                    float tempNewXRight = (availableSpaceRight - sizeRight.X);
-                    float tempOldYRight = pItem.AnchorPosition.Y;
-                    pItem.AnchorPosition = new Vector2(tempNewXRight, tempOldYRight);
+                    pItem.AnchorPosition = new Vector2((availableSpaceRight - sizeRight.X), pItem.AnchorPosition.Y);
                     break;
                 default:
                     break;
             }
+        }
+        #endregion
+
+        #region Method to apply vertical alignment
+        public void ApplyVerticalAlignment(LoadMenuData.TitleProperties pItem)
+        {
+            pItem.AnchorPosition = new Vector2(pItem.AnchorPosition.X, (pItem.AnchorPosition.Y / 12) * GameWindowHeight);
         }
         #endregion
     }

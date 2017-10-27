@@ -3,7 +3,7 @@
     {
       "ItemName": "MainTitle",
       "Value": "Salem",
-      "AnchorPosition": "0, 50",
+      "AnchorPosition": "0, 1",
       "Alignment": "Center",
       "EnumColor": "Red",
       "FontFileName": "Capture_it"
@@ -11,7 +11,7 @@
     {
       "ItemName": "SubTitle",
       "Value": "Story",
-      "AnchorPosition": "0, 150",
+      "AnchorPosition": "0, 3",
       "Alignment": "Center",
       "EnumColor": "Blue",
       "FontFileName": "AlexBrush",
@@ -20,7 +20,7 @@
     {
       "ItemName": "Version",
       "Value": "V 1.0",
-      "AnchorPosition": "0, 0",
+      "AnchorPosition": "0, 11",
       "Alignment": "Right",
       "EnumColor": "White",
       "FontFileName": "TimesNewRoman24",
@@ -38,7 +38,7 @@
       "0, 0",
       "0, 0"
     ],
-    "AnchorPosition": "0, 300",
+    "AnchorPosition": "0, 7",
     "Alignment": "Center",
     "EnumColor": "White",
     "FontFileName": "Pacifico",
