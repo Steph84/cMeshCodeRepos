@@ -1,10 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using blockMenu.UtilFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
-namespace blockMenu
+namespace blockMenu.MenuFolder
 {
     public class LoadMenuData
     {
@@ -57,7 +58,7 @@ namespace blockMenu
         {
             MenuData temp = new MenuData();
 
-            string filename = "../../../../menuData.json";
+            string filename = "../../../../MenuFolder/menuData.json";
 
             using (StreamReader streamReader = new StreamReader(filename))
             {

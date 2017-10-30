@@ -66,16 +66,16 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="KeyBoardManager.cs" />
-    <Compile Include="LoadMenuData.cs" />
-    <Compile Include="Menu.cs" />
+    <Compile Include="UtilFolder\KeyBoardManager.cs" />
+    <Compile Include="MenuFolder\LoadMenuData.cs" />
+    <Compile Include="MenuFolder\Menu.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="PersonnalColors.cs" />
+    <Compile Include="UtilFolder\PersonnalColors.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextAlignment.cs" />
-    <Compile Include="Tweening.cs" />
-    <Compile Include="WindowDimension.cs" />
+    <Compile Include="UtilFolder\TextAlignment.cs" />
+    <Compile Include="UtilFolder\Tweening.cs" />
+    <Compile Include="MenuFolder\WindowDimension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -96,7 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="blockMenu_TemporaryKey.pfx" />
-    <None Include="menuData.json" />
+    <None Include="MenuFolder\menuData.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
