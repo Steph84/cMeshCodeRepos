@@ -10,6 +10,7 @@ namespace blockMenu.MenuFolder
         public int DisplayHeight { get; set; }
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
+        public float GameSizeCoefficient { get; set; }
         private GraphicsDeviceManager Graphics { get; set; }
         private GameWindow GameWindow { get; set; }
 
@@ -19,16 +20,19 @@ namespace blockMenu.MenuFolder
         private bool IsFullScreen = false;
 
         // Array for the GameWindow in relation to the resolution
-        private int [,] ArrayResolution = new int [4,4] {  // displayRes / gameWindowRes
-                                                            { 1024, 768, 1152, 576 },
-                                                            { 1920, 1080, 1728, 864 },
-                                                            { 2560, 1440, 2304, 1152 },
-                                                            { 3840, 2160, 3456, 1728 }
+        private int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
+                                                            { 1024, 768, 1152, 576, 10 },
+                                                            { 1920, 1080, 1728, 864, 15 },
+                                                            { 2560, 1440, 2304, 1152, 20 },
+                                                            { 3840, 2160, 3456, 1728, 30 }
                                                         };
         #endregion
 
         #region WindowDimension Constructor
-        public WindowDimension(DisplayMode pCurrentDisplayMode, Viewport pViewport, GameWindow pGameWindow, GraphicsDeviceManager pGraphics)
+        public WindowDimension(DisplayMode pCurrentDisplayMode,
+                               Viewport pViewport,
+                               GameWindow pGameWindow,
+                               GraphicsDeviceManager pGraphics)
         {
             // get the different obbjects
             Graphics = pGraphics;
@@ -71,6 +75,7 @@ namespace blockMenu.MenuFolder
                 {
                     newGameWindowWidth = ArrayResolution[line, 2];
                     newGameWindowHeight = ArrayResolution[line, 3];
+                    GameSizeCoefficient = ArrayResolution[line, 4] / 10.0f;
                 }
                 else
                     break;

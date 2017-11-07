@@ -16,6 +16,7 @@ namespace blockMenu
         Tuple<int, int> GameWindowSize;
         private string MyTitleGameWindow = "This is a game !";
         private EnumMainState MyState = EnumMainState.MenuTitle;
+        public float GameSizeCoefficient = 1.0f;
 
         public enum EnumMainState
         {
@@ -40,8 +41,10 @@ namespace blockMenu
                                            GraphicsDevice.Viewport,
                                            Window,
                                            graphics);
-
+            
+            // update Main properties
             GameWindowSize = new Tuple<int, int>(MyWindow.GameWindowWidth, MyWindow.GameWindowHeight);
+            GameSizeCoefficient = MyWindow.GameSizeCoefficient;
 
             base.Initialize();
         }
