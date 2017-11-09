@@ -12,6 +12,7 @@ namespace jamGitHubGameOff
 
         WindowDimension MyWindow;
         Menu MyMenu;
+        Map MyMap;
 
         Tuple<int, int> GameWindowSize;
         private string MyTitleGameWindow = "This is a game !";
@@ -54,6 +55,7 @@ namespace jamGitHubGameOff
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             MyMenu = new Menu(GameWindowSize, Content, spriteBatch);
+            MyMap = new Map(GameWindowSize, Content, spriteBatch);
         }
 
         protected override void UnloadContent()
@@ -62,15 +64,6 @@ namespace jamGitHubGameOff
 
         protected override void Update(GameTime gameTime)
         {
-            //double frameRate = 1.0d / (gameTime.ElapsedGameTime.TotalMilliseconds / 1000.0d);
-            //Console.WriteLine(frameRate);
-
-            //for (int i = 0; i < 1000000; i++)
-            //{
-            //    Tuple<int, double, float, decimal> yoshi = new Tuple<int, double, float, decimal>(1, 2, 3, 4);
-            //}
-            
-
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
@@ -122,6 +115,7 @@ namespace jamGitHubGameOff
 
                 case EnumMainState.GamePlayable:
                     // let's play
+                    MyMap.MapDraw(gameTime);
                     break;
 
                 default:
