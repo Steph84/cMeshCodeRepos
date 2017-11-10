@@ -7,6 +7,8 @@ namespace jamGitHubGameOff
 {
     public class Main : Game
     {
+        Texture2D line1;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -15,9 +17,11 @@ namespace jamGitHubGameOff
         GameClass MyGameClass;
 
         Tuple<int, int> GameWindowSize;
-        private string MyTitleGameWindow = "This is a game !";
-        private EnumMainState MyState = EnumMainState.MenuTitle;
-        public float GameSizeCoefficient = 1.0f;
+        string MyTitleGameWindow = "This is a game !";
+        //EnumMainState MyState = EnumMainState.MenuTitle;
+        EnumMainState MyState = EnumMainState.GamePlayable;
+        
+        float GameSizeCoefficient = 1.0f;
 
         public enum EnumMainState
         {
@@ -56,6 +60,9 @@ namespace jamGitHubGameOff
 
             MyMenu = new Menu(GameWindowSize, Content, spriteBatch);
             MyGameClass = new GameClass(GameWindowSize, Content, spriteBatch);
+            
+            line1 = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
+            line1.SetData(new[] { Color.White });
         }
 
         protected override void UnloadContent()
@@ -99,7 +106,7 @@ namespace jamGitHubGameOff
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-
+            
             switch (MyState)
             {
                 case EnumMainState.MenuTitle:
@@ -122,7 +129,13 @@ namespace jamGitHubGameOff
                 default:
                     break;
             }
-            
+
+            spriteBatch.Draw(line1, new Rectangle(0, 207, 100, 1), Color.White);
+            for (int i = 0; i < 40; i++)
+            {
+                spriteBatch.Draw(line1, new Rectangle((int)Math.Round(100 + i * 4.0, 0, MidpointRounding.AwayFromZero), 207 + i, 1, 1), Color.White);
+            }
+
             spriteBatch.End();
         
             base.Draw(gameTime);
