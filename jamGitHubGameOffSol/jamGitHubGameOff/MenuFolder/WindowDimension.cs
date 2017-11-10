@@ -11,8 +11,8 @@ namespace jamGitHubGameOff.MenuFolder
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
         public float GameSizeCoefficient { get; set; }
-        private GraphicsDeviceManager Graphics { get; set; }
-        private GameWindow GameWindow { get; set; }
+        GraphicsDeviceManager Graphics;
+        GameWindow GameWindow;
 
         // initialize values
         private bool AllowAltF4 = true;
@@ -20,12 +20,12 @@ namespace jamGitHubGameOff.MenuFolder
         private bool IsFullScreen = false;
 
         // Array for the GameWindow in relation to the resolution
-        private int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
-                                                            { 1024, 768, 1152, 576, 10 },
-                                                            { 1920, 1080, 1728, 864, 15 },
-                                                            { 2560, 1440, 2304, 1152, 20 },
-                                                            { 3840, 2160, 3456, 1728, 30 }
-                                                        };
+        int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
+                                                    { 1024, 768, 1152, 576, 10 },
+                                                    { 1920, 1080, 1728, 864, 15 },
+                                                    { 2560, 1440, 2304, 1152, 20 },
+                                                    { 3840, 2160, 3456, 1728, 30 }
+                                                };
         #endregion
 
         #region WindowDimension Constructor

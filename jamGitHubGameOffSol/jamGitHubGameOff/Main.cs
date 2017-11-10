@@ -12,7 +12,7 @@ namespace jamGitHubGameOff
 
         WindowDimension MyWindow;
         Menu MyMenu;
-        Map MyMap;
+        GameClass MyGameClass;
 
         Tuple<int, int> GameWindowSize;
         private string MyTitleGameWindow = "This is a game !";
@@ -55,7 +55,7 @@ namespace jamGitHubGameOff
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             MyMenu = new Menu(GameWindowSize, Content, spriteBatch);
-            MyMap = new Map(GameWindowSize, Content, spriteBatch);
+            MyGameClass = new GameClass(GameWindowSize, Content, spriteBatch);
         }
 
         protected override void UnloadContent()
@@ -80,6 +80,7 @@ namespace jamGitHubGameOff
 
                 case EnumMainState.GamePlayable:
                     // let's play
+                    MyGameClass.GameClassUpdate(gameTime);
                     break;
 
                 case EnumMainState.MenuQuit:
@@ -115,7 +116,7 @@ namespace jamGitHubGameOff
 
                 case EnumMainState.GamePlayable:
                     // let's play
-                    MyMap.MapDraw(gameTime);
+                    MyGameClass.GameClassDraw(gameTime);
                     break;
 
                 default:

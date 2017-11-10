@@ -66,6 +66,7 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GameClass.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="UtilFolder\KeyBoardManager.cs" />
     <Compile Include="MenuFolder\LoadMenuData.cs" />

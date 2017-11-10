@@ -8,9 +8,8 @@ namespace jamGitHubGameOff
 {
     public class Map
     {
-        public int GameWindowWidth { get; private set; }
-        public int GameWindowHeight { get; private set; }
-
+        int GameWindowWidth;
+        int GameWindowHeight;
         ContentManager Content;
         SpriteBatch SpriteBatch;
         
