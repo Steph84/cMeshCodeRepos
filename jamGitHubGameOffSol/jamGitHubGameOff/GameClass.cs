@@ -17,14 +17,14 @@ namespace jamGitHubGameOff
         SpriteBatch SpriteBatch;
         Map MyMap;
 
-        public GameClass(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
+        public GameClass(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, GraphicsDevice pGraphicsDevice)
         {
             GameWindowWidth = pGameWindowSize.Item1;
             GameWindowHeight = pGameWindowSize.Item2;
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 
-            MyMap = new Map(pGameWindowSize, Content, SpriteBatch);
+            MyMap = new Map(pGameWindowSize, Content, SpriteBatch, pGraphicsDevice);
         }
 
         public void GameClassUpdate(GameTime pGameTime)

@@ -7,8 +7,6 @@ namespace jamGitHubGameOff
 {
     public class Main : Game
     {
-        Texture2D line1;
-
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -59,10 +57,7 @@ namespace jamGitHubGameOff
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             MyMenu = new Menu(GameWindowSize, Content, spriteBatch);
-            MyGameClass = new GameClass(GameWindowSize, Content, spriteBatch);
-            
-            line1 = new Texture2D(GraphicsDevice, 1, 1, false, SurfaceFormat.Color);
-            line1.SetData(new[] { Color.White });
+            MyGameClass = new GameClass(GameWindowSize, Content, spriteBatch, GraphicsDevice);
         }
 
         protected override void UnloadContent()
@@ -129,13 +124,7 @@ namespace jamGitHubGameOff
                 default:
                     break;
             }
-
-            spriteBatch.Draw(line1, new Rectangle(0, 207, 100, 1), Color.White);
-            for (int i = 0; i < 40; i++)
-            {
-                spriteBatch.Draw(line1, new Rectangle((int)Math.Round(100 + i * 4.0, 0, MidpointRounding.AwayFromZero), 207 + i, 1, 1), Color.White);
-            }
-
+            
             spriteBatch.End();
         
             base.Draw(gameTime);
