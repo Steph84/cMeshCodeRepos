@@ -8,6 +8,8 @@ namespace jamGitHubGameOff
 {
     public class Map
     {
+        DonkeyKong MyDonkeyKong;
+
         // position of all points for the map to walk on
         public List<Vector2> ListMapPoints =
             new List<Vector2> {
@@ -76,6 +78,15 @@ namespace jamGitHubGameOff
             // Layer 3 platform part
             DKCMapLayer3Pic = Content.Load<Texture2D>("DKCBarrelCannonCanyonCut");
             DKCMapLayer3Target = new Rectangle(0, 0, DKCMapLayer3Pic.Width, DKCMapLayer3Pic.Height);
+
+            MyDonkeyKong = new DonkeyKong(Content, SpriteBatch);
+        }
+        #endregion
+
+        #region MapUpdate
+        public void MapUpdate(GameTime pGameTime)
+        {
+            MyDonkeyKong.DonkeyKongUpDate(pGameTime);
         }
         #endregion
 
@@ -100,6 +111,7 @@ namespace jamGitHubGameOff
             foreach(var item in ListRectanglePoints)
                 SpriteBatch.Draw(segmentPoint, item, Color.White);
 
+            MyDonkeyKong.DonkeyKongDraw(pGameTime);
         }
         #endregion
 

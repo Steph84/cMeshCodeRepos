@@ -29,7 +29,7 @@ namespace jamGitHubGameOff
 
         public void GameClassUpdate(GameTime pGameTime)
         {
-
+            MyMap.MapUpdate(pGameTime);
         }
 
         public void GameClassDraw(GameTime pGameTime)
