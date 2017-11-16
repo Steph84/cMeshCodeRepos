@@ -79,7 +79,7 @@ namespace jamGitHubGameOff
             DKCMapLayer3Pic = Content.Load<Texture2D>("DKCBarrelCannonCanyonCut");
             DKCMapLayer3Target = new Rectangle(0, 0, DKCMapLayer3Pic.Width, DKCMapLayer3Pic.Height);
 
-            MyDonkeyKong = new DonkeyKong(Content, SpriteBatch);
+            MyDonkeyKong = new DonkeyKong(pGameWindowSize, Content, SpriteBatch, ListMapPoints);
         }
         #endregion
 
