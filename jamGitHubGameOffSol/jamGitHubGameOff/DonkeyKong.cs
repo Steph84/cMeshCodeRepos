@@ -24,9 +24,11 @@ namespace jamGitHubGameOff
         Rectangle donkeyPos;
         double speedAnimation = 8.0d;
         int speedFalling = 200;
-        int speedWalking = 100;
-        string donkeyDir = "right";
-        int coefDir = 1;
+        int speedWalking = 300;
+        string donkeyDir = "left";
+        int coefDir = -1;
+        SpriteEffects donkeyDirSprite = SpriteEffects.FlipHorizontally;
+        Vector2 donkeyOrig;
 
         public DonkeyKong(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
@@ -37,7 +39,8 @@ namespace jamGitHubGameOff
             ListMapPoints = pListMapPoints;
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
             donkeyQuad = new Rectangle(0, 0, DKStandingFrameWidth, DKStandingFrameHeight);
-            donkeyPos = new Rectangle(1000, 200, DKStandingFrameWidth, DKStandingFrameHeight);
+            donkeyPos = new Rectangle(100, 200, DKStandingFrameWidth, DKStandingFrameHeight);
+            donkeyOrig = new Vector2(donkeyPos.Width / 2, donkeyPos.Height / 2);
         }
 
         public void DonkeyKongUpDate(GameTime pGameTime)
@@ -78,36 +81,36 @@ namespace jamGitHubGameOff
             double b = leftBoundary.Y - leftBoundary.X * a;
 
             // modify DK y
-            if ((donkeyPos.Y + donkeyPos.Height) < (donkeyPos.X * a + b))
+            if ((donkeyPos.Y + donkeyPos.Height/2) < (donkeyPos.X * a + b))
                 donkeyPos.Y = donkeyPos.Y + (speedFalling * pGameTime.ElapsedGameTime.Milliseconds / 1000);
             else
-                donkeyPos.Y = (int)(donkeyPos.X * a + b - donkeyPos.Height);
+                donkeyPos.Y = (int)(donkeyPos.X * a + b - donkeyPos.Height/2);
             #endregion
 
             #region Manage movement along x
-            if (donkeyDir == "right")
-                coefDir = 1;
-
-            if(donkeyDir == "left")
-                coefDir = -1;
 
             donkeyPos.X = donkeyPos.X + coefDir * (speedWalking * pGameTime.ElapsedGameTime.Milliseconds / 1000);
 
-            if (donkeyPos.X > GameWindowWidth)
+            if (donkeyPos.X > GameWindowWidth - donkeyPos.Width / 2)
+            {
                 donkeyDir = "left";
-            
-            if (donkeyPos.X < 0)
+                coefDir = -1;
+                donkeyDirSprite = SpriteEffects.FlipHorizontally;
+            }
+
+            if (donkeyPos.X < donkeyPos.Width / 2)
+            {
                 donkeyDir = "right";
+                coefDir = 1;
+                donkeyDirSprite = SpriteEffects.None;
+            }
 
             #endregion
         }
 
         public void DonkeyKongDraw(GameTime pGameTime)
         {
-            //SpriteBatch.Draw(DKStandingPic, donkeyPos, donkeyQuad, Color.White);
-            // TODO retournement ne fonctionne pas
-            SpriteBatch.Draw(DKStandingPic, null, donkeyPos, donkeyQuad, null, 0,
-                             new Vector2((float)coefDir, 1), Color.White, SpriteEffects.None, 0);
+            SpriteBatch.Draw(DKStandingPic, donkeyPos, donkeyQuad, Color.White, 0, donkeyOrig, donkeyDirSprite, 0);
         }
     }
 }
