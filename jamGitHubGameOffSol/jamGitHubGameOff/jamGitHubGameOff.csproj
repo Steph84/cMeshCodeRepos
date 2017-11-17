@@ -69,6 +69,7 @@
     <Compile Include="DonkeyKong.cs" />
     <Compile Include="GameClass.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="SpriteGenerator.cs" />
     <Compile Include="UtilFolder\KeyBoardManager.cs" />
     <Compile Include="MenuFolder\LoadMenuData.cs" />
     <Compile Include="MenuFolder\Menu.cs" />

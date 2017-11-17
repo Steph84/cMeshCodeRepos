@@ -15,6 +15,8 @@ namespace jamGitHubGameOff
         SpriteBatch SpriteBatch;
         List<Vector2> ListMapPoints;
 
+        SpriteGenerator DKStanding;
+
         Texture2D DKStandingPic;
         int DKStandingFrameWidth = 42;
         int DKStandingFrameHeight = 40;
@@ -25,28 +27,12 @@ namespace jamGitHubGameOff
         double speedAnimation = 8.0d;
         int speedFalling = 200;
         int speedWalking = 300;
-        EnumDonkeyKongDirection donkeyDir = EnumDonkeyKongDirection.Left;
+        EnumSpriteDirection donkeyDir = EnumSpriteDirection.Left;
         SpriteEffects donkeyDirSprite = SpriteEffects.FlipHorizontally;
         Vector2 donkeyOrig;
         EnumDonkeyKongAction donkeyAction = EnumDonkeyKongAction.Standing;
 
-        public enum EnumDonkeyKongDirection
-        {
-            Right = 1,
-            Left = -1
-        }
-
-        public enum EnumDonkeyKongAction
-        {
-            Standing = 0,
-            Walking = 1,
-            Running = 2,
-            Jumping = 3,
-            Falling = 4,
-            Throwing = 5,
-            Hit = 6,
-            Celebrate = 7
-        }
+        
 
         public DonkeyKong(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
@@ -56,6 +42,11 @@ namespace jamGitHubGameOff
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
+            DKStanding = new SpriteGenerator(DKStandingPic, 11);
+            DKStanding.SourceQuad = new Rectangle(100, 200, DKStandingFrameWidth, DKStandingFrameHeight);
+
+
+
             donkeyQuad = new Rectangle(0, 0, DKStandingFrameWidth, DKStandingFrameHeight);
             donkeyPos = new Rectangle(100, 200, DKStandingFrameWidth, DKStandingFrameHeight);
             donkeyOrig = new Vector2(donkeyPos.Width / 2, donkeyPos.Height / 2);
@@ -111,13 +102,13 @@ namespace jamGitHubGameOff
 
             if (donkeyPos.X > GameWindowWidth - donkeyPos.Width / 2)
             {
-                donkeyDir = EnumDonkeyKongDirection.Left;
+                donkeyDir = EnumSpriteDirection.Left;
                 donkeyDirSprite = SpriteEffects.FlipHorizontally;
             }
 
             if (donkeyPos.X < donkeyPos.Width / 2)
             {
-                donkeyDir = EnumDonkeyKongDirection.Right;
+                donkeyDir = EnumSpriteDirection.Right;
                 donkeyDirSprite = SpriteEffects.None;
             }
 
@@ -128,5 +119,17 @@ namespace jamGitHubGameOff
         {
             SpriteBatch.Draw(DKStandingPic, donkeyPos, donkeyQuad, Color.White, 0, donkeyOrig, donkeyDirSprite, 0);
         }
+    }
+    
+    public enum EnumDonkeyKongAction
+    {
+        Standing = 0,
+        Walking = 1,
+        Running = 2,
+        Jumping = 3,
+        Falling = 4,
+        Throwing = 5,
+        Hit = 6,
+        Celebrate = 7
     }
 }
