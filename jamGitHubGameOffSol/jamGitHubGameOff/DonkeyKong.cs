@@ -25,10 +25,28 @@ namespace jamGitHubGameOff
         double speedAnimation = 8.0d;
         int speedFalling = 200;
         int speedWalking = 300;
-        string donkeyDir = "left";
-        int coefDir = -1;
+        EnumDonkeyKongDirection donkeyDir = EnumDonkeyKongDirection.Left;
         SpriteEffects donkeyDirSprite = SpriteEffects.FlipHorizontally;
         Vector2 donkeyOrig;
+        EnumDonkeyKongAction donkeyAction = EnumDonkeyKongAction.Standing;
+
+        public enum EnumDonkeyKongDirection
+        {
+            Right = 1,
+            Left = -1
+        }
+
+        public enum EnumDonkeyKongAction
+        {
+            Standing = 0,
+            Walking = 1,
+            Running = 2,
+            Jumping = 3,
+            Falling = 4,
+            Throwing = 5,
+            Hit = 6,
+            Celebrate = 7
+        }
 
         public DonkeyKong(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
@@ -89,19 +107,17 @@ namespace jamGitHubGameOff
 
             #region Manage movement along x
 
-            donkeyPos.X = donkeyPos.X + coefDir * (speedWalking * pGameTime.ElapsedGameTime.Milliseconds / 1000);
+            donkeyPos.X = donkeyPos.X + (int)donkeyDir * (speedWalking * pGameTime.ElapsedGameTime.Milliseconds / 1000);
 
             if (donkeyPos.X > GameWindowWidth - donkeyPos.Width / 2)
             {
-                donkeyDir = "left";
-                coefDir = -1;
+                donkeyDir = EnumDonkeyKongDirection.Left;
                 donkeyDirSprite = SpriteEffects.FlipHorizontally;
             }
 
             if (donkeyPos.X < donkeyPos.Width / 2)
             {
-                donkeyDir = "right";
-                coefDir = 1;
+                donkeyDir = EnumDonkeyKongDirection.Right;
                 donkeyDirSprite = SpriteEffects.None;
             }
 
