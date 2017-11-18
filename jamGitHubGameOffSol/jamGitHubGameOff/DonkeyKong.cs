@@ -15,22 +15,15 @@ namespace jamGitHubGameOff
         SpriteBatch SpriteBatch;
         List<Vector2> ListMapPoints;
 
-        SpriteGenerator DKStanding;
+        SpriteGenerator MyDKStandingSprite;
 
         Texture2D DKStandingPic;
-        int DKStandingFrameWidth = 42;
-        int DKStandingFrameHeight = 40;
-        double currentFrame = 0;
-        string parseQuads = "forth";
-        Rectangle donkeyQuad;
-        Rectangle donkeyPos;
-        double speedAnimation = 8.0d;
-        int speedFalling = 200;
-        int speedWalking = 300;
-        EnumSpriteDirection donkeyDir = EnumSpriteDirection.Left;
-        SpriteEffects donkeyDirSprite = SpriteEffects.FlipHorizontally;
-        Vector2 donkeyOrig;
-        EnumDonkeyKongAction donkeyAction = EnumDonkeyKongAction.Standing;
+        int DKStandingFrameNumber;
+        Rectangle DonkeyKongPosition;
+        double DKSpeedFalling;
+        double DKSpeedWalking;
+        EnumSpriteDirection DonkeyKongDirection = EnumSpriteDirection.Left;
+        EnumDonkeyKongAction DonkeyKongAction = EnumDonkeyKongAction.Standing;
 
         
 
@@ -42,46 +35,57 @@ namespace jamGitHubGameOff
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
-            DKStanding = new SpriteGenerator(DKStandingPic, 11);
-            DKStanding.SourceQuad = new Rectangle(100, 200, DKStandingFrameWidth, DKStandingFrameHeight);
+            DKStandingFrameNumber = 11;
 
+            MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber);
+            MyDKStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
+            MyDKStandingSprite.SpeedAnimation = 8.0d;
 
-
-            donkeyQuad = new Rectangle(0, 0, DKStandingFrameWidth, DKStandingFrameHeight);
-            donkeyPos = new Rectangle(100, 200, DKStandingFrameWidth, DKStandingFrameHeight);
-            donkeyOrig = new Vector2(donkeyPos.Width / 2, donkeyPos.Height / 2);
+            DonkeyKongPosition = new Rectangle(100, 200, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
+            DKSpeedFalling = 0.2d;
+            DKSpeedWalking = 0.07d; // minimum 0.0625 for 16ms frame rate
         }
 
         public void DonkeyKongUpDate(GameTime pGameTime)
         {
+            // TODO to move into the SpriteGenerator Update
             #region Manage DK animation
-            if(parseQuads == "forth")
-                currentFrame = currentFrame + (speedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-
-            if (currentFrame > 10)
+            if (MyDKStandingSprite.ParseQuads == "forth")
             {
-                currentFrame = 10;
-                parseQuads = "back";
+                MyDKStandingSprite.CurrentFrame =
+                    MyDKStandingSprite.CurrentFrame + (MyDKStandingSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
             }
 
-            if(parseQuads == "back")
-                currentFrame = currentFrame - (speedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-
-            if (currentFrame < 0)
+            if (MyDKStandingSprite.CurrentFrame > DKStandingFrameNumber - 1)
             {
-                currentFrame = 0;
-                parseQuads = "forth";
+                MyDKStandingSprite.CurrentFrame = DKStandingFrameNumber - 1;
+                MyDKStandingSprite.ParseQuads = "back";
             }
 
-            donkeyQuad.X = (int)Math.Floor(currentFrame) * DKStandingFrameWidth;
+            if (MyDKStandingSprite.ParseQuads == "back")
+            {
+                MyDKStandingSprite.CurrentFrame =
+                    MyDKStandingSprite.CurrentFrame - (MyDKStandingSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
+            }
+
+            if (MyDKStandingSprite.CurrentFrame < 0)
+            {
+                MyDKStandingSprite.CurrentFrame = 0;
+                MyDKStandingSprite.ParseQuads = "forth";
+            }
+
+            MyDKStandingSprite.SourceQuad = new Rectangle((int)Math.Floor(MyDKStandingSprite.CurrentFrame) * MyDKStandingSprite.FrameWidth,
+                                                          MyDKStandingSprite.SourceQuad.Y,
+                                                          MyDKStandingSprite.SourceQuad.Width,
+                                                          MyDKStandingSprite.SourceQuad.Height);
             #endregion
 
             #region Manage collision on the ground
             // find the 2 points around DK
-            Vector2 leftBoundary = ListMapPoints.Where(x => donkeyPos.X >= x.X).LastOrDefault();
+            Vector2 leftBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X >= x.X).LastOrDefault();
             if (leftBoundary == null)
                 leftBoundary = ListMapPoints.First();
-            Vector2 rightBoundary = ListMapPoints.Where(x => donkeyPos.X < x.X).FirstOrDefault();
+            Vector2 rightBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X < x.X).FirstOrDefault();
             if (rightBoundary == null)
                 rightBoundary = ListMapPoints.Last();
 
@@ -90,34 +94,33 @@ namespace jamGitHubGameOff
             double b = leftBoundary.Y - leftBoundary.X * a;
 
             // modify DK y
-            if ((donkeyPos.Y + donkeyPos.Height/2) < (donkeyPos.X * a + b))
-                donkeyPos.Y = donkeyPos.Y + (speedFalling * pGameTime.ElapsedGameTime.Milliseconds / 1000);
+            if ((DonkeyKongPosition.Y + DonkeyKongPosition.Height/2) < (DonkeyKongPosition.X * a + b))
+                DonkeyKongPosition.Y = DonkeyKongPosition.Y + (int)(DKSpeedFalling * pGameTime.ElapsedGameTime.Milliseconds);
             else
-                donkeyPos.Y = (int)(donkeyPos.X * a + b - donkeyPos.Height/2);
+                DonkeyKongPosition.Y = (int)(DonkeyKongPosition.X * a + b - DonkeyKongPosition.Height/2);
             #endregion
 
             #region Manage movement along x
+            DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
 
-            donkeyPos.X = donkeyPos.X + (int)donkeyDir * (speedWalking * pGameTime.ElapsedGameTime.Milliseconds / 1000);
-
-            if (donkeyPos.X > GameWindowWidth - donkeyPos.Width / 2)
+            if (DonkeyKongPosition.X > GameWindowWidth - DonkeyKongPosition.Width / 2)
             {
-                donkeyDir = EnumSpriteDirection.Left;
-                donkeyDirSprite = SpriteEffects.FlipHorizontally;
+                DonkeyKongDirection = EnumSpriteDirection.Left;
             }
 
-            if (donkeyPos.X < donkeyPos.Width / 2)
+            if (DonkeyKongPosition.X < DonkeyKongPosition.Width / 2)
             {
-                donkeyDir = EnumSpriteDirection.Right;
-                donkeyDirSprite = SpriteEffects.None;
+                DonkeyKongDirection = EnumSpriteDirection.Right;
             }
-
             #endregion
+
+            // update the sprite direction and the animation (soon)
+            MyDKStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
         }
 
         public void DonkeyKongDraw(GameTime pGameTime)
         {
-            SpriteBatch.Draw(DKStandingPic, donkeyPos, donkeyQuad, Color.White, 0, donkeyOrig, donkeyDirSprite, 0);
+            MyDKStandingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
         }
     }
     
