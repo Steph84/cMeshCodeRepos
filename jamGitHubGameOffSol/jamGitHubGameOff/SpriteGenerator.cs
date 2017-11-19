@@ -65,24 +65,31 @@ namespace jamGitHubGameOff
 
                 if (ParseQuads == "back")
                     CurrentFrame = CurrentFrame - (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-            }
-            #endregion
 
-            #region Manage the loop around the number of frames
-            if (CurrentFrame > FrameNumber - 1)
-            {
-                CurrentFrame = FrameNumber - 1;
-                if (HasCompleteAnimation == false)
+                if (CurrentFrame > FrameNumber - 1)
+                {
+                    CurrentFrame = FrameNumber - 1;
                     ParseQuads = "back";
-            }
+                }
 
-            if (CurrentFrame < 0)
-            {
-                CurrentFrame = 0;
-                if (HasCompleteAnimation == false)
+                if (CurrentFrame < 0)
+                {
+                    CurrentFrame = 0;
                     ParseQuads = "forth";
+                }
             }
             #endregion
+
+            #region Manage the movement with a complete animation
+            if (HasCompleteAnimation == true)
+            {
+                CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
+                
+                if (CurrentFrame > FrameNumber - 1)
+                    CurrentFrame = 0;
+            }
+            #endregion
+
 
             SourceQuad = new Rectangle((int)Math.Floor(CurrentFrame) * FrameWidth, SourceQuad.Y, SourceQuad.Width, SourceQuad.Height);
         }

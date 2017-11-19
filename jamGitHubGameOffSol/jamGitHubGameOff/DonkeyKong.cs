@@ -16,9 +16,13 @@ namespace jamGitHubGameOff
         List<Vector2> ListMapPoints;
 
         SpriteGenerator MyDKStandingSprite;
-
         Texture2D DKStandingPic;
         int DKStandingFrameNumber;
+
+        SpriteGenerator MyDKWalkingSprite;
+        Texture2D DKWalkingPic;
+        int DKWalkingFrameNumber;
+        
         Rectangle DonkeyKongPosition;
         double DKSpeedFalling;
         double DKSpeedWalking;
@@ -34,16 +38,24 @@ namespace jamGitHubGameOff
             Content = pContent;
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
+
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
             DKStandingFrameNumber = 11;
-
             MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber, false);
             MyDKStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             MyDKStandingSprite.SpeedAnimation = 8.0d;
 
+            DKWalkingPic = Content.Load<Texture2D>("DKCWalking"); // 20
+            DKWalkingFrameNumber = 20;
+            MyDKWalkingSprite = new SpriteGenerator(SpriteBatch, DKWalkingPic, DKWalkingFrameNumber, true);
+            MyDKWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKWalkingSprite.FrameWidth, MyDKWalkingSprite.FrameHeight);
+            MyDKWalkingSprite.SpeedAnimation = 10.0d;
+
             DonkeyKongPosition = new Rectangle(100, 200, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             DKSpeedFalling = 0.2d;
             DKSpeedWalking = 0.07d; // minimum 0.0625 for 16ms frame rate
+
+            DonkeyKongAction = EnumDonkeyKongAction.Walking;
         }
 
         public void DonkeyKongUpDate(GameTime pGameTime)
@@ -79,12 +91,56 @@ namespace jamGitHubGameOff
             #endregion
 
             // update the sprite direction and the animation
-            MyDKStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+            switch (DonkeyKongAction)
+            {
+                case EnumDonkeyKongAction.Standing:
+                    MyDKStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.Walking:
+                    MyDKWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.Running:
+                    break;
+                case EnumDonkeyKongAction.Jumping:
+                    break;
+                case EnumDonkeyKongAction.Falling:
+                    break;
+                case EnumDonkeyKongAction.Throwing:
+                    break;
+                case EnumDonkeyKongAction.Hit:
+                    break;
+                case EnumDonkeyKongAction.Celebrate:
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void DonkeyKongDraw(GameTime pGameTime)
         {
-            MyDKStandingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+            switch (DonkeyKongAction)
+            {
+                case EnumDonkeyKongAction.Standing:
+                    MyDKStandingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
+                case EnumDonkeyKongAction.Walking:
+                    MyDKWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
+                case EnumDonkeyKongAction.Running:
+                    break;
+                case EnumDonkeyKongAction.Jumping:
+                    break;
+                case EnumDonkeyKongAction.Falling:
+                    break;
+                case EnumDonkeyKongAction.Throwing:
+                    break;
+                case EnumDonkeyKongAction.Hit:
+                    break;
+                case EnumDonkeyKongAction.Celebrate:
+                    break;
+                default:
+                    break;
+            }
         }
     }
     
