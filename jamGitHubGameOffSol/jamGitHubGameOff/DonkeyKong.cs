@@ -37,7 +37,7 @@ namespace jamGitHubGameOff
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
             DKStandingFrameNumber = 11;
 
-            MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber);
+            MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber, false);
             MyDKStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             MyDKStandingSprite.SpeedAnimation = 8.0d;
 
@@ -48,38 +48,6 @@ namespace jamGitHubGameOff
 
         public void DonkeyKongUpDate(GameTime pGameTime)
         {
-            // TODO to move into the SpriteGenerator Update
-            #region Manage DK animation
-            if (MyDKStandingSprite.ParseQuads == "forth")
-            {
-                MyDKStandingSprite.CurrentFrame =
-                    MyDKStandingSprite.CurrentFrame + (MyDKStandingSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-            }
-
-            if (MyDKStandingSprite.CurrentFrame > DKStandingFrameNumber - 1)
-            {
-                MyDKStandingSprite.CurrentFrame = DKStandingFrameNumber - 1;
-                MyDKStandingSprite.ParseQuads = "back";
-            }
-
-            if (MyDKStandingSprite.ParseQuads == "back")
-            {
-                MyDKStandingSprite.CurrentFrame =
-                    MyDKStandingSprite.CurrentFrame - (MyDKStandingSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-            }
-
-            if (MyDKStandingSprite.CurrentFrame < 0)
-            {
-                MyDKStandingSprite.CurrentFrame = 0;
-                MyDKStandingSprite.ParseQuads = "forth";
-            }
-
-            MyDKStandingSprite.SourceQuad = new Rectangle((int)Math.Floor(MyDKStandingSprite.CurrentFrame) * MyDKStandingSprite.FrameWidth,
-                                                          MyDKStandingSprite.SourceQuad.Y,
-                                                          MyDKStandingSprite.SourceQuad.Width,
-                                                          MyDKStandingSprite.SourceQuad.Height);
-            #endregion
-
             #region Manage collision on the ground
             // find the 2 points around DK
             Vector2 leftBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X >= x.X).LastOrDefault();
@@ -104,17 +72,13 @@ namespace jamGitHubGameOff
             DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
 
             if (DonkeyKongPosition.X > GameWindowWidth - DonkeyKongPosition.Width / 2)
-            {
                 DonkeyKongDirection = EnumSpriteDirection.Left;
-            }
 
             if (DonkeyKongPosition.X < DonkeyKongPosition.Width / 2)
-            {
                 DonkeyKongDirection = EnumSpriteDirection.Right;
-            }
             #endregion
 
-            // update the sprite direction and the animation (soon)
+            // update the sprite direction and the animation
             MyDKStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
         }
 
