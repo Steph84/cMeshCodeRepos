@@ -51,7 +51,7 @@ namespace jamGitHubGameOff
             MyDKWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKWalkingSprite.FrameWidth, MyDKWalkingSprite.FrameHeight);
             MyDKWalkingSprite.SpeedAnimation = 10.0d;
 
-            DonkeyKongPosition = new Rectangle(100, 200, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
+            DonkeyKongPosition = new Rectangle(700, 200, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             DKSpeedFalling = 0.2d;
             DKSpeedWalking = 0.07d; // minimum 0.0625 for 16ms frame rate
 
@@ -81,13 +81,28 @@ namespace jamGitHubGameOff
             #endregion
 
             #region Manage movement along x
-            DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
+            if (DonkeyKongAction == EnumDonkeyKongAction.Walking)
+            {
+                DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
 
-            if (DonkeyKongPosition.X > GameWindowWidth - DonkeyKongPosition.Width / 2)
-                DonkeyKongDirection = EnumSpriteDirection.Left;
+                if (DonkeyKongPosition.X > ListMapPoints[16].X - DonkeyKongPosition.Width / 2)
+                    DonkeyKongDirection = EnumSpriteDirection.Left;
 
-            if (DonkeyKongPosition.X < DonkeyKongPosition.Width / 2)
-                DonkeyKongDirection = EnumSpriteDirection.Right;
+                if (DonkeyKongPosition.X < ListMapPoints[6].X + DonkeyKongPosition.Width / 2)
+                    DonkeyKongDirection = EnumSpriteDirection.Right;
+            }
+            #endregion
+
+            #region AI
+            if(pGameTime.TotalGameTime.TotalSeconds > 2 && pGameTime.TotalGameTime.TotalSeconds < 5)
+            {
+                DonkeyKongAction = EnumDonkeyKongAction.Standing;
+            }
+
+            if (pGameTime.TotalGameTime.TotalSeconds > 5)
+            {
+                DonkeyKongAction = EnumDonkeyKongAction.Walking;
+            }
             #endregion
 
             // update the sprite direction and the animation

@@ -13,13 +13,13 @@ namespace jamGitHubGameOff
         // position of all points for the map to walk on
         public List<Vector2> ListMapPoints =
             new List<Vector2> {
-                                    new Vector2(0, 210),
+                                    new Vector2(0, 210), // first edge index 0
                                     new Vector2(100, 210),
                                     new Vector2(250, 250),
                                     new Vector2(270, 305),
                                     new Vector2(340, 305),
                                     new Vector2(355, 315),
-                                    new Vector2(405, 380),
+                                    new Vector2(405, 380), // second edge index 6
                                     new Vector2(445, 370),
                                     new Vector2(475, 380),
                                     new Vector2(490, 435),
@@ -28,7 +28,8 @@ namespace jamGitHubGameOff
                                     new Vector2(735, 405),
                                     new Vector2(795, 420),
                                     new Vector2(860, 405),
-                                    new Vector2(1150, 405)
+                                    new Vector2(1100, 405),
+                                    new Vector2(1120, 410)
                               };
         List<Rectangle> ListRectanglePoints = new List<Rectangle>();
         Texture2D segmentPoint;
