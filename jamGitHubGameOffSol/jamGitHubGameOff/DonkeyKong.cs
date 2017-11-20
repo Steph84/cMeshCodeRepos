@@ -29,7 +29,9 @@ namespace jamGitHubGameOff
         EnumSpriteDirection DonkeyKongDirection = EnumSpriteDirection.Left;
         EnumDonkeyKongAction DonkeyKongAction = EnumDonkeyKongAction.Standing;
 
-        
+        double elapsedTime = 0;
+        Random RandomObject = new Random();
+        int tempRdmAI = 0;
 
         public DonkeyKong(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
@@ -51,15 +53,17 @@ namespace jamGitHubGameOff
             MyDKWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKWalkingSprite.FrameWidth, MyDKWalkingSprite.FrameHeight);
             MyDKWalkingSprite.SpeedAnimation = 10.0d;
 
-            DonkeyKongPosition = new Rectangle(700, 200, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
+            DonkeyKongPosition = new Rectangle(700, 300, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             DKSpeedFalling = 0.2d;
-            DKSpeedWalking = 0.07d; // minimum 0.0625 for 16ms frame rate
+            DKSpeedWalking = 0.063d; // minimum 0.0625 for 16ms frame rate
 
             DonkeyKongAction = EnumDonkeyKongAction.Walking;
         }
 
         public void DonkeyKongUpDate(GameTime pGameTime)
         {
+            elapsedTime = elapsedTime + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
+
             #region Manage collision on the ground
             // find the 2 points around DK
             Vector2 leftBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X >= x.X).LastOrDefault();
@@ -74,10 +78,7 @@ namespace jamGitHubGameOff
             double b = leftBoundary.Y - leftBoundary.X * a;
 
             // modify DK y
-            if ((DonkeyKongPosition.Y + DonkeyKongPosition.Height/2) < (DonkeyKongPosition.X * a + b))
-                DonkeyKongPosition.Y = DonkeyKongPosition.Y + (int)(DKSpeedFalling * pGameTime.ElapsedGameTime.Milliseconds);
-            else
-                DonkeyKongPosition.Y = (int)(DonkeyKongPosition.X * a + b - DonkeyKongPosition.Height/2);
+            DonkeyKongPosition.Y = (int)(DonkeyKongPosition.X * a + b - DonkeyKongPosition.Height/2);
             #endregion
 
             #region Manage movement along x
@@ -94,14 +95,34 @@ namespace jamGitHubGameOff
             #endregion
 
             #region AI
-            if(pGameTime.TotalGameTime.TotalSeconds > 2 && pGameTime.TotalGameTime.TotalSeconds < 5)
+            tempRdmAI = RandomObject.Next(3, 7);
+            if (elapsedTime > tempRdmAI)
             {
-                DonkeyKongAction = EnumDonkeyKongAction.Standing;
-            }
-
-            if (pGameTime.TotalGameTime.TotalSeconds > 5)
-            {
-                DonkeyKongAction = EnumDonkeyKongAction.Walking;
+                switch (DonkeyKongAction)
+                {
+                    case EnumDonkeyKongAction.Standing:
+                        DonkeyKongAction = EnumDonkeyKongAction.Walking;
+                        elapsedTime = 0;
+                        break;
+                    case EnumDonkeyKongAction.Walking:
+                        DonkeyKongAction = EnumDonkeyKongAction.Standing;
+                        elapsedTime = 0;
+                        break;
+                    case EnumDonkeyKongAction.Running:
+                        break;
+                    case EnumDonkeyKongAction.Jumping:
+                        break;
+                    case EnumDonkeyKongAction.Falling:
+                        break;
+                    case EnumDonkeyKongAction.Throwing:
+                        break;
+                    case EnumDonkeyKongAction.Hit:
+                        break;
+                    case EnumDonkeyKongAction.Celebrate:
+                        break;
+                    default:
+                        break;
+                }
             }
             #endregion
 
