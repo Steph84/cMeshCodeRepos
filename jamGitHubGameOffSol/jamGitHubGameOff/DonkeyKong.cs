@@ -15,6 +15,7 @@ namespace jamGitHubGameOff
         SpriteBatch SpriteBatch;
         List<Vector2> ListMapPoints;
 
+        #region Load Sprites
         SpriteGenerator MyDKStandingSprite;
         Texture2D DKStandingPic;
         int DKStandingFrameNumber;
@@ -22,7 +23,24 @@ namespace jamGitHubGameOff
         SpriteGenerator MyDKWalkingSprite;
         Texture2D DKWalkingPic;
         int DKWalkingFrameNumber;
-        
+
+        SpriteGenerator MyDKHoldBarilStandingSprite;
+        Texture2D DKHoldBarilStandingPic;
+        int DKHoldBarilStandingFrameNumber;
+
+        SpriteGenerator MyDKHoldBarilWalkingSprite;
+        Texture2D DKHoldBarilWalkingPic;
+        int DKHoldBarilWalkingFrameNumber;
+
+        SpriteGenerator MyDKLiftBarilSprite;
+        Texture2D DKLiftBarilPic;
+        int DKLiftBarilFrameNumber;
+
+        SpriteGenerator MyDKThrowBarilSprite;
+        Texture2D DKThrowBarilPic;
+        int DKThrowBarilFrameNumber;
+        #endregion
+
         Rectangle DonkeyKongPosition;
         double DKSpeedFalling;
         double DKSpeedWalking;
@@ -41,6 +59,7 @@ namespace jamGitHubGameOff
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
 
+            #region Initialize Sprites
             DKStandingPic = Content.Load<Texture2D>("DKCStanding"); // 11 42x40
             DKStandingFrameNumber = 11;
             MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber, false);
@@ -52,6 +71,32 @@ namespace jamGitHubGameOff
             MyDKWalkingSprite = new SpriteGenerator(SpriteBatch, DKWalkingPic, DKWalkingFrameNumber, true);
             MyDKWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKWalkingSprite.FrameWidth, MyDKWalkingSprite.FrameHeight);
             MyDKWalkingSprite.SpeedAnimation = 10.0d;
+            
+            DKHoldBarilStandingPic = Content.Load<Texture2D>("DKHoldBarilStanding");
+            DKHoldBarilStandingFrameNumber = 3;
+            MyDKHoldBarilStandingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilStandingPic, DKHoldBarilStandingFrameNumber, false);
+            MyDKHoldBarilStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKHoldBarilStandingSprite.FrameWidth, MyDKHoldBarilStandingSprite.FrameHeight);
+            MyDKHoldBarilStandingSprite.SpeedAnimation = 8.0d;
+
+            DKHoldBarilWalkingPic = Content.Load<Texture2D>("DKHoldBarilWalking");
+            DKHoldBarilWalkingFrameNumber = 15;
+            MyDKHoldBarilWalkingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilWalkingPic, DKHoldBarilWalkingFrameNumber, false);
+            MyDKHoldBarilWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKHoldBarilWalkingSprite.FrameWidth, MyDKHoldBarilWalkingSprite.FrameHeight);
+            MyDKHoldBarilWalkingSprite.SpeedAnimation = 8.0d;
+
+            DKLiftBarilPic = Content.Load<Texture2D>("DKLiftBaril");
+            DKLiftBarilFrameNumber = 7;
+            MyDKLiftBarilSprite = new SpriteGenerator(SpriteBatch, DKLiftBarilPic, DKLiftBarilFrameNumber, false);
+            MyDKLiftBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKLiftBarilSprite.FrameWidth, MyDKLiftBarilSprite.FrameHeight);
+            MyDKLiftBarilSprite.SpeedAnimation = 8.0d;
+
+            DKThrowBarilPic = Content.Load<Texture2D>("DKThrowBaril");
+            DKThrowBarilFrameNumber = 19;
+            MyDKThrowBarilSprite = new SpriteGenerator(SpriteBatch, DKThrowBarilPic, DKThrowBarilFrameNumber, false);
+            MyDKThrowBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKThrowBarilSprite.FrameWidth, MyDKThrowBarilSprite.FrameHeight);
+            MyDKThrowBarilSprite.SpeedAnimation = 8.0d;
+
+            #endregion
 
             DonkeyKongPosition = new Rectangle(700, 300, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             DKSpeedFalling = 0.2d;
@@ -135,13 +180,23 @@ namespace jamGitHubGameOff
                 case EnumDonkeyKongAction.Walking:
                     MyDKWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
                     break;
+                case EnumDonkeyKongAction.Lifting:
+                    MyDKLiftBarilSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.HoldingStand:
+                    MyDKHoldBarilStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.HoldingWalk:
+                    MyDKHoldBarilWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.Throwing:
+                    MyDKThrowBarilSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
                 case EnumDonkeyKongAction.Running:
                     break;
                 case EnumDonkeyKongAction.Jumping:
                     break;
                 case EnumDonkeyKongAction.Falling:
-                    break;
-                case EnumDonkeyKongAction.Throwing:
                     break;
                 case EnumDonkeyKongAction.Hit:
                     break;
@@ -162,13 +217,23 @@ namespace jamGitHubGameOff
                 case EnumDonkeyKongAction.Walking:
                     MyDKWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
                     break;
+                case EnumDonkeyKongAction.Lifting:
+                    MyDKLiftBarilSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
+                case EnumDonkeyKongAction.HoldingStand:
+                    MyDKHoldBarilStandingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
+                case EnumDonkeyKongAction.HoldingWalk:
+                    MyDKHoldBarilWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
+                case EnumDonkeyKongAction.Throwing:
+                    MyDKThrowBarilSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
                 case EnumDonkeyKongAction.Running:
                     break;
                 case EnumDonkeyKongAction.Jumping:
                     break;
                 case EnumDonkeyKongAction.Falling:
-                    break;
-                case EnumDonkeyKongAction.Throwing:
                     break;
                 case EnumDonkeyKongAction.Hit:
                     break;
@@ -184,11 +249,14 @@ namespace jamGitHubGameOff
     {
         Standing = 0,
         Walking = 1,
-        Running = 2,
-        Jumping = 3,
-        Falling = 4,
+        Lifting = 2,
+        HoldingStand = 3,
+        HoldingWalk = 4,
         Throwing = 5,
-        Hit = 6,
-        Celebrate = 7
+        Running = 6,
+        Jumping = 7,
+        Falling = 8,
+        Hit = 9,
+        Celebrate = 10
     }
 }
