@@ -1,0 +1,104 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace jamGitHubGameOff
+{
+    public class Baril
+    {
+        int GameWindowWidth;
+        int GameWindowHeight;
+        ContentManager Content;
+        SpriteBatch SpriteBatch;
+
+        SpriteGenerator MyBarilSprite;
+        Texture2D BarilPic;
+        int BarilFrameNumber;
+        
+        Rectangle BarilPosition;
+        double BarilCurrentFrame;
+        Vector2 BarilOrigin;
+        SpriteEffects BarilDirection = SpriteEffects.None;
+        EnumBarilState BarilState = EnumBarilState.Standing;
+
+        public Baril(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
+        {
+            GameWindowWidth = pGameWindowSize.Item1;
+            GameWindowHeight = pGameWindowSize.Item2;
+            Content = pContent;
+            SpriteBatch = pSpriteBatch;
+
+            BarilPic = Content.Load<Texture2D>("DKBaril");
+            BarilFrameNumber = 5;
+            MyBarilSprite = new SpriteGenerator(SpriteBatch, BarilPic, BarilFrameNumber, false);
+            MyBarilSprite.SourceQuad = new Rectangle(0, 0, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
+            MyBarilSprite.SpeedAnimation = 8.0d;
+            BarilOrigin = new Vector2(MyBarilSprite.FrameWidth / 2, MyBarilSprite.FrameHeight / 2);
+            BarilCurrentFrame = 0;
+            BarilPosition = new Rectangle(GameWindowWidth/2, GameWindowHeight/2, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
+        }
+
+        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition)
+        {
+            switch (BarilState)
+            {
+                case EnumBarilState.Standing:
+                    BarilCurrentFrame = 0;
+                    break;
+                case EnumBarilState.Lifted:
+                    if (BarilCurrentFrame < 4)
+                    {
+                        BarilCurrentFrame = BarilCurrentFrame + (MyBarilSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
+                    }
+                    break;
+                case EnumBarilState.Held:
+                    BarilCurrentFrame = 4;
+                    break;
+                case EnumBarilState.Thrown:
+                    BarilCurrentFrame = 4;
+                    break;
+                default:
+                    break;
+            }
+
+            MyBarilSprite.SourceQuad = new Rectangle((int)Math.Floor(BarilCurrentFrame) * MyBarilSprite.FrameWidth,
+                                                    MyBarilSprite.SourceQuad.Y,
+                                                    MyBarilSprite.SourceQuad.Width,
+                                                    MyBarilSprite.SourceQuad.Height);
+        }
+
+        public void BarilDraw(GameTime pGameTime)
+        {
+            SpriteBatch.Draw(BarilPic, BarilPosition, MyBarilSprite.SourceQuad, Color.White, 0, BarilOrigin, BarilDirection, 0);
+
+            //switch (BarilState)
+            //{
+            //    case EnumBarilState.Standing:
+            //        SpriteBatch.Draw(SpritePicture, pDonkeyKongPosition, SourceQuad, Color.White, 0, SpriteOrigin, SpriteDirection, 0);
+            //        break;
+            //    case EnumBarilState.Lifted:
+            //        SpriteBatch.Draw(SpritePicture, pDonkeyKongPosition, SourceQuad, Color.White, 0, SpriteOrigin, SpriteDirection, 0);
+            //        break;
+            //    case EnumBarilState.Held:
+            //        break;
+            //    case EnumBarilState.Thrown:
+            //        break;
+            //    default:
+            //        break;
+            //}
+        }
+
+        public enum EnumBarilState
+        {
+            Standing = 1,
+            Lifted = 2,
+            Held = 3,
+            Thrown = 4
+        }
+    }
+}

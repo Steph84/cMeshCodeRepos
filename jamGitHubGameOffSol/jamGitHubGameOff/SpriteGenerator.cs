@@ -89,8 +89,7 @@ namespace jamGitHubGameOff
                     CurrentFrame = 0;
             }
             #endregion
-
-
+            
             SourceQuad = new Rectangle((int)Math.Floor(CurrentFrame) * FrameWidth, SourceQuad.Y, SourceQuad.Width, SourceQuad.Height);
         }
 
