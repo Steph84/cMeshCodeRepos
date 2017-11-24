@@ -69,6 +69,7 @@
     <Compile Include="Baril.cs" />
     <Compile Include="DonkeyKong.cs" />
     <Compile Include="GameClass.cs" />
+    <Compile Include="GroundCollision.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="SpriteGenerator.cs" />
     <Compile Include="UtilFolder\KeyBoardManager.cs" />

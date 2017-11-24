@@ -108,39 +108,20 @@ namespace jamGitHubGameOff
         public void DonkeyKongUpDate(GameTime pGameTime)
         {
             elapsedTimePatroling = elapsedTimePatroling + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
-            elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
+            //elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
 
-            #region Baril Spawn
-            if (elapsedTimeBarilSpawn > 5 && MyBaril == null)
+            #region Baril Spawn + Movement
+            if (MyBaril == null)
             {
-                MyBaril = new Baril(new Tuple<int, int>(GameWindowWidth, GameWindowHeight), Content, SpriteBatch);
+                MyBaril = new Baril(new Tuple<int, int>(GameWindowWidth, GameWindowHeight), Content, SpriteBatch, ListMapPoints);
             }
-            #endregion
-
-
-            #region Baril Spawn
-            if (MyBaril != null)
+            else
             {
                 MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition);
             }
             #endregion
-
-            #region Manage collision on the ground
-            // find the 2 points around DK
-            Vector2 leftBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X >= x.X).LastOrDefault();
-            if (leftBoundary == null)
-                leftBoundary = ListMapPoints.First();
-            Vector2 rightBoundary = ListMapPoints.Where(x => DonkeyKongPosition.X < x.X).FirstOrDefault();
-            if (rightBoundary == null)
-                rightBoundary = ListMapPoints.Last();
-
-            // compute equation coeff
-            double a = (rightBoundary.Y - leftBoundary.Y) / (rightBoundary.X - leftBoundary.X);
-            double b = leftBoundary.Y - leftBoundary.X * a;
-
-            // modify DK y
-            DonkeyKongPosition.Y = (int)(DonkeyKongPosition.X * a + b - DonkeyKongPosition.Height/2);
-            #endregion
+            
+            DonkeyKongPosition = GroundCollision.StickToTheGround(DonkeyKongPosition, ListMapPoints);
 
             #region Manage movement along x
             if (DonkeyKongAction == EnumDonkeyKongAction.Walking)
@@ -150,7 +131,7 @@ namespace jamGitHubGameOff
                 if (DonkeyKongPosition.X > ListMapPoints[16].X - DonkeyKongPosition.Width / 2)
                     DonkeyKongDirection = EnumSpriteDirection.Left;
 
-                if (DonkeyKongPosition.X < ListMapPoints[6].X + DonkeyKongPosition.Width / 2)
+                if (DonkeyKongPosition.X < ListMapPoints[9].X + DonkeyKongPosition.Width / 2)
                     DonkeyKongDirection = EnumSpriteDirection.Right;
             }
             #endregion

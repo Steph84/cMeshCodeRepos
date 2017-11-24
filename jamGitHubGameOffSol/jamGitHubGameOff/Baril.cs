@@ -15,6 +15,7 @@ namespace jamGitHubGameOff
         int GameWindowHeight;
         ContentManager Content;
         SpriteBatch SpriteBatch;
+        List<Vector2> ListMapPoints;
 
         SpriteGenerator MyBarilSprite;
         Texture2D BarilPic;
@@ -26,12 +27,15 @@ namespace jamGitHubGameOff
         SpriteEffects BarilDirection = SpriteEffects.None;
         EnumBarilState BarilState = EnumBarilState.Standing;
 
-        public Baril(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
+        Random RandomObject = new Random();
+
+        public Baril(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
             GameWindowWidth = pGameWindowSize.Item1;
             GameWindowHeight = pGameWindowSize.Item2;
             Content = pContent;
             SpriteBatch = pSpriteBatch;
+            ListMapPoints = pListMapPoints;
 
             BarilPic = Content.Load<Texture2D>("DKBaril");
             BarilFrameNumber = 5;
@@ -40,7 +44,8 @@ namespace jamGitHubGameOff
             MyBarilSprite.SpeedAnimation = 8.0d;
             BarilOrigin = new Vector2(MyBarilSprite.FrameWidth / 2, MyBarilSprite.FrameHeight / 2);
             BarilCurrentFrame = 0;
-            BarilPosition = new Rectangle(GameWindowWidth/2, GameWindowHeight/2, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
+            int BarilSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
+            BarilPosition = new Rectangle(BarilSpawnPosX, GameWindowHeight/2, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
         }
 
         public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition)
@@ -48,6 +53,7 @@ namespace jamGitHubGameOff
             switch (BarilState)
             {
                 case EnumBarilState.Standing:
+                    BarilPosition = GroundCollision.StickToTheGround(BarilPosition, ListMapPoints);
                     BarilCurrentFrame = 0;
                     break;
                 case EnumBarilState.Lifted:
