@@ -52,6 +52,8 @@ namespace jamGitHubGameOff
         double elapsedTimeBarilSpawn = 0;
         Random RandomObject = new Random();
 
+        int deltaPosX;
+
         public DonkeyKong(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
             GameWindowWidth = pGameWindowSize.Item1;
@@ -63,101 +65,152 @@ namespace jamGitHubGameOff
             #region Initialize Sprites
             DKStandingPic = Content.Load<Texture2D>("DKCStanding");
             DKStandingFrameNumber = 11;
-            MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber, false);
+            MyDKStandingSprite = new SpriteGenerator(SpriteBatch, DKStandingPic, DKStandingFrameNumber, false, true);
             MyDKStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             MyDKStandingSprite.SpeedAnimation = 8.0d;
 
             DKWalkingPic = Content.Load<Texture2D>("DKCWalking");
             DKWalkingFrameNumber = 20;
-            MyDKWalkingSprite = new SpriteGenerator(SpriteBatch, DKWalkingPic, DKWalkingFrameNumber, true);
+            MyDKWalkingSprite = new SpriteGenerator(SpriteBatch, DKWalkingPic, DKWalkingFrameNumber, true, true);
             MyDKWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKWalkingSprite.FrameWidth, MyDKWalkingSprite.FrameHeight);
             MyDKWalkingSprite.SpeedAnimation = 10.0d;
             
             DKHoldBarilStandingPic = Content.Load<Texture2D>("DKHoldBarilStanding");
             DKHoldBarilStandingFrameNumber = 3;
-            MyDKHoldBarilStandingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilStandingPic, DKHoldBarilStandingFrameNumber, false);
+            MyDKHoldBarilStandingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilStandingPic, DKHoldBarilStandingFrameNumber, true, true);
             MyDKHoldBarilStandingSprite.SourceQuad = new Rectangle(0, 0, MyDKHoldBarilStandingSprite.FrameWidth, MyDKHoldBarilStandingSprite.FrameHeight);
-            MyDKHoldBarilStandingSprite.SpeedAnimation = 8.0d;
+            MyDKHoldBarilStandingSprite.SpeedAnimation = 4.0d;
 
             DKHoldBarilWalkingPic = Content.Load<Texture2D>("DKHoldBarilWalking");
             DKHoldBarilWalkingFrameNumber = 15;
-            MyDKHoldBarilWalkingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilWalkingPic, DKHoldBarilWalkingFrameNumber, false);
+            MyDKHoldBarilWalkingSprite = new SpriteGenerator(SpriteBatch, DKHoldBarilWalkingPic, DKHoldBarilWalkingFrameNumber, true, true);
             MyDKHoldBarilWalkingSprite.SourceQuad = new Rectangle(0, 0, MyDKHoldBarilWalkingSprite.FrameWidth, MyDKHoldBarilWalkingSprite.FrameHeight);
             MyDKHoldBarilWalkingSprite.SpeedAnimation = 8.0d;
 
             DKLiftBarilPic = Content.Load<Texture2D>("DKLiftBaril");
             DKLiftBarilFrameNumber = 7;
-            MyDKLiftBarilSprite = new SpriteGenerator(SpriteBatch, DKLiftBarilPic, DKLiftBarilFrameNumber, false);
+            MyDKLiftBarilSprite = new SpriteGenerator(SpriteBatch, DKLiftBarilPic, DKLiftBarilFrameNumber, true, false);
             MyDKLiftBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKLiftBarilSprite.FrameWidth, MyDKLiftBarilSprite.FrameHeight);
             MyDKLiftBarilSprite.SpeedAnimation = 8.0d;
 
             DKThrowBarilPic = Content.Load<Texture2D>("DKThrowBaril");
             DKThrowBarilFrameNumber = 19;
-            MyDKThrowBarilSprite = new SpriteGenerator(SpriteBatch, DKThrowBarilPic, DKThrowBarilFrameNumber, false);
+            MyDKThrowBarilSprite = new SpriteGenerator(SpriteBatch, DKThrowBarilPic, DKThrowBarilFrameNumber, true, false);
             MyDKThrowBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKThrowBarilSprite.FrameWidth, MyDKThrowBarilSprite.FrameHeight);
             MyDKThrowBarilSprite.SpeedAnimation = 8.0d;
             #endregion
 
-            DonkeyKongPosition = new Rectangle(700, 300, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
+            int DKSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
+            DonkeyKongPosition = new Rectangle(DKSpawnPosX, 0, MyDKStandingSprite.FrameWidth, MyDKStandingSprite.FrameHeight);
             DKSpeedWalking = 0.063d; // minimum 0.0625 for 16ms frame rate
 
-            DonkeyKongAction = EnumDonkeyKongAction.Walking;
-            
+            DonkeyKongAction = EnumDonkeyKongAction.Standing;
         }
 
         public void DonkeyKongUpDate(GameTime pGameTime)
         {
             elapsedTimePatroling = elapsedTimePatroling + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
-            //elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
-
+            elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
+            
             #region Baril Spawn + Movement
-            if (MyBaril == null)
+            if (elapsedTimeBarilSpawn > 5 && MyBaril == null)
             {
                 MyBaril = new Baril(new Tuple<int, int>(GameWindowWidth, GameWindowHeight), Content, SpriteBatch, ListMapPoints);
             }
-            else
+            if (MyBaril != null)
             {
+                deltaPosX = MyBaril.BarilPosition.X - DonkeyKongPosition.X;
                 MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition);
+                if (Math.Abs(deltaPosX) > MyBaril.BarilPosition.Width / 2)
+                    DonkeyKongAction = EnumDonkeyKongAction.Seeking;
+                if (Math.Abs(deltaPosX) <= MyBaril.BarilPosition.Width / 2 && DonkeyKongAction == EnumDonkeyKongAction.Seeking)
+                    DonkeyKongAction = EnumDonkeyKongAction.Lifting;
             }
             #endregion
             
             DonkeyKongPosition = GroundCollision.StickToTheGround(DonkeyKongPosition, ListMapPoints);
 
             #region Manage movement along x
-            if (DonkeyKongAction == EnumDonkeyKongAction.Walking)
+            Console.WriteLine(DonkeyKongAction);
+            switch (DonkeyKongAction)
             {
-                DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
+                case EnumDonkeyKongAction.Standing:
+                    break;
+                case EnumDonkeyKongAction.Walking:
+                    {
+                        DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
 
-                if (DonkeyKongPosition.X > ListMapPoints[16].X - DonkeyKongPosition.Width / 2)
+                        if (DonkeyKongPosition.X > ListMapPoints[16].X - DonkeyKongPosition.Width / 2)
+                            DonkeyKongDirection = EnumSpriteDirection.Left;
+
+                        if (DonkeyKongPosition.X < ListMapPoints[9].X + DonkeyKongPosition.Width / 2)
+                            DonkeyKongDirection = EnumSpriteDirection.Right;
+                    }
+                    break;
+                case EnumDonkeyKongAction.Seeking:
+                    {
+                        if (deltaPosX > 0)
+                            DonkeyKongDirection = EnumSpriteDirection.Right;
+                        else
+                            DonkeyKongDirection = EnumSpriteDirection.Left;
+
+                        DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
+                    }
+                    break;
+                case EnumDonkeyKongAction.Lifting:
+                    DonkeyKongPosition.Width = MyDKLiftBarilSprite.FrameWidth;
+                    DonkeyKongPosition.Height = MyDKLiftBarilSprite.FrameHeight;
+                    if (MyDKLiftBarilSprite.CurrentFrame >= MyDKLiftBarilSprite.FrameNumber)
+                    {
+                        DonkeyKongAction = EnumDonkeyKongAction.HoldingStand;
+                    }
+                    break;
+                case EnumDonkeyKongAction.HoldingStand:
+                    DonkeyKongPosition.Width = MyDKHoldBarilStandingSprite.FrameWidth;
+                    DonkeyKongPosition.Height = MyDKHoldBarilStandingSprite.FrameHeight;
                     DonkeyKongDirection = EnumSpriteDirection.Left;
-
-                if (DonkeyKongPosition.X < ListMapPoints[9].X + DonkeyKongPosition.Width / 2)
-                    DonkeyKongDirection = EnumSpriteDirection.Right;
+                    break;
+                case EnumDonkeyKongAction.HoldingWalk:
+                    break;
+                case EnumDonkeyKongAction.Throwing:
+                    break;
+                case EnumDonkeyKongAction.Running:
+                    break;
+                case EnumDonkeyKongAction.Jumping:
+                    break;
+                case EnumDonkeyKongAction.Falling:
+                    break;
+                case EnumDonkeyKongAction.Hit:
+                    break;
+                case EnumDonkeyKongAction.Celebrate:
+                    break;
+                default:
+                    break;
             }
             #endregion
 
             #region AI
-            int tempRdmAI = RandomObject.Next(3, 7);
-            if (elapsedTimePatroling > tempRdmAI)
-            {
-                switch (DonkeyKongAction)
-                {
-                    case EnumDonkeyKongAction.Standing:
-                        DonkeyKongAction = EnumDonkeyKongAction.Walking;
-                        elapsedTimePatroling = 0;
-                        break;
-                    case EnumDonkeyKongAction.Walking:
-                        DonkeyKongAction = EnumDonkeyKongAction.Standing;
-                        elapsedTimePatroling = 0;
-                        break;
-                    case EnumDonkeyKongAction.Running:
-                        break;
-                    case EnumDonkeyKongAction.Jumping:
-                        break;
-                    default:
-                        break;
-                }
-            }
+            //int tempRdmAI = RandomObject.Next(3, 7);
+            //if (elapsedTimePatroling > tempRdmAI)
+            //{
+            //    switch (DonkeyKongAction)
+            //    {
+            //        case EnumDonkeyKongAction.Standing:
+            //            DonkeyKongAction = EnumDonkeyKongAction.Walking;
+            //            elapsedTimePatroling = 0;
+            //            break;
+            //        case EnumDonkeyKongAction.Walking:
+            //            DonkeyKongAction = EnumDonkeyKongAction.Standing;
+            //            elapsedTimePatroling = 0;
+            //            break;
+            //        case EnumDonkeyKongAction.Running:
+            //            break;
+            //        case EnumDonkeyKongAction.Jumping:
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
 
 
 
@@ -170,6 +223,9 @@ namespace jamGitHubGameOff
                     MyDKStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
                     break;
                 case EnumDonkeyKongAction.Walking:
+                    MyDKWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    break;
+                case EnumDonkeyKongAction.Seeking:
                     MyDKWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
                     break;
                 case EnumDonkeyKongAction.Lifting:
@@ -217,6 +273,9 @@ namespace jamGitHubGameOff
                 case EnumDonkeyKongAction.Walking:
                     MyDKWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
                     break;
+                case EnumDonkeyKongAction.Seeking:
+                    MyDKWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    break;
                 case EnumDonkeyKongAction.Lifting:
                     MyDKLiftBarilSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
                     break;
@@ -249,14 +308,15 @@ namespace jamGitHubGameOff
     {
         Standing = 0,
         Walking = 1,
-        Lifting = 2,
-        HoldingStand = 3,
-        HoldingWalk = 4,
-        Throwing = 5,
-        Running = 6,
-        Jumping = 7,
-        Falling = 8,
-        Hit = 9,
-        Celebrate = 10
+        Seeking = 2,
+        Lifting = 3,
+        HoldingStand = 4,
+        HoldingWalk = 5,
+        Throwing = 6,
+        Running = 7,
+        Jumping = 8,
+        Falling = 9,
+        Hit = 10,
+        Celebrate = 11
     }
 }

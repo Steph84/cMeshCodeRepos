@@ -29,13 +29,15 @@ namespace jamGitHubGameOff
         public double SpeedAnimation { get; set; }
         public SpriteEffects SpriteDirection { get; set; }
         public bool HasCompleteAnimation { get; set; }
+        public bool IsLooping { get; set; }
 
-        public SpriteGenerator(SpriteBatch pSpriteBatch, Texture2D pSpritePicture, int pFrameNumber, bool pHasCompleteAnimation)
+        public SpriteGenerator(SpriteBatch pSpriteBatch, Texture2D pSpritePicture, int pFrameNumber, bool pHasCompleteAnimation, bool pIsLooping)
         {
             SpriteBatch = pSpriteBatch;
             SpritePicture = pSpritePicture;
             FrameNumber = pFrameNumber;
             HasCompleteAnimation = pHasCompleteAnimation;
+            IsLooping = pIsLooping;
 
             FrameHeight = SpritePicture.Height;
             FrameWidth = SpritePicture.Width / pFrameNumber;
@@ -85,7 +87,7 @@ namespace jamGitHubGameOff
             {
                 CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
                 
-                if (CurrentFrame > FrameNumber - 1)
+                if (IsLooping == true && CurrentFrame > FrameNumber - 1)
                     CurrentFrame = 0;
             }
             #endregion

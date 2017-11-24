@@ -21,7 +21,7 @@ namespace jamGitHubGameOff
         Texture2D BarilPic;
         int BarilFrameNumber;
         
-        Rectangle BarilPosition;
+        public Rectangle BarilPosition { get; set; }
         double BarilCurrentFrame;
         Vector2 BarilOrigin;
         SpriteEffects BarilDirection = SpriteEffects.None;
@@ -39,13 +39,13 @@ namespace jamGitHubGameOff
 
             BarilPic = Content.Load<Texture2D>("DKBaril");
             BarilFrameNumber = 5;
-            MyBarilSprite = new SpriteGenerator(SpriteBatch, BarilPic, BarilFrameNumber, false);
+            MyBarilSprite = new SpriteGenerator(SpriteBatch, BarilPic, BarilFrameNumber, false, false);
             MyBarilSprite.SourceQuad = new Rectangle(0, 0, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
             MyBarilSprite.SpeedAnimation = 8.0d;
             BarilOrigin = new Vector2(MyBarilSprite.FrameWidth / 2, MyBarilSprite.FrameHeight / 2);
             BarilCurrentFrame = 0;
             int BarilSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
-            BarilPosition = new Rectangle(BarilSpawnPosX, GameWindowHeight/2, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
+            BarilPosition = new Rectangle(BarilSpawnPosX, 0, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
         }
 
         public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition)
