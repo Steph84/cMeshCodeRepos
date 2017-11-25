@@ -26,6 +26,7 @@ namespace jamGitHubGameOff
         Vector2 BarilOrigin;
         SpriteEffects BarilDirection = SpriteEffects.None;
         EnumBarilState BarilState = EnumBarilState.Standing;
+        double BarilSpeedUp, BarilSpeedThrow;
 
         Random RandomObject = new Random();
 
@@ -46,10 +47,25 @@ namespace jamGitHubGameOff
             BarilCurrentFrame = 0;
             int BarilSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
             BarilPosition = new Rectangle(BarilSpawnPosX, 0, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
+
+            BarilSpeedUp = 0.065;
         }
 
-        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition)
+        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction)
         {
+            switch (pDonkeyKongAction)
+            {
+                case EnumDonkeyKongAction.Lifting:
+                    BarilState = EnumBarilState.Lifted;
+                    break;
+                case EnumDonkeyKongAction.HoldingStand:
+                    BarilState = EnumBarilState.Held;
+                    break;
+                default:
+                    break;
+            }
+
+
             switch (BarilState)
             {
                 case EnumBarilState.Standing:
@@ -61,8 +77,13 @@ namespace jamGitHubGameOff
                     {
                         BarilCurrentFrame = BarilCurrentFrame + (MyBarilSprite.SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
                     }
+                    if (BarilPosition.Y + BarilPosition.Height > pDonkeyKongPosition.Top)
+                    {
+                        BarilPosition = new Rectangle(BarilPosition.X, BarilPosition.Y - (int)(BarilSpeedUp * pGameTime.ElapsedGameTime.Milliseconds), BarilPosition.Width, BarilPosition.Height);
+                    }
                     break;
                 case EnumBarilState.Held:
+                    BarilPosition = new Rectangle(BarilPosition.X, pDonkeyKongPosition.Top - BarilPosition.Height, BarilPosition.Width, BarilPosition.Height);
                     BarilCurrentFrame = 4;
                     break;
                 case EnumBarilState.Thrown:
