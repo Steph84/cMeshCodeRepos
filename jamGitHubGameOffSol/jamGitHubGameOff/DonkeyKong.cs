@@ -98,7 +98,7 @@ namespace jamGitHubGameOff
             DKThrowBarilFrameNumber = 19;
             MyDKThrowBarilSprite = new SpriteGenerator(SpriteBatch, DKThrowBarilPic, DKThrowBarilFrameNumber, true, false);
             MyDKThrowBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKThrowBarilSprite.FrameWidth, MyDKThrowBarilSprite.FrameHeight);
-            MyDKThrowBarilSprite.SpeedAnimation = 20.0d;
+            MyDKThrowBarilSprite.SpeedAnimation = 40.0d;
             #endregion
 
             int DKSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
@@ -114,7 +114,7 @@ namespace jamGitHubGameOff
             elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
             
             #region Baril Spawn + Movement
-            if (elapsedTimeBarilSpawn > 2 && MyBaril == null)
+            if (elapsedTimeBarilSpawn > 3 && MyBaril == null)
             {
                 MyBaril = new Baril(new Tuple<int, int>(GameWindowWidth, GameWindowHeight), Content, SpriteBatch, ListMapPoints);
             }
@@ -134,6 +134,12 @@ namespace jamGitHubGameOff
                                     || MyBaril.BarilState == EnumBarilState.Thrown))
             {
                 MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition, MyDKThrowBarilSprite);
+            }
+
+            if(MyBaril != null && MyBaril.BarilState == EnumBarilState.Dead)
+            {
+                elapsedTimeBarilSpawn = 0;
+                MyBaril = null;
             }
             #endregion
 
@@ -175,6 +181,7 @@ namespace jamGitHubGameOff
                     if (MyDKLiftBarilSprite.CurrentFrame >= MyDKLiftBarilSprite.FrameNumber)
                     {
                         DonkeyKongAction = EnumDonkeyKongAction.HoldingStand;
+                        MyDKLiftBarilSprite.CurrentFrame = 0;
                     }
                     break;
                 case EnumDonkeyKongAction.HoldingStand:
@@ -182,9 +189,10 @@ namespace jamGitHubGameOff
                     DonkeyKongPosition.Width = MyDKHoldBarilStandingSprite.FrameWidth;
                     DonkeyKongPosition.Height = MyDKHoldBarilStandingSprite.FrameHeight;
                     DonkeyKongDirection = EnumSpriteDirection.Left;
-                    if (elapsedTimeBarilTargeting > 3)
+                    if (elapsedTimeBarilTargeting > 1)
                     {
                         DonkeyKongAction = EnumDonkeyKongAction.Throwing;
+                        elapsedTimeBarilTargeting = 0;
                     }
                     break;
                 case EnumDonkeyKongAction.HoldingWalk:
@@ -195,6 +203,7 @@ namespace jamGitHubGameOff
                     if (MyDKThrowBarilSprite.CurrentFrame >= MyDKThrowBarilSprite.FrameNumber)
                     {
                         DonkeyKongAction = EnumDonkeyKongAction.Standing;
+                        MyDKThrowBarilSprite.CurrentFrame = 0;
                     }
                     break;
                 case EnumDonkeyKongAction.Running:

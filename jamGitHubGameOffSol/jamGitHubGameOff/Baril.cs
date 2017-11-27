@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using MathNet.Numerics.LinearAlgebra;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -27,6 +28,7 @@ namespace jamGitHubGameOff
         SpriteEffects BarilDirection = SpriteEffects.None;
         public EnumBarilState BarilState { get; set; }
         double BarilSpeedUp, BarilSpeedBack, BarilSpeedThrow;
+        Tuple<double, double, double> CoefQuadra = null;
 
         Random RandomObject = new Random();
 
@@ -51,6 +53,7 @@ namespace jamGitHubGameOff
             BarilState = EnumBarilState.Standing;
             BarilSpeedUp = 0.065;
             BarilSpeedBack = 0.065;
+            BarilSpeedThrow = 0.26;
         }
 
         public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction,
@@ -105,7 +108,21 @@ namespace jamGitHubGameOff
                     BarilCurrentFrame = 4;
                     break;
                 case EnumBarilState.Thrown:
-                    ComputeTrajectory(pDonkeyKongPosition, pPlayerPos);
+                    if (CoefQuadra == null)
+                    {
+                        var tempResult = ComputeTrajectory(BarilPosition, pPlayerPos);
+                        CoefQuadra = new Tuple<double, double, double>(tempResult[0], tempResult[1], tempResult[2]);
+                    }
+                    else
+                    {
+                        BarilPosition = new Rectangle(BarilPosition.X - (int)(BarilSpeedThrow * pGameTime.ElapsedGameTime.Milliseconds),
+                                                      (int)(BarilPosition.X * CoefQuadra.Item1 + Math.Pow(BarilPosition.X, 2) * CoefQuadra.Item2 + CoefQuadra.Item3),
+                                                      BarilPosition.Width, BarilPosition.Height);
+                    }
+                    if(BarilPosition.Y > GameWindowWidth + BarilPosition.Height)
+                    {
+                        BarilState = EnumBarilState.Dead;
+                    }
                     BarilCurrentFrame = 4;
                     break;
                 default:
@@ -145,15 +162,24 @@ namespace jamGitHubGameOff
             Lifted = 2,
             Held = 3,
             MoveBack = 4,
-            Thrown = 5
+            Thrown = 5,
+            Dead = 6
         }
 
-        private void ComputeTrajectory(Rectangle pDKPos, Rectangle pPlayerPos)
+        private List<double> ComputeTrajectory(Rectangle pBarilPos, Rectangle pPlayerPos)
         {
-            Vector2 tempDKPos = new Vector2(pDKPos.X, pDKPos.Y);
+            Vector2 tempDKPos = new Vector2(pBarilPos.X, pBarilPos.Y);
+            Vector2 tempTurningPointPos = new Vector2((pBarilPos.X + pPlayerPos.X) / 2, 50);
             Vector2 tempPlayerPos = new Vector2(pPlayerPos.X, pPlayerPos.Y);
-            Vector2 tempTurningPointPos = new Vector2((pDKPos.X + pPlayerPos.X)/2, 50);
 
+            var A = Matrix<double>.Build.DenseOfArray(new double[,] {
+                                                                        { tempDKPos.X, Math.Pow(tempDKPos.X, 2), 1 },
+                                                                        { tempTurningPointPos.X, Math.Pow(tempTurningPointPos.X, 2), 1 },
+                                                                        { tempPlayerPos.X, Math.Pow(tempPlayerPos.X, 2), 1 }
+                                                                    });
+            var b = Vector<double>.Build.Dense(new double[] { tempDKPos.Y, tempTurningPointPos.Y, tempPlayerPos.Y });
+            var x = A.Solve(b);
+            return x.ToList();
         }
     }
 }

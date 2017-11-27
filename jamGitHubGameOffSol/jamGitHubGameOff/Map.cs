@@ -82,6 +82,7 @@ namespace jamGitHubGameOff
             DKCMapLayer3Target = new Rectangle(0, 0, DKCMapLayer3Pic.Width, DKCMapLayer3Pic.Height);
 
             MyDonkeyKong = new DonkeyKong(pGameWindowSize, Content, SpriteBatch, ListMapPoints);
+            MyPlayer = new Player(pGameWindowSize, Content, SpriteBatch, ListMapPoints);
         }
         #endregion
 

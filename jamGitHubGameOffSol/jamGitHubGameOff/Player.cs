@@ -24,7 +24,7 @@ namespace jamGitHubGameOff
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
 
-            PlayerPosition = new Rectangle(5, 5, 32, 32);
+            PlayerPosition = new Rectangle(250, 250, 32, 32);
 
         }
     }
