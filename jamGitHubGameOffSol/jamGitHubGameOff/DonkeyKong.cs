@@ -108,7 +108,7 @@ namespace jamGitHubGameOff
             DonkeyKongAction = EnumDonkeyKongAction.Standing;
         }
 
-        public void DonkeyKongUpDate(GameTime pGameTime)
+        public void DonkeyKongUpDate(GameTime pGameTime, Rectangle pPlayerPosition)
         {
             elapsedTimePatroling = elapsedTimePatroling + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
             elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
@@ -123,7 +123,7 @@ namespace jamGitHubGameOff
                                     || MyBaril.BarilState == EnumBarilState.Held))
             {
                 deltaPosX = MyBaril.BarilPosition.X - DonkeyKongPosition.X;
-                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction);
+                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition);
                 if (Math.Abs(deltaPosX) > MyBaril.BarilPosition.Width / 2)
                     DonkeyKongAction = EnumDonkeyKongAction.Seeking;
                 if (Math.Abs(deltaPosX) <= 0 && DonkeyKongAction == EnumDonkeyKongAction.Seeking)
@@ -133,7 +133,7 @@ namespace jamGitHubGameOff
             if (MyBaril != null && (MyBaril.BarilState == EnumBarilState.MoveBack
                                     || MyBaril.BarilState == EnumBarilState.Thrown))
             {
-                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, MyDKThrowBarilSprite);
+                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition, MyDKThrowBarilSprite);
             }
             #endregion
 

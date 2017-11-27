@@ -9,6 +9,7 @@ namespace jamGitHubGameOff
     public class Map
     {
         DonkeyKong MyDonkeyKong;
+        Player MyPlayer;
 
         // position of all points for the map to walk on
         public List<Vector2> ListMapPoints =
@@ -87,7 +88,7 @@ namespace jamGitHubGameOff
         #region MapUpdate
         public void MapUpdate(GameTime pGameTime)
         {
-            MyDonkeyKong.DonkeyKongUpDate(pGameTime);
+            MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition);
         }
         #endregion
 

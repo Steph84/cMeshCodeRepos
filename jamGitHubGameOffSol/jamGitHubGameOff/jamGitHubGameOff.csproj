@@ -71,6 +71,7 @@
     <Compile Include="GameClass.cs" />
     <Compile Include="GroundCollision.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="SpriteGenerator.cs" />
     <Compile Include="UtilFolder\KeyBoardManager.cs" />
     <Compile Include="MenuFolder\LoadMenuData.cs" />

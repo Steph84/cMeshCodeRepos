@@ -53,8 +53,8 @@ namespace jamGitHubGameOff
             BarilSpeedBack = 0.065;
         }
 
-        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition,
-                                EnumDonkeyKongAction? pDonkeyKongAction, SpriteGenerator pSprite = null)
+        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction,
+                                Rectangle pPlayerPos, SpriteGenerator pSprite = null)
         {
             switch (pDonkeyKongAction)
             {
@@ -105,7 +105,7 @@ namespace jamGitHubGameOff
                     BarilCurrentFrame = 4;
                     break;
                 case EnumBarilState.Thrown:
-                    // compute trajectory
+                    ComputeTrajectory(pDonkeyKongPosition, pPlayerPos);
                     BarilCurrentFrame = 4;
                     break;
                 default:
@@ -146,6 +146,14 @@ namespace jamGitHubGameOff
             Held = 3,
             MoveBack = 4,
             Thrown = 5
+        }
+
+        private void ComputeTrajectory(Rectangle pDKPos, Rectangle pPlayerPos)
+        {
+            Vector2 tempDKPos = new Vector2(pDKPos.X, pDKPos.Y);
+            Vector2 tempPlayerPos = new Vector2(pPlayerPos.X, pPlayerPos.Y);
+            Vector2 tempTurningPointPos = new Vector2((pDKPos.X + pPlayerPos.X)/2, 50);
+
         }
     }
 }
