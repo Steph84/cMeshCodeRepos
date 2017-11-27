@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using static jamGitHubGameOff.Baril;
 
 namespace jamGitHubGameOff
 {
@@ -50,7 +50,8 @@ namespace jamGitHubGameOff
 
         double elapsedTimePatroling = 0;
         double elapsedTimeBarilSpawn = 0;
-        Random RandomObject = new Random();
+        double elapsedTimeBarilTargeting = 0;
+         Random RandomObject = new Random();
 
         int deltaPosX;
 
@@ -97,7 +98,7 @@ namespace jamGitHubGameOff
             DKThrowBarilFrameNumber = 19;
             MyDKThrowBarilSprite = new SpriteGenerator(SpriteBatch, DKThrowBarilPic, DKThrowBarilFrameNumber, true, false);
             MyDKThrowBarilSprite.SourceQuad = new Rectangle(0, 0, MyDKThrowBarilSprite.FrameWidth, MyDKThrowBarilSprite.FrameHeight);
-            MyDKThrowBarilSprite.SpeedAnimation = 8.0d;
+            MyDKThrowBarilSprite.SpeedAnimation = 20.0d;
             #endregion
 
             int DKSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
@@ -117,26 +118,37 @@ namespace jamGitHubGameOff
             {
                 MyBaril = new Baril(new Tuple<int, int>(GameWindowWidth, GameWindowHeight), Content, SpriteBatch, ListMapPoints);
             }
-            if (MyBaril != null)
+            if (MyBaril != null && (MyBaril.BarilState == EnumBarilState.Standing
+                                    || MyBaril.BarilState == EnumBarilState.Lifted
+                                    || MyBaril.BarilState == EnumBarilState.Held))
             {
                 deltaPosX = MyBaril.BarilPosition.X - DonkeyKongPosition.X;
-                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, null);
+                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction);
                 if (Math.Abs(deltaPosX) > MyBaril.BarilPosition.Width / 2)
                     DonkeyKongAction = EnumDonkeyKongAction.Seeking;
                 if (Math.Abs(deltaPosX) <= 0 && DonkeyKongAction == EnumDonkeyKongAction.Seeking)
                     DonkeyKongAction = EnumDonkeyKongAction.Lifting;
             }
+
+            if (MyBaril != null && (MyBaril.BarilState == EnumBarilState.MoveBack
+                                    || MyBaril.BarilState == EnumBarilState.Thrown))
+            {
+                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, MyDKThrowBarilSprite);
+            }
             #endregion
-            
+
             DonkeyKongPosition = GroundCollision.StickToTheGround(DonkeyKongPosition, ListMapPoints);
 
             #region Manage movement along x
-            Console.WriteLine(DonkeyKongAction);
             switch (DonkeyKongAction)
             {
                 case EnumDonkeyKongAction.Standing:
+                    DonkeyKongPosition.Width = MyDKStandingSprite.FrameWidth;
+                    DonkeyKongPosition.Height = MyDKStandingSprite.FrameHeight;
                     break;
                 case EnumDonkeyKongAction.Walking:
+                    DonkeyKongPosition.Width = MyDKWalkingSprite.FrameWidth;
+                    DonkeyKongPosition.Height = MyDKWalkingSprite.FrameHeight;
                     {
                         DonkeyKongPosition.X = DonkeyKongPosition.X + (int)DonkeyKongDirection * (int)(DKSpeedWalking * pGameTime.ElapsedGameTime.Milliseconds);
 
@@ -166,13 +178,24 @@ namespace jamGitHubGameOff
                     }
                     break;
                 case EnumDonkeyKongAction.HoldingStand:
+                    elapsedTimeBarilTargeting = elapsedTimeBarilTargeting + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
                     DonkeyKongPosition.Width = MyDKHoldBarilStandingSprite.FrameWidth;
                     DonkeyKongPosition.Height = MyDKHoldBarilStandingSprite.FrameHeight;
                     DonkeyKongDirection = EnumSpriteDirection.Left;
+                    if (elapsedTimeBarilTargeting > 3)
+                    {
+                        DonkeyKongAction = EnumDonkeyKongAction.Throwing;
+                    }
                     break;
                 case EnumDonkeyKongAction.HoldingWalk:
                     break;
                 case EnumDonkeyKongAction.Throwing:
+                    DonkeyKongPosition.Width = MyDKThrowBarilSprite.FrameWidth;
+                    DonkeyKongPosition.Height = MyDKThrowBarilSprite.FrameHeight;
+                    if (MyDKThrowBarilSprite.CurrentFrame >= MyDKThrowBarilSprite.FrameNumber)
+                    {
+                        DonkeyKongAction = EnumDonkeyKongAction.Standing;
+                    }
                     break;
                 case EnumDonkeyKongAction.Running:
                     break;
@@ -190,27 +213,27 @@ namespace jamGitHubGameOff
             #endregion
 
             #region AI
-            //int tempRdmAI = RandomObject.Next(3, 7);
-            //if (elapsedTimePatroling > tempRdmAI)
-            //{
-            //    switch (DonkeyKongAction)
-            //    {
-            //        case EnumDonkeyKongAction.Standing:
-            //            DonkeyKongAction = EnumDonkeyKongAction.Walking;
-            //            elapsedTimePatroling = 0;
-            //            break;
-            //        case EnumDonkeyKongAction.Walking:
-            //            DonkeyKongAction = EnumDonkeyKongAction.Standing;
-            //            elapsedTimePatroling = 0;
-            //            break;
-            //        case EnumDonkeyKongAction.Running:
-            //            break;
-            //        case EnumDonkeyKongAction.Jumping:
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
+            int tempRdmAI = RandomObject.Next(3, 7);
+            if (elapsedTimePatroling > tempRdmAI)
+            {
+                switch (DonkeyKongAction)
+                {
+                    case EnumDonkeyKongAction.Standing:
+                        DonkeyKongAction = EnumDonkeyKongAction.Walking;
+                        elapsedTimePatroling = 0;
+                        break;
+                    case EnumDonkeyKongAction.Walking:
+                        DonkeyKongAction = EnumDonkeyKongAction.Standing;
+                        elapsedTimePatroling = 0;
+                        break;
+                    case EnumDonkeyKongAction.Running:
+                        break;
+                    case EnumDonkeyKongAction.Jumping:
+                        break;
+                    default:
+                        break;
+                }
+            }
             #endregion
 
             #region Update the sprite direction and the animation
@@ -227,13 +250,12 @@ namespace jamGitHubGameOff
                     break;
                 case EnumDonkeyKongAction.Lifting:
                     MyDKLiftBarilSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
-                    MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction);
                     break;
                 case EnumDonkeyKongAction.HoldingStand:
                     MyDKHoldBarilStandingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
                     break;
                 case EnumDonkeyKongAction.HoldingWalk:
-                    MyDKHoldBarilWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
+                    //MyDKHoldBarilWalkingSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
                     break;
                 case EnumDonkeyKongAction.Throwing:
                     MyDKThrowBarilSprite.SpriteGeneratorUpdate(pGameTime, DonkeyKongDirection);
@@ -282,7 +304,7 @@ namespace jamGitHubGameOff
                     MyDKHoldBarilStandingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
                     break;
                 case EnumDonkeyKongAction.HoldingWalk:
-                    MyDKHoldBarilWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
+                    //MyDKHoldBarilWalkingSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);
                     break;
                 case EnumDonkeyKongAction.Throwing:
                     MyDKThrowBarilSprite.SpriteGeneratorDraw(pGameTime, DonkeyKongPosition);

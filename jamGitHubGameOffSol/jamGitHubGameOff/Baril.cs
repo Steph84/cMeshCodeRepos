@@ -25,8 +25,8 @@ namespace jamGitHubGameOff
         double BarilCurrentFrame;
         Vector2 BarilOrigin;
         SpriteEffects BarilDirection = SpriteEffects.None;
-        EnumBarilState BarilState = EnumBarilState.Standing;
-        double BarilSpeedUp, BarilSpeedThrow;
+        public EnumBarilState BarilState { get; set; }
+        double BarilSpeedUp, BarilSpeedBack, BarilSpeedThrow;
 
         Random RandomObject = new Random();
 
@@ -48,10 +48,13 @@ namespace jamGitHubGameOff
             int BarilSpawnPosX = RandomObject.Next((int)ListMapPoints[9].X, (int)ListMapPoints[16].X); // 9 to 16
             BarilPosition = new Rectangle(BarilSpawnPosX, 0, MyBarilSprite.FrameWidth, MyBarilSprite.FrameHeight);
 
+            BarilState = EnumBarilState.Standing;
             BarilSpeedUp = 0.065;
+            BarilSpeedBack = 0.065;
         }
 
-        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction)
+        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition,
+                                EnumDonkeyKongAction? pDonkeyKongAction, SpriteGenerator pSprite = null)
         {
             switch (pDonkeyKongAction)
             {
@@ -61,11 +64,20 @@ namespace jamGitHubGameOff
                 case EnumDonkeyKongAction.HoldingStand:
                     BarilState = EnumBarilState.Held;
                     break;
+                case EnumDonkeyKongAction.Throwing:
+                    if (pSprite != null && pSprite.CurrentFrame < 5) // != null to avoid lag between states
+                    {
+                        BarilState = EnumBarilState.MoveBack;
+                    }
+                    else
+                    {
+                        BarilState = EnumBarilState.Thrown;
+                    }
+                    break;
                 default:
                     break;
             }
-
-
+            Console.WriteLine(BarilState);
             switch (BarilState)
             {
                 case EnumBarilState.Standing:
@@ -86,7 +98,14 @@ namespace jamGitHubGameOff
                     BarilPosition = new Rectangle(BarilPosition.X, pDonkeyKongPosition.Top - BarilPosition.Height, BarilPosition.Width, BarilPosition.Height);
                     BarilCurrentFrame = 4;
                     break;
+                case EnumBarilState.MoveBack:
+                    int tempBarilXPos = 0;
+                    tempBarilXPos = BarilPosition.X + (int)(BarilSpeedBack * pGameTime.ElapsedGameTime.Milliseconds);
+                    BarilPosition = new Rectangle(tempBarilXPos, BarilPosition.Y, BarilPosition.Width, BarilPosition.Height);
+                    BarilCurrentFrame = 4;
+                    break;
                 case EnumBarilState.Thrown:
+                    // compute trajectory
                     BarilCurrentFrame = 4;
                     break;
                 default:
@@ -125,7 +144,8 @@ namespace jamGitHubGameOff
             Standing = 1,
             Lifted = 2,
             Held = 3,
-            Thrown = 4
+            MoveBack = 4,
+            Thrown = 5
         }
     }
 }
