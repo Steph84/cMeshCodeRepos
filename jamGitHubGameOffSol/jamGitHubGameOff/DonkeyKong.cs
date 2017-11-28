@@ -51,7 +51,7 @@ namespace jamGitHubGameOff
         double elapsedTimePatroling = 0;
         double elapsedTimeBarilSpawn = 0;
         double elapsedTimeBarilTargeting = 0;
-         Random RandomObject = new Random();
+        Random RandomObject = new Random();
 
         int deltaPosX;
 

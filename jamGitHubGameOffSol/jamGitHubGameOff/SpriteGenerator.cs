@@ -68,13 +68,13 @@ namespace jamGitHubGameOff
                 if (ParseQuads == "back")
                     CurrentFrame = CurrentFrame - (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
 
-                if (CurrentFrame > FrameNumber - 1)
+                if (CurrentFrame > FrameNumber)
                 {
-                    CurrentFrame = FrameNumber - 1;
+                    CurrentFrame = FrameNumber;
                     ParseQuads = "back";
                 }
 
-                if (CurrentFrame < 0)
+                if (IsLooping == true && CurrentFrame < 0)
                 {
                     CurrentFrame = 0;
                     ParseQuads = "forth";
@@ -87,7 +87,7 @@ namespace jamGitHubGameOff
             {
                 CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
                 
-                if (IsLooping == true && CurrentFrame > FrameNumber - 1)
+                if (IsLooping == true && CurrentFrame > FrameNumber)
                     CurrentFrame = 0;
             }
             #endregion
