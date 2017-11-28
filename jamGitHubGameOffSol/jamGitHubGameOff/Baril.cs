@@ -80,7 +80,7 @@ namespace jamGitHubGameOff
                 default:
                     break;
             }
-            Console.WriteLine(BarilState);
+
             switch (BarilState)
             {
                 case EnumBarilState.Standing:

@@ -90,6 +90,7 @@ namespace jamGitHubGameOff
         public void MapUpdate(GameTime pGameTime)
         {
             MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition);
+            MyPlayer.PlayerUpDate(pGameTime);
         }
         #endregion
 
@@ -115,6 +116,7 @@ namespace jamGitHubGameOff
                 SpriteBatch.Draw(segmentPoint, item, Color.White);
 
             MyDonkeyKong.DonkeyKongDraw(pGameTime);
+            MyPlayer.PlayerDraw(pGameTime);
         }
         #endregion
 
