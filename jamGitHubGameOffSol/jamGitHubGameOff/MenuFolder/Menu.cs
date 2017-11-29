@@ -270,7 +270,6 @@ namespace jamGitHubGameOff.MenuFolder
                         InitializeTweening();
                         TargetState = Main.EnumMainState.MenuInstructions;
                     }
-
                 }
                 #endregion
 

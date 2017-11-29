@@ -21,6 +21,7 @@ namespace blockMenu
         public enum EnumMainState
         {
             MenuTitle,
+            MenuInstructions,
             MenuCredits,
             MenuQuit,
             GameAnimation,
@@ -77,6 +78,10 @@ namespace blockMenu
                     MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
                     break;
 
+                case EnumMainState.MenuInstructions:
+                    MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
+                    break;
+
                 case EnumMainState.MenuCredits:
                     MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
                     break;
@@ -110,6 +115,10 @@ namespace blockMenu
             {
                 case EnumMainState.MenuTitle:
                     MyMenu.MenuTitleDraw(gameTime);
+                    break;
+
+                case EnumMainState.MenuInstructions:
+                    MyMenu.MenuInstructionsDraw(gameTime);
                     break;
 
                 case EnumMainState.MenuCredits:

@@ -15,6 +15,7 @@ namespace blockMenu.MenuFolder
             public List<TitleProperties> ListeMenuTitles { get; set; }
             public MenuSelection MenuSelection { get; set; }
             public List<CreditsProperties> Credits { get; set; }
+            public List<InstructionsProperties> Instructions { get; set; }
         }
         
         public class TitleProperties
@@ -50,6 +51,13 @@ namespace blockMenu.MenuFolder
             public string Assets { get; set; }
             public string Name { get; set; }
             public string Source { get; set; }
+        }
+
+        public class InstructionsProperties
+        {
+            public List<Vector2> AnchorPosition { get; set; }
+            public string Action { get; set; }
+            public string Control { get; set; }
         }
         #endregion
 

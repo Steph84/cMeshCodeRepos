@@ -30,10 +30,12 @@
   "MenuSelection": {
     "SelectionItems": [
       "New game",
+      "Instructions",
       "Credits",
       "Quit"
     ],
     "AnchorItems": [
+      "0, 0",
       "0, 0",
       "0, 0",
       "0, 0"
@@ -64,6 +66,24 @@
         "Assets": "Sound effect",
         "Name": "Teemu Selanne",
         "Source": "http://"
+    }
+  ],
+  "Instructions": [
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300"
+      ],
+      "Action": "Direction",
+      "Control": "WASD arrow keys"
+    },
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300"
+      ],
+      "Action": "Jump",
+      "Control": "Space key"
     }
   ]
 }

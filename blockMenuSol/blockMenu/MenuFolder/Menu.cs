@@ -21,6 +21,7 @@ namespace blockMenu.MenuFolder
         List<LoadMenuData.TitleProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;
         List<LoadMenuData.CreditsProperties> MyMenuCredits;
+        List<LoadMenuData.InstructionsProperties> MyMenuInstructions;
 
         Color tempColor;
 
@@ -33,10 +34,17 @@ namespace blockMenu.MenuFolder
         SoundEffect soundHeadBack, soundMoveSelect, soundValidateSelect;
         float volumeSoundEffects;
 
+        SpriteFont StandardFontTitle, StandardFontLines;
+
         // Credits stuff
         string CreditsTitle;
         Vector2 CreditsTitlePosition;
         SpriteFont CreditsFontTitle, CreditsFontLines;
+
+        // Instructions stuff
+        string InstructionsTitle;
+        Vector2 InstructionsTitlePosition;
+        SpriteFont InstructionsFontTitle, InstructionsFontLines;
 
         // backArrow stuff
         Texture2D backArrowPic;
@@ -76,12 +84,16 @@ namespace blockMenu.MenuFolder
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
             MyMenuCredits = MyMenuData.Credits;
-            
+            MyMenuInstructions = MyMenuData.Instructions;
+
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
             soundHeadBack = Content.Load<SoundEffect>("headBack");
             volumeSoundEffects = 0.25f;
-            
+
+            StandardFontTitle = Content.Load<SpriteFont>("TimesNewRoman24");
+            StandardFontLines = Content.Load<SpriteFont>("TimesNewRoman12");
+
             #region Manage the titles on the main screen
             CreditsTitle = "The Credits";
             foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
@@ -130,16 +142,16 @@ namespace blockMenu.MenuFolder
             }
             #endregion
 
-            #region Manage the Credits
-
             backArrowPic = Content.Load<Texture2D>("backArrow");
             backArrowTarget = new Rectangle(5, 5, 32, 32);
             backArrowTextPos = new Vector2(50, 5);
             backArrowText = "Esc";
 
+            #region Manage the Credits
+
             // Load fonts
-            CreditsFontTitle = Content.Load<SpriteFont>("TimesNewRoman24");
-            CreditsFontLines = Content.Load<SpriteFont>("TimesNewRoman12");
+            CreditsFontTitle = StandardFontTitle;
+            CreditsFontLines = StandardFontLines;
 
             // measure size text
             Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
@@ -162,6 +174,38 @@ namespace blockMenu.MenuFolder
                                                         + i * sizeCreditsLine.Y * 4); // anchor of each block
                 }
             }
+
+            #region Manage the Instructions part
+
+            InstructionsTitle = "The Instructions";
+
+            // Load fonts
+            InstructionsFontTitle = StandardFontTitle;
+            InstructionsFontLines = StandardFontLines;
+
+            // measure size text
+            Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
+            Vector2 sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
+
+            // manage the centered title
+            float tempNewXInstructionsTitle = (GameWindowWidth - sizeInstructionsTitle.X) / 2;
+            InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, GameWindowHeight / 12);
+
+            // manage the positions of the instructions
+            for (int i = 0; i < MyMenuInstructions.Count; i++)
+            {
+                var instruction = MyMenuInstructions[i];
+                for (int j = 0; j < instruction.AnchorPosition.Count; j++)
+                {
+                    var anchor = instruction.AnchorPosition[j];
+                    MyMenuInstructions[i].AnchorPosition[j] =
+                        new Vector2(GameWindowWidth / 12, sizeInstructionsTitle.Y * 3 // anchor of the whole credits
+                                                        + j * sizeInstructionsLine.Y // anchor of each lines
+                                                        + i * sizeInstructionsLine.Y * 4); // anchor of each block
+                }
+            }
+            #endregion
+            
             #endregion
         }
         #endregion
@@ -218,7 +262,14 @@ namespace blockMenu.MenuFolder
                         InitializeTweening();
                         TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
                     }
-                        
+
+                    if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Instructions")
+                    { // initialize tweening parameters
+                        menuOut = true;
+                        bMenuStable = false;
+                        InitializeTweening();
+                        TargetState = Main.EnumMainState.MenuInstructions;
+                    }
                 }
                 #endregion
 
@@ -228,6 +279,27 @@ namespace blockMenu.MenuFolder
             { // call the tweening effect
                 pMyState = TweeningSelectionLines(pGameTime, menuIn, menuOut, pMyState, TargetState);
             }
+
+            return pMyState;
+        }
+        #endregion
+
+        #region MenuInstructionsUpdate
+        public Main.EnumMainState MenuInstructionsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+        {
+            newState = Keyboard.GetState();
+
+            if (newState.IsKeyDown(Keys.Escape) && !oldState.IsKeyDown(Keys.Escape))
+            {
+                soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+                // initialize the tweening parameters
+                InitializeTweening();
+                bMenuStable = false;
+                menuIn = true;
+                pMyState = Main.EnumMainState.MenuTitle;
+            }
+
+            oldState = newState;
 
             return pMyState;
         }
@@ -276,6 +348,25 @@ namespace blockMenu.MenuFolder
             }
             //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
             #endregion
+        }
+        #endregion
+
+        #region MenuInstructionsDraw
+        public void MenuInstructionsDraw(GameTime pGameTime)
+        {
+            // Draw Instructions title
+            SpriteBatch.DrawString(InstructionsFontTitle, InstructionsTitle, InstructionsTitlePosition, Color.White);
+
+            // Draw Instructions themselves
+            foreach (var instruction in MyMenuInstructions)
+            {
+                SpriteBatch.DrawString(InstructionsFontLines, instruction.Action, instruction.AnchorPosition[0], Color.White);
+                SpriteBatch.DrawString(InstructionsFontLines, instruction.Control, instruction.AnchorPosition[1], Color.White);
+            }
+
+            // Draw the BackArrow pic
+            SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
+            SpriteBatch.DrawString(InstructionsFontTitle, backArrowText, backArrowTextPos, Color.White);
         }
         #endregion
 
