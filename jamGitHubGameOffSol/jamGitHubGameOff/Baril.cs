@@ -5,8 +5,6 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace jamGitHubGameOff
 {
@@ -126,11 +124,6 @@ namespace jamGitHubGameOff
                                                       (int)(BarilPosition.X * CoefQuadra.Item1 + Math.Pow(BarilPosition.X, 2) * CoefQuadra.Item2 + CoefQuadra.Item3),
                                                       BarilPosition.Width, BarilPosition.Height);
                     }
-                    if(BarilPosition.Y > GameWindowWidth + BarilPosition.Height)
-                    {
-                        BarilState = EnumBarilState.Dead;
-                        BarilDirection = EnumSpriteDirection.None;
-                    }
                     if(BarilPosition.X < ListMapPoints[2].X)
                     {
                         // check collision
@@ -142,6 +135,9 @@ namespace jamGitHubGameOff
                     break;
                 case EnumBarilState.ThrownBack:
                     BarilDirection = EnumSpriteDirection.Right;
+                    BarilPosition = new Rectangle(BarilPosition.X + (int)(BarilSpeedThrow * pGameTime.ElapsedGameTime.Milliseconds),
+                                                       (int)(BarilPosition.X * CoefQuadra.Item1 + Math.Pow(BarilPosition.X, 2) * CoefQuadra.Item2 + CoefQuadra.Item3),
+                                                       BarilPosition.Width, BarilPosition.Height);
                     if (BarilPosition.X > ListMapPoints[9].X)
                     {
                         // check collision
@@ -151,6 +147,12 @@ namespace jamGitHubGameOff
                     break;
                 default:
                     break;
+            }
+
+            if (BarilPosition.Y > GameWindowWidth + BarilPosition.Height)
+            {
+                BarilState = EnumBarilState.Dead;
+                BarilDirection = EnumSpriteDirection.None;
             }
 
             MyBarilSprite.SourceQuad = new Rectangle((int)Math.Floor(BarilCurrentFrame) * MyBarilSprite.FrameWidth,

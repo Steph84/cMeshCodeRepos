@@ -51,6 +51,7 @@ namespace jamGitHubGameOff
         List<int> ListDKCMapLayer2Pos = new List<int>();
 
         bool barilHit = false;
+        bool jasonThrowBack = false;
 
         #region Constructor Map
         public Map(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, GraphicsDevice pGraphicsDevice)
@@ -91,8 +92,9 @@ namespace jamGitHubGameOff
         #region MapUpdate
         public void MapUpdate(GameTime pGameTime)
         {
-            barilHit = MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition);
+            barilHit = MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition, jasonThrowBack);
             MyPlayer.PlayerUpDate(pGameTime);
+            jasonThrowBack = false;
         }
         #endregion
 
@@ -114,12 +116,36 @@ namespace jamGitHubGameOff
             SpriteBatch.Draw(DKCMapLayer3Pic, DKCMapLayer3Target, Color.White);
 
             // draw the segments points
-            foreach(var item in ListRectanglePoints)
-                SpriteBatch.Draw(segmentPoint, item, Color.White);
+            //foreach(var item in ListRectanglePoints)
+            //    SpriteBatch.Draw(segmentPoint, item, Color.White);
 
             // TODO blink draw when hit
-            MyDonkeyKong.DonkeyKongDraw(pGameTime);
-            MyPlayer.PlayerDraw(pGameTime);
+            if(barilHit)
+            {
+                // if Jason is hit
+                if(MyDonkeyKong.DictCharacterHit["Jason"])
+                {
+                    if (MyPlayer.PlayerState != Player.EnumPlayerState.Slashing)
+                        MyDonkeyKong.DonkeyKongDraw(pGameTime);
+                    else
+                    {
+                        MyPlayer.PlayerDraw(pGameTime);
+                        MyDonkeyKong.DonkeyKongDraw(pGameTime);
+                        jasonThrowBack = true;
+                    }
+                }
+
+                // if DK is hit
+                if(MyDonkeyKong.DictCharacterHit["DonkeyKong"])
+                {
+                    MyPlayer.PlayerDraw(pGameTime);
+                }
+            }
+            else
+            {
+                MyDonkeyKong.DonkeyKongDraw(pGameTime);
+                MyPlayer.PlayerDraw(pGameTime);
+            }
         }
         #endregion
 

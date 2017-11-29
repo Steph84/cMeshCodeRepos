@@ -15,15 +15,15 @@ namespace jamGitHubGameOff
         GameClass MyGameClass;
 
         Tuple<int, int> GameWindowSize;
-        string MyTitleGameWindow = "This is a game !";
-        //EnumMainState MyState = EnumMainState.MenuTitle;
-        EnumMainState MyState = EnumMainState.GamePlayable;
+        string MyTitleGameWindow = "Throwback to Donkey !";
+        EnumMainState MyState = EnumMainState.MenuTitle;
         
         float GameSizeCoefficient = 1.0f;
 
         public enum EnumMainState
         {
             MenuTitle,
+            MenuInstructions,
             MenuCredits,
             MenuQuit,
             GameAnimation,
@@ -72,6 +72,10 @@ namespace jamGitHubGameOff
                     MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
                     break;
 
+                case EnumMainState.MenuInstructions:
+                    MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
+                    break;
+
                 case EnumMainState.MenuCredits:
                     MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
                     break;
@@ -106,6 +110,10 @@ namespace jamGitHubGameOff
             {
                 case EnumMainState.MenuTitle:
                     MyMenu.MenuTitleDraw(gameTime);
+                    break;
+                    
+                case EnumMainState.MenuInstructions:
+                    MyMenu.MenuInstructionsDraw(gameTime);
                     break;
 
                 case EnumMainState.MenuCredits:

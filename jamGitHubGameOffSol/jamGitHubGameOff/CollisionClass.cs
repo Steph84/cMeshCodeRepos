@@ -23,9 +23,10 @@ namespace jamGitHubGameOff
             //{
             //    if (Math.Abs(dy) < (pFirstObject.Height * pFirstObject.scale + pSecondObject.Height * pSecondObject.scale))
 
-            if (Math.Abs(dx) < (pFirstObject.Width + pSecondObject.Width))
+            // divided by 4 beacause of the size of the Jason sprite
+            if (Math.Abs(dx) < (pFirstObject.Width/4 + pSecondObject.Width/4))
             {
-                if (Math.Abs(dy) < (pFirstObject.Height + pSecondObject.Height))
+                if (Math.Abs(dy) < (pFirstObject.Height/4 + pSecondObject.Height/4))
                 {
                     return true;
                 }

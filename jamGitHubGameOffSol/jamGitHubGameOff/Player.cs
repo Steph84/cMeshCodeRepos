@@ -21,7 +21,6 @@ namespace jamGitHubGameOff
 
         public Rectangle PlayerPosition { get; set; }
         Vector2 PlayerOrigin;
-        SpriteEffects PlayerSpriteDirection = SpriteEffects.None;
         EnumSpriteDirection PlayerDirection = EnumSpriteDirection.Right;
         double PlayerCurrentFrame;
         public EnumPlayerState PlayerState { get; set; }
@@ -44,7 +43,7 @@ namespace jamGitHubGameOff
             MyPlayerSprite = new SpriteGenerator(SpriteBatch, PlayerPic, PlayerFrameNumber, false, false);
 
             MyPlayerSprite.SourceQuad = new Rectangle(0, 0, MyPlayerSprite.FrameWidth, MyPlayerSprite.FrameHeight);
-            MyPlayerSprite.SpeedAnimation = 20.0d;
+            MyPlayerSprite.SpeedAnimation = 40.0d;
             PlayerOrigin = new Vector2(MyPlayerSprite.FrameWidth / 2, MyPlayerSprite.FrameHeight / 2);
             PlayerCurrentFrame = 0;
 
@@ -56,7 +55,6 @@ namespace jamGitHubGameOff
 
         public void PlayerUpDate(GameTime pGameTime)
         {
-
             PlayerPosition = GroundCollision.StickToTheGround(PlayerPosition, ListMapPoints);
 
             newState = Keyboard.GetState();
@@ -104,9 +102,6 @@ namespace jamGitHubGameOff
                         MyPlayerSprite.CurrentFrame = 0;
                         MyPlayerSprite.ParseQuads = "forth";
                     }
-
-                    Console.WriteLine(MyPlayerSprite.CurrentFrame);
-
                     break;
                 default:
                     break;

@@ -66,8 +66,8 @@ namespace jamGitHubGameOff
             ListMapPoints = pListMapPoints;
 
             DictCharacterHit = new Dictionary<string, bool>(){
-                                                                   { "JasonHit", false},
-                                                                   { "DonkeyKongHit", false }
+                                                                   { "Jason", false},
+                                                                   { "DonkeyKong", false }
                                                              };
 
             #region Initialize Sprites
@@ -115,9 +115,13 @@ namespace jamGitHubGameOff
             DonkeyKongAction = EnumDonkeyKongAction.Standing;
         }
 
-        public bool DonkeyKongUpDate(GameTime pGameTime, Rectangle pPlayerPosition)
+        public bool DonkeyKongUpDate(GameTime pGameTime, Rectangle pPlayerPosition, bool? pJasonThrowBack)
         {
             bool tempHitToReturn = false;
+            if(pJasonThrowBack == true)
+            {
+                MyBaril.BarilState = EnumBarilState.ThrownBack;
+            }
 
             elapsedTimePatroling = elapsedTimePatroling + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
             elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
@@ -142,7 +146,8 @@ namespace jamGitHubGameOff
             }
 
             if (MyBaril != null && (MyBaril.BarilState == EnumBarilState.MoveBack
-                                    || MyBaril.BarilState == EnumBarilState.Thrown))
+                                    || MyBaril.BarilState == EnumBarilState.Thrown
+                                    || MyBaril.BarilState == EnumBarilState.ThrownBack))
             {
                 tempHitToReturn = MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition, MyDKThrowBarilSprite);
             }
@@ -164,10 +169,10 @@ namespace jamGitHubGameOff
                     case EnumSpriteDirection.None:
                         break;
                     case EnumSpriteDirection.Right:
-                        DictCharacterHit["DonkeyKongHit"] = true;
+                        DictCharacterHit["DonkeyKong"] = true;
                         break;
                     case EnumSpriteDirection.Left:
-                        DictCharacterHit["JasonHit"] = true;
+                        DictCharacterHit["Jason"] = true;
                         break;
                     default:
                         break;
@@ -175,8 +180,8 @@ namespace jamGitHubGameOff
             }
             else
             {
-                DictCharacterHit["DonkeyKongHit"] = false;
-                DictCharacterHit["JasonHit"] = false;
+                DictCharacterHit["DonkeyKong"] = false;
+                DictCharacterHit["Jason"] = false;
             }
             #endregion
 
