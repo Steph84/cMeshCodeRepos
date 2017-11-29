@@ -23,14 +23,16 @@ namespace jamGitHubGameOff
         int BarilFrameNumber;
         
         public Rectangle BarilPosition { get; set; }
+        public EnumSpriteDirection BarilDirection { get; set; }
         double BarilCurrentFrame;
         Vector2 BarilOrigin;
-        SpriteEffects BarilDirection = SpriteEffects.None;
+        SpriteEffects BarilSpriteDirection = SpriteEffects.None;
         public EnumBarilState BarilState { get; set; }
         double BarilSpeedUp, BarilSpeedBack, BarilSpeedThrow;
         Tuple<double, double, double> CoefQuadra = null;
-
+        
         Random RandomObject = new Random();
+        CollisionClass MyCollision = new CollisionClass();
 
         public Baril(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, List<Vector2> pListMapPoints)
         {
@@ -54,11 +56,15 @@ namespace jamGitHubGameOff
             BarilSpeedUp = 0.065;
             BarilSpeedBack = 0.065;
             BarilSpeedThrow = 0.26;
-        }
+            
+            BarilDirection = EnumSpriteDirection.None;
+    }
 
-        public void BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction,
+        public bool BarilUpDate(GameTime pGameTime, Rectangle pDonkeyKongPosition, EnumDonkeyKongAction? pDonkeyKongAction,
                                 Rectangle pPlayerPos, SpriteGenerator pSprite = null)
         {
+            bool tempHit = false;
+
             switch (pDonkeyKongAction)
             {
                 case EnumDonkeyKongAction.Lifting:
@@ -108,6 +114,7 @@ namespace jamGitHubGameOff
                     BarilCurrentFrame = 4;
                     break;
                 case EnumBarilState.Thrown:
+                    BarilDirection = EnumSpriteDirection.Left;
                     if (CoefQuadra == null)
                     {
                         var tempResult = ComputeTrajectory(BarilPosition, pPlayerPos);
@@ -122,8 +129,25 @@ namespace jamGitHubGameOff
                     if(BarilPosition.Y > GameWindowWidth + BarilPosition.Height)
                     {
                         BarilState = EnumBarilState.Dead;
+                        BarilDirection = EnumSpriteDirection.None;
+                    }
+                    if(BarilPosition.X < ListMapPoints[2].X)
+                    {
+                        // check collision
+                        tempHit = MyCollision.CheckCollision(BarilPosition, pPlayerPos);
+                        // collision + machete = baril go back
+                        // collision - machete = player hit
                     }
                     BarilCurrentFrame = 4;
+                    break;
+                case EnumBarilState.ThrownBack:
+                    BarilDirection = EnumSpriteDirection.Right;
+                    if (BarilPosition.X > ListMapPoints[9].X)
+                    {
+                        // check collision
+                        tempHit = MyCollision.CheckCollision(BarilPosition, pDonkeyKongPosition);
+                        // collision = DK hit
+                    }
                     break;
                 default:
                     break;
@@ -133,11 +157,12 @@ namespace jamGitHubGameOff
                                                     MyBarilSprite.SourceQuad.Y,
                                                     MyBarilSprite.SourceQuad.Width,
                                                     MyBarilSprite.SourceQuad.Height);
+            return tempHit;
         }
 
         public void BarilDraw(GameTime pGameTime)
         {
-            SpriteBatch.Draw(BarilPic, BarilPosition, MyBarilSprite.SourceQuad, Color.White, 0, BarilOrigin, BarilDirection, 0);
+            SpriteBatch.Draw(BarilPic, BarilPosition, MyBarilSprite.SourceQuad, Color.White, 0, BarilOrigin, BarilSpriteDirection, 0);
 
             //switch (BarilState)
             //{
@@ -163,7 +188,8 @@ namespace jamGitHubGameOff
             Held = 3,
             MoveBack = 4,
             Thrown = 5,
-            Dead = 6
+            Dead = 6,
+            ThrownBack = 7
         }
 
         private List<double> ComputeTrajectory(Rectangle pBarilPos, Rectangle pPlayerPos)

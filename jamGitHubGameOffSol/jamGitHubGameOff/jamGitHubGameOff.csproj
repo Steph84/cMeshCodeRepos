@@ -67,6 +67,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Baril.cs" />
+    <Compile Include="CollisionClass.cs" />
     <Compile Include="DonkeyKong.cs" />
     <Compile Include="GameClass.cs" />
     <Compile Include="GroundCollision.cs" />

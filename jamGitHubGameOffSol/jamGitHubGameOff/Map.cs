@@ -50,6 +50,8 @@ namespace jamGitHubGameOff
         List<int> ListDKCMapLayer1Pos = new List<int>();
         List<int> ListDKCMapLayer2Pos = new List<int>();
 
+        bool barilHit = false;
+
         #region Constructor Map
         public Map(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch, GraphicsDevice pGraphicsDevice)
         {
@@ -89,7 +91,7 @@ namespace jamGitHubGameOff
         #region MapUpdate
         public void MapUpdate(GameTime pGameTime)
         {
-            MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition);
+            barilHit = MyDonkeyKong.DonkeyKongUpDate(pGameTime, MyPlayer.PlayerPosition);
             MyPlayer.PlayerUpDate(pGameTime);
         }
         #endregion
@@ -115,6 +117,7 @@ namespace jamGitHubGameOff
             foreach(var item in ListRectanglePoints)
                 SpriteBatch.Draw(segmentPoint, item, Color.White);
 
+            // TODO blink draw when hit
             MyDonkeyKong.DonkeyKongDraw(pGameTime);
             MyPlayer.PlayerDraw(pGameTime);
         }

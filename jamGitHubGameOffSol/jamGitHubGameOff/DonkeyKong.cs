@@ -17,6 +17,8 @@ namespace jamGitHubGameOff
         SpriteBatch SpriteBatch;
         List<Vector2> ListMapPoints;
 
+        public Dictionary<string, bool> DictCharacterHit { get; set; }
+
         #region Load Sprites
         SpriteGenerator MyDKStandingSprite;
         Texture2D DKStandingPic;
@@ -63,6 +65,11 @@ namespace jamGitHubGameOff
             SpriteBatch = pSpriteBatch;
             ListMapPoints = pListMapPoints;
 
+            DictCharacterHit = new Dictionary<string, bool>(){
+                                                                   { "JasonHit", false},
+                                                                   { "DonkeyKongHit", false }
+                                                             };
+
             #region Initialize Sprites
             DKStandingPic = Content.Load<Texture2D>("DKCStanding");
             DKStandingFrameNumber = 11;
@@ -108,11 +115,15 @@ namespace jamGitHubGameOff
             DonkeyKongAction = EnumDonkeyKongAction.Standing;
         }
 
-        public void DonkeyKongUpDate(GameTime pGameTime, Rectangle pPlayerPosition)
+        public bool DonkeyKongUpDate(GameTime pGameTime, Rectangle pPlayerPosition)
         {
+            bool tempHitToReturn = false;
+
             elapsedTimePatroling = elapsedTimePatroling + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
             elapsedTimeBarilSpawn = elapsedTimeBarilSpawn + (pGameTime.ElapsedGameTime.Milliseconds) / 1000.0d;
-            
+
+            DonkeyKongPosition = GroundCollision.StickToTheGround(DonkeyKongPosition, ListMapPoints);
+
             #region Baril Spawn + Movement
             if (elapsedTimeBarilSpawn > 3 && MyBaril == null)
             {
@@ -123,7 +134,7 @@ namespace jamGitHubGameOff
                                     || MyBaril.BarilState == EnumBarilState.Held))
             {
                 deltaPosX = MyBaril.BarilPosition.X - DonkeyKongPosition.X;
-                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition);
+                tempHitToReturn = MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition);
                 if (Math.Abs(deltaPosX) > MyBaril.BarilPosition.Width / 2)
                     DonkeyKongAction = EnumDonkeyKongAction.Seeking;
                 if (Math.Abs(deltaPosX) <= 0 && DonkeyKongAction == EnumDonkeyKongAction.Seeking)
@@ -133,17 +144,42 @@ namespace jamGitHubGameOff
             if (MyBaril != null && (MyBaril.BarilState == EnumBarilState.MoveBack
                                     || MyBaril.BarilState == EnumBarilState.Thrown))
             {
-                MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition, MyDKThrowBarilSprite);
+                tempHitToReturn = MyBaril.BarilUpDate(pGameTime, DonkeyKongPosition, DonkeyKongAction, pPlayerPosition, MyDKThrowBarilSprite);
             }
 
-            if(MyBaril != null && MyBaril.BarilState == EnumBarilState.Dead)
+            if (MyBaril != null && MyBaril.BarilState == EnumBarilState.Dead)
             {
                 elapsedTimeBarilSpawn = 0;
                 MyBaril = null;
+                tempHitToReturn = false;
             }
             #endregion
 
-            DonkeyKongPosition = GroundCollision.StickToTheGround(DonkeyKongPosition, ListMapPoints);
+            #region Manage the collision state
+            if (tempHitToReturn)
+            {
+                // detect wich character hit
+                switch (MyBaril.BarilDirection)
+                {
+                    case EnumSpriteDirection.None:
+                        break;
+                    case EnumSpriteDirection.Right:
+                        DictCharacterHit["DonkeyKongHit"] = true;
+                        break;
+                    case EnumSpriteDirection.Left:
+                        DictCharacterHit["JasonHit"] = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                DictCharacterHit["DonkeyKongHit"] = false;
+                DictCharacterHit["JasonHit"] = false;
+            }
+            #endregion
+
 
             #region Manage movement along x
             switch (DonkeyKongAction)
@@ -283,6 +319,8 @@ namespace jamGitHubGameOff
                     break;
             }
             #endregion
+
+            return tempHitToReturn;
         }
 
         public void DonkeyKongDraw(GameTime pGameTime)
