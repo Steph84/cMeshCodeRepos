@@ -107,7 +107,6 @@
     <MonoGameContentReference Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="blockMenu_TemporaryKey.pfx" />
     <None Include="MenuFolder\menuData.json" />
     <None Include="packages.config" />
   </ItemGroup>
