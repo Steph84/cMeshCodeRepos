@@ -85,7 +85,7 @@ namespace blockMenu.MenuFolder
             MyMenuSelection = MyMenuData.MenuSelection;
             MyMenuCredits = MyMenuData.Credits;
             MyMenuInstructions = MyMenuData.Instructions;
-
+            
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
             soundHeadBack = Content.Load<SoundEffect>("headBack");

@@ -60,10 +60,16 @@
     <ManifestKeyFile>blockMenu_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="UtilFolder\KeyBoardManager.cs" />
@@ -98,6 +104,7 @@
     <None Include="blockMenu_TemporaryKey.pfx" />
     <None Include="MenuFolder\menuData.json" />
     <None Include="packages.config" />
+    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
