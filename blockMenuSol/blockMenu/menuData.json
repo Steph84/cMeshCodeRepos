@@ -1,0 +1,89 @@
+﻿{
+  "ListeMenuTitles": [
+    {
+      "ItemName": "MainTitle",
+      "Value": "Salem",
+      "AnchorPosition": "0, 1",
+      "Alignment": "Center",
+      "EnumColor": "Red",
+      "FontFileName": "Capture_it"
+    },
+    {
+      "ItemName": "SubTitle",
+      "Value": "Story",
+      "AnchorPosition": "0, 3",
+      "Alignment": "Center",
+      "EnumColor": "Blue",
+      "FontFileName": "AlexBrush",
+      "WidthLimit": "0.9"
+    },
+    {
+      "ItemName": "Version",
+      "Value": "V 1.0",
+      "AnchorPosition": "0, 11",
+      "Alignment": "Right",
+      "EnumColor": "White",
+      "FontFileName": "TimesNewRoman24",
+      "WidthLimit": "0.99"
+    }
+  ],
+  "MenuSelection": {
+    "SelectionItems": [
+      "New game",
+      "Instructions",
+      "Credits",
+      "Quit"
+    ],
+    "AnchorItems": [
+      "0, 0",
+      "0, 0",
+      "0, 0",
+      "0, 0"
+    ],
+    "AnchorPosition": "0, 7",
+    "Alignment": "Center",
+    "EnumColor": "White",
+    "FontFileName": "Pacifico",
+    "ItemSelected": "0"
+  },
+  "Credits": [
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300",
+        "0, 300"
+      ],
+      "Assets": "Background picture",
+      "Name": "Alexander Ovechkin",
+      "Source": "http://"
+    },
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300",
+        "0, 300"
+      ],
+        "Assets": "Sound effect",
+        "Name": "Teemu Selanne",
+        "Source": "http://"
+    }
+  ],
+  "Instructions": [
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300"
+      ],
+      "Action": "Direction",
+      "Control": "WASD arrow keys"
+    },
+    {
+      "AnchorPosition": [
+        "0, 300",
+        "0, 300"
+      ],
+      "Action": "Jump",
+      "Control": "Space key"
+    }
+  ]
+}

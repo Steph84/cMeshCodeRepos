@@ -1,11 +1,10 @@
-﻿using blockMenu.UtilFolder;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 
-namespace blockMenu.MenuFolder
+namespace blockMenu
 {
     public class LoadMenuData
     {
@@ -62,18 +61,135 @@ namespace blockMenu.MenuFolder
         #endregion
 
         #region Method to extract data and set properties from Json file
-        public MenuData LoadJsonData()
+        //public MenuData LoadJsonData()
+        //{
+        //    MenuData temp = new MenuData();
+
+        //    string filename = "../../../../MenuFolder/menuData.json";
+
+        //    using (StreamReader streamReader = new StreamReader(filename))
+        //    {
+        //        string json = streamReader.ReadToEnd();
+        //        temp = JsonConvert.DeserializeObject<MenuData>(json);
+        //    }
+        //    return temp;
+        //}
+        #endregion
+
+        #region Method to initialize the Data
+        public MenuData LoadHardData()
         {
-            MenuData temp = new MenuData();
+            MenuData MenuData = new MenuData(); ;
 
-            string filename = "../../../../MenuFolder/menuData.json";
-
-            using (StreamReader streamReader = new StreamReader(filename))
+            #region ListeMenuTitles
+            MenuData.ListeMenuTitles = new List<TitleProperties>();
+            MenuData.ListeMenuTitles.Add(new TitleProperties
             {
-                string json = streamReader.ReadToEnd();
-                temp = JsonConvert.DeserializeObject<MenuData>(json);
-            }
-            return temp;
+                ItemName = "MaintTitle",
+                Value = "Salem",
+                AnchorPosition = new Vector2(0, 1),
+                Alignment = TextAlignment.EnumLineAlignment.Center,
+                EnumColor = PersonnalColors.EnumColorName.Red,
+                FontFileName = "Capture_it"
+            });
+            MenuData.ListeMenuTitles.Add(new TitleProperties
+            {
+                ItemName = "SubTitle",
+                Value = "Story",
+                AnchorPosition = new Vector2(0, 3),
+                Alignment = TextAlignment.EnumLineAlignment.Center,
+                EnumColor = PersonnalColors.EnumColorName.Blue,
+                FontFileName = "AlexBrush",
+                WidthLimit = 0.9f
+            });
+            MenuData.ListeMenuTitles.Add(new TitleProperties
+            {
+                ItemName = "Version",
+                Value = "V 1.0",
+                AnchorPosition = new Vector2(0, 11),
+                Alignment = TextAlignment.EnumLineAlignment.Right,
+                EnumColor = PersonnalColors.EnumColorName.White,
+                FontFileName = "TimesNewRoman24",
+                WidthLimit = 0.99f
+            });
+            #endregion
+
+            #region MenuSelection
+            MenuData.MenuSelection = new MenuSelection();
+            MenuData.MenuSelection.SelectionItems = new List<string>
+            {
+                "New game",
+                "Instructions",
+                "Credits",
+                "Quit"
+            };
+            MenuData.MenuSelection.AnchorItems = new List<Vector2>
+            {
+                new Vector2(0, 0),
+                new Vector2(0, 0),
+                new Vector2(0, 0),
+                new Vector2(0, 0),
+            };
+            MenuData.MenuSelection.AnchorPosition = new Vector2(0, 7);
+            MenuData.MenuSelection.Alignment = TextAlignment.EnumLineAlignment.Center;
+            MenuData.MenuSelection.EnumColor = PersonnalColors.EnumColorName.White;
+            MenuData.MenuSelection.FontFileName = "Pacifico";
+            MenuData.MenuSelection.ItemSelected = 0;
+            #endregion
+
+            #region Credits
+            MenuData.Credits = new List<CreditsProperties>();
+            MenuData.Credits.Add(new CreditsProperties
+            {
+                AnchorPosition = new List<Vector2>
+                {
+                    new Vector2(0, 300),
+                    new Vector2(0, 300),
+                    new Vector2(0, 300),           
+                },
+                Assets = "Background picture",
+                Name = "Alexander Ovechkin",
+                Source = "http://"
+            });
+            MenuData.Credits.Add(new CreditsProperties
+            {
+                AnchorPosition = new List<Vector2>
+                {
+                    new Vector2(0, 300),
+                    new Vector2(0, 300),
+                    new Vector2(0, 300),
+                },
+                Assets = "Sound effect",
+                Name = "Teemu Selanne",
+                Source = "http://"
+            });
+            #endregion
+
+            #region Instructions
+            MenuData.Instructions = new List<InstructionsProperties>();
+            MenuData.Instructions.Add(new InstructionsProperties
+            {
+                AnchorPosition = new List<Vector2>
+                {
+                    new Vector2(0, 300),
+                    new Vector2(0, 300)
+                },
+                Action = "Direction",
+                Control = "WASD arrow keys"
+            });
+            MenuData.Instructions.Add(new InstructionsProperties
+            {
+                AnchorPosition = new List<Vector2>
+                {
+                    new Vector2(0, 300),
+                    new Vector2(0, 300)
+                },
+                Action = "Jump",
+                Control = "Space key"
+            });
+            #endregion
+
+            return MenuData;
         }
         #endregion
     }

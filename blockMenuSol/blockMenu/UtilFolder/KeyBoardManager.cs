@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace blockMenu.UtilFolder
+namespace blockMenu
 {
     public class KeyBoardManager
     {

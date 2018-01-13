@@ -13,11 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin NewXmlContent.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:NewXmlContent.xml
-
 #begin Pacifico.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

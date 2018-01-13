@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 
-namespace blockMenu.UtilFolder
+namespace blockMenu
 {
     public class PersonnalColors
     {

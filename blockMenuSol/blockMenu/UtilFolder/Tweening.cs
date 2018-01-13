@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace blockMenu.UtilFolder
+namespace blockMenu
 {
     public class Tweening
     {

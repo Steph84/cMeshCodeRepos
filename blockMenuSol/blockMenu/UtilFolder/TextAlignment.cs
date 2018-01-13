@@ -1,9 +1,8 @@
-﻿using blockMenu.MenuFolder;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace blockMenu.UtilFolder
+namespace blockMenu
 {
     public class TextAlignment
     {

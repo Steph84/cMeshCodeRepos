@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace blockMenu.MenuFolder
+namespace blockMenu
 {
     public class WindowDimension
     {

@@ -1,5 +1,4 @@
-﻿using blockMenu.UtilFolder;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 
-namespace blockMenu.MenuFolder
+namespace blockMenu
 {
     public class Menu
     {
@@ -80,11 +79,15 @@ namespace blockMenu.MenuFolder
             MyTweening = new Tweening();
             InitializeTweening();
 
-            MyMenuData = LoadMenuData.LoadJsonData();
-            MyMenuTitles = MyMenuData.ListeMenuTitles;
-            MyMenuSelection = MyMenuData.MenuSelection;
-            MyMenuCredits = MyMenuData.Credits;
-            MyMenuInstructions = MyMenuData.Instructions;
+            //MyMenuData = LoadMenuData.LoadJsonData();
+            MyMenuData = LoadMenuData.LoadHardData();
+            if (MyMenuData != null)
+            {
+                MyMenuTitles = MyMenuData.ListeMenuTitles;
+                MyMenuSelection = MyMenuData.MenuSelection;
+                MyMenuCredits = MyMenuData.Credits;
+                MyMenuInstructions = MyMenuData.Instructions;
+            }
             
             soundMoveSelect = Content.Load<SoundEffect>("moveSelect");
             soundValidateSelect = Content.Load<SoundEffect>("validateSelect");
@@ -96,27 +99,31 @@ namespace blockMenu.MenuFolder
 
             #region Manage the titles on the main screen
             CreditsTitle = "The Credits";
-            foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
+            if (MyMenuTitles != null)
             {
-                // Load the Font
-                item.Font = Content.Load<SpriteFont>(item.FontFileName);
+                foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
+                {
+                    // Load the Font
+                    item.Font = Content.Load<SpriteFont>(item.FontFileName);
 
-                // Manage the alignments
-                TextAlignment.ApplyHorizontalAlignment(item);
-                TextAlignment.ApplyVerticalAlignment(item);
+                    // Manage the alignments
+                    TextAlignment.ApplyHorizontalAlignment(item);
+                    TextAlignment.ApplyVerticalAlignment(item);
 
-                // set the color of each item
-                Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
-                if (item.EnumColor == PersonnalColors.EnumColorName.White)
-                    item.Color = Color.White;
-                else
-                    item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
+                    // set the color of each item
+                    Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
+                    if (item.EnumColor == PersonnalColors.EnumColorName.White)
+                        item.Color = Color.White;
+                    else
+                        item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
+                }
             }
             #endregion
 
             #region Manage the Selection part
             // Load the Font for the Selection
-            MyMenuSelection.Font = Content.Load<SpriteFont>(MyMenuSelection.FontFileName);
+            if(MyMenuSelection != null && MyMenuSelection.FontFileName != null)
+                MyMenuSelection.Font = Content.Load<SpriteFont>(MyMenuSelection.FontFileName);
 
             // Manage the position of each selection item
             tweeningOriginPosIn = new List<float>();
@@ -124,21 +131,24 @@ namespace blockMenu.MenuFolder
             tweeningOriginPosOut = new List<float>();
             tweeningTargetPosOut = new List<float>();
 
-            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
             {
-                // determine positions for the selection lines
-                float availableSpaceCenter = (GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
-                Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(MyMenuSelection.SelectionItems[i]);
-                
-                MyMenuSelection.AnchorItems[i] =
-                    new Vector2((availableSpaceCenter - sizeCenter.X) / 2,
-                                (MyMenuSelection.AnchorPosition.Y / 12) * GameWindowHeight + (i - 1) * sizeCenter.Y);
+                for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+                {
+                    // determine positions for the selection lines
+                    float availableSpaceCenter = (GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
+                    Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(MyMenuSelection.SelectionItems[i]);
 
-                // determine positions for the tweening
-                tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
-                tweeningOriginPosIn.Add(-100 * (i + 1));
-                tweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
-                tweeningTargetPosOut.Add(GameWindowWidth + (100 * ((3 - i) + 1)));
+                    MyMenuSelection.AnchorItems[i] =
+                        new Vector2((availableSpaceCenter - sizeCenter.X) / 2,
+                                    (MyMenuSelection.AnchorPosition.Y / 12) * GameWindowHeight + (i - 1) * sizeCenter.Y);
+
+                    // determine positions for the tweening
+                    tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
+                    tweeningOriginPosIn.Add(-100 * (i + 1));
+                    tweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
+                    tweeningTargetPosOut.Add(GameWindowWidth + (100 * ((3 - i) + 1)));
+                }
             }
             #endregion
 
@@ -155,23 +165,28 @@ namespace blockMenu.MenuFolder
 
             // measure size text
             Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
-            Vector2 sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
+            Vector2 sizeCreditsLine = new Vector2();
+            if (MyMenuCredits != null && MyMenuCredits.Count != 0)
+                sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
             
             // manage the centered title
             float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
             CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, GameWindowHeight/12);
 
             // manage the positions of the credits
-            for (int i = 0; i < MyMenuCredits.Count; i++)
+            if (MyMenuCredits != null)
             {
-                var credit = MyMenuCredits[i];
-                for (int j = 0; j < credit.AnchorPosition.Count; j++)
+                for (int i = 0; i < MyMenuCredits.Count; i++)
                 {
-                    var anchor = credit.AnchorPosition[j];
-                    MyMenuCredits[i].AnchorPosition[j] =
-                        new Vector2(GameWindowWidth/12, sizeCreditsTitle.Y * 3 // anchor of the whole credits
-                                                        + j * sizeCreditsLine.Y // anchor of each lines
-                                                        + i * sizeCreditsLine.Y * 4); // anchor of each block
+                    var credit = MyMenuCredits[i];
+                    for (int j = 0; j < credit.AnchorPosition.Count; j++)
+                    {
+                        var anchor = credit.AnchorPosition[j];
+                        MyMenuCredits[i].AnchorPosition[j] =
+                            new Vector2(GameWindowWidth / 12, sizeCreditsTitle.Y * 3 // anchor of the whole credits
+                                                            + j * sizeCreditsLine.Y // anchor of each lines
+                                                            + i * sizeCreditsLine.Y * 4); // anchor of each block
+                    }
                 }
             }
 
@@ -185,23 +200,28 @@ namespace blockMenu.MenuFolder
 
             // measure size text
             Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
-            Vector2 sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
+            Vector2 sizeInstructionsLine = new Vector2();
+            if (MyMenuInstructions != null && MyMenuInstructions.Count != 0)
+                sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
 
             // manage the centered title
             float tempNewXInstructionsTitle = (GameWindowWidth - sizeInstructionsTitle.X) / 2;
             InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, GameWindowHeight / 12);
 
             // manage the positions of the instructions
-            for (int i = 0; i < MyMenuInstructions.Count; i++)
+            if (MyMenuInstructions != null)
             {
-                var instruction = MyMenuInstructions[i];
-                for (int j = 0; j < instruction.AnchorPosition.Count; j++)
+                for (int i = 0; i < MyMenuInstructions.Count; i++)
                 {
-                    var anchor = instruction.AnchorPosition[j];
-                    MyMenuInstructions[i].AnchorPosition[j] =
-                        new Vector2(GameWindowWidth / 12, sizeInstructionsTitle.Y * 3 // anchor of the whole credits
-                                                        + j * sizeInstructionsLine.Y // anchor of each lines
-                                                        + i * sizeInstructionsLine.Y * 4); // anchor of each block
+                    var instruction = MyMenuInstructions[i];
+                    for (int j = 0; j < instruction.AnchorPosition.Count; j++)
+                    {
+                        var anchor = instruction.AnchorPosition[j];
+                        MyMenuInstructions[i].AnchorPosition[j] =
+                            new Vector2(GameWindowWidth / 12, sizeInstructionsTitle.Y * 3 // anchor of the whole credits
+                                                            + j * sizeInstructionsLine.Y // anchor of each lines
+                                                            + i * sizeInstructionsLine.Y * 4); // anchor of each block
+                    }
                 }
             }
             #endregion
@@ -230,10 +250,13 @@ namespace blockMenu.MenuFolder
                     MyMenuSelection.ItemSelected -= 1;
                 }
 
-                if (MyMenuSelection.ItemSelected < 0)
-                    MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
-                if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
-                    MyMenuSelection.ItemSelected = 0;
+                if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
+                {
+                    if (MyMenuSelection.ItemSelected < 0)
+                        MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
+                    if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
+                        MyMenuSelection.ItemSelected = 0;
+                }
                 #endregion
 
                 #region Manage the MainState status
@@ -330,23 +353,29 @@ namespace blockMenu.MenuFolder
         public void MenuTitleDraw(GameTime pGameTime)
         {
             #region Draw the Titles of the main menu
-            foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
-                SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+            if (MyMenuTitles != null)
+            {
+                foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
+                    SpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+            }
             #endregion
 
             #region Draw the selection menu
-            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
             {
-                tempColor = Color.SlateGray;
-                if (MyMenuSelection.ItemSelected == i)
+                for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
                 {
-                    tempColor = Color.White;
-                    //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
+                    tempColor = Color.SlateGray;
+                    if (MyMenuSelection.ItemSelected == i)
+                    {
+                        tempColor = Color.White;
+                        //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
+                    }
+
+                    SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
                 }
- 
-                SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
+                //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
             }
-            //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
             #endregion
         }
         #endregion
@@ -410,26 +439,29 @@ namespace blockMenu.MenuFolder
                 }
             }
 
-            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
             {
-                if (pMenuIn)
+                for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
                 {
-                    MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
-                                                                          tweeningOriginPosIn[i],
-                                                                          tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
-                                                                          MyTweening.Duration),
-                                                    MyMenuSelection.AnchorItems[i].Y);
-                }
+                    if (pMenuIn)
+                    {
+                        MyMenuSelection.AnchorItems[i] =
+                                            new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
+                                                                              tweeningOriginPosIn[i],
+                                                                              tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
+                                                                              MyTweening.Duration),
+                                                        MyMenuSelection.AnchorItems[i].Y);
+                    }
 
-                if (pMenuOut)
-                {
-                    MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseInSin(MyTweening.Time,
-                                                                          tweeningOriginPosOut[i],
-                                                                          tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
-                                                                          MyTweening.Duration),
-                                                    MyMenuSelection.AnchorItems[i].Y);
+                    if (pMenuOut)
+                    {
+                        MyMenuSelection.AnchorItems[i] =
+                                            new Vector2(MyTweening.EaseInSin(MyTweening.Time,
+                                                                              tweeningOriginPosOut[i],
+                                                                              tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
+                                                                              MyTweening.Duration),
+                                                        MyMenuSelection.AnchorItems[i].Y);
+                    }
                 }
             }
             return temp;
