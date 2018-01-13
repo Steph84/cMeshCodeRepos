@@ -1,8 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.IO;
 
 namespace blockMenu
 {
@@ -59,23 +57,7 @@ namespace blockMenu
             public string Control { get; set; }
         }
         #endregion
-
-        #region Method to extract data and set properties from Json file
-        //public MenuData LoadJsonData()
-        //{
-        //    MenuData temp = new MenuData();
-
-        //    string filename = "../../../../MenuFolder/menuData.json";
-
-        //    using (StreamReader streamReader = new StreamReader(filename))
-        //    {
-        //        string json = streamReader.ReadToEnd();
-        //        temp = JsonConvert.DeserializeObject<MenuData>(json);
-        //    }
-        //    return temp;
-        //}
-        #endregion
-
+        
         #region Method to initialize the Data
         public MenuData LoadHardData()
         {

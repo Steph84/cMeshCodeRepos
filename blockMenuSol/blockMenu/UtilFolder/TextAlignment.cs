@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace blockMenu
 {
@@ -8,8 +6,7 @@ namespace blockMenu
     {
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
+        
         public enum EnumLineAlignment
         {
             Left = 1,
