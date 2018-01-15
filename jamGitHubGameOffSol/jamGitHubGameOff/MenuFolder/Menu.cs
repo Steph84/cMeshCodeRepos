@@ -80,7 +80,7 @@ namespace jamGitHubGameOff.MenuFolder
             MyTweening = new Tweening();
             InitializeTweening();
 
-            MyMenuData = LoadMenuData.LoadJsonData();
+            MyMenuData = LoadMenuData.LoadHardData();
             MyMenuTitles = MyMenuData.ListeMenuTitles;
             MyMenuSelection = MyMenuData.MenuSelection;
             MyMenuCredits = MyMenuData.Credits;

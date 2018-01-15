@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using blockMenu.MenuFolder;
+using Microsoft.Xna.Framework;
 
-namespace blockMenu
+namespace blockMenu.UtilFolder
 {
     public class TextAlignment
     {

@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
+﻿using System;
 
 namespace jamGitHubGameOff.UtilFolder
 {
     public class PersonnalColors
     {
-        [JsonConverter(typeof(StringEnumConverter))]
         public enum EnumColorName
         {
             Red = 1,

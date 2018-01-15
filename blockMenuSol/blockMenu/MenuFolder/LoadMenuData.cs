@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using blockMenu.UtilFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
 
-namespace blockMenu
+namespace blockMenu.MenuFolder
 {
     public class LoadMenuData
     {
