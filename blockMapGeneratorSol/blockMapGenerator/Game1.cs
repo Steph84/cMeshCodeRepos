@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Drawing;
 
 namespace blockMapGenerator
 {
@@ -39,6 +40,25 @@ namespace blockMapGenerator
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            
+            var item = Content.Load<Texture2D>("testMapBitMap");
+            var height = 18;
+            var width = 36;
+            Rectangle extractRegion = new Rectangle(0, 0, width, height);
+
+            Color[] rawData = new Color[width * height];
+            item.GetData<Color>(0, extractRegion, rawData, 0, width * height);
+
+            Color[,] rawDataAsGrid = new Color[height, width];
+            for (int row = 0; row < height; row++)
+            {
+                for (int column = 0; column < width; column++)
+                {
+                    // Assumes row major ordering of the array.
+                    rawDataAsGrid[row, column] = rawData[row * width + column];
+                }
+            }
+            
 
             // TODO: use this.Content to load your game content here
         }

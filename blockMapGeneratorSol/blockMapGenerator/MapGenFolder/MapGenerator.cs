@@ -6,7 +6,15 @@ using System.Threading.Tasks;
 
 namespace blockMapGenerator.MapGenFolder
 {
-    class MapGenerator
+    public class MapGenerator
     {
+
+        // constructor that call all the methods
+
+        // method to extrat tileSet
+
+        // method to read B&W map
+
+        // method write map
     }
 }
