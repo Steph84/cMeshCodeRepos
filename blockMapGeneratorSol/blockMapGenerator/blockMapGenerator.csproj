@@ -40,8 +40,10 @@
   <ItemGroup>
     <Compile Include="Game1.cs" />
     <Compile Include="MapGenFolder\MapGenerator.cs" />
+    <Compile Include="MapGenFolder\TileObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilFolder\SpriteObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
