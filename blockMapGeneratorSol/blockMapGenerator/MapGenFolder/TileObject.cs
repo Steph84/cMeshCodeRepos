@@ -1,18 +1,17 @@
 ﻿using blockMapGenerator.UtilFolder;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using static blockMapGenerator.MapGenFolder.MapGenerator;
 
 namespace blockMapGenerator.MapGenFolder
 {
     public class TileObject : SpriteObject
     {
-        public TileObject(Rectangle pPosition) : base(pPosition)
-        {
+        public MapTexture Texture { get; set; }
+        public int Flag { get; set; }
 
+        public TileObject(Rectangle pPosition, MapTexture pTexture) : base(pPosition)
+        {
+            Texture = pTexture;
         }
     }
 }

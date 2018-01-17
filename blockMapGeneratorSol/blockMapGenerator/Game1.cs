@@ -33,7 +33,7 @@ namespace blockMapGenerator
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            MyMap = new MapGenFolder.MapGenerator(Content, spriteBatch, "testMapBitMap");
+            MyMap = new MapGenFolder.MapGenerator(Content, spriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32);
             
 
             // TODO: use this.Content to load your game content here

@@ -1,38 +1,114 @@
-﻿using blockMapGenerator.UtilFolder;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace blockMapGenerator.MapGenFolder
 {
     public class MapGenerator
     {
-        private Texture2D BitMapData { get; set; }
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
         private string BitMapName { get; set; }
+        private Texture2D BitMapData { get; set; }
+        private string TileSetName { get; set; }
+        private Texture2D TileSetData { get; set; }
         private Tuple<int, int> MapSizeInTile { get; set; }
         public MapTexture[,] MapTextureGrid { get; private set; }
-        public TileObject MapGrid { get; set; } 
+        public TileObject[,] MapGrid { get; set; } 
+        private int TileWidth { get; set; }
+        private int TileHeight { get; set; }
+        private bool IsSingleTileSet { get; set; }
 
-        public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName)
+        public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight)
         {
             Content = pContent;
             SpriteBatch = pSpriteBatch;
             BitMapName = pBitMapName;
+            TileSetName = pTileSetName;
+            TileWidth = pTileWidth;
+            TileHeight = pTileHeight;
 
             ExtractDataFromBitMap();
             ExtractTileSet();
+            InitilizeMapGrid();
+            GenerateMapGrid();
+        }
+
+        private void GenerateMapGrid()
+        {
+            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            {
+                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                {
+                    Dictionary<int, bool> DictTextureAround =
+                        new Dictionary<int, bool>(){ {1, false }, {2, false }, {4, false }, {8, false } };
+
+                    if (row == 0)
+                        DictTextureAround[1] = true;
+                    else
+                        if(MapTextureGrid[row - 1, column] == MapTexture.Wall)
+                            DictTextureAround[1] = true;
+
+                    if (column == MapSizeInTile.Item1 - 1)
+                        DictTextureAround[2] = true;
+                    else
+                        if (MapTextureGrid[row, column + 1] == MapTexture.Wall)
+                        DictTextureAround[2] = true;
+
+                    if (row == MapSizeInTile.Item2 - 1)
+                        DictTextureAround[4] = true;
+                    else
+                        if (MapTextureGrid[row + 1, column] == MapTexture.Wall)
+                        DictTextureAround[4] = true;
+
+                    if (column == 0)
+                        DictTextureAround[8] = true;
+                    else
+                        if (MapTextureGrid[row, column - 1] == MapTexture.Wall)
+                        DictTextureAround[8] = true;
+
+                    int tempFlag = 0;
+                    foreach (KeyValuePair<int, bool> entry in DictTextureAround)
+                    {
+                        if (entry.Value)
+                            tempFlag += entry.Key;
+                    }
+
+                    MapGrid[row, column].Flag = tempFlag;
+                }
+            }
+        }
+
+        private void InitilizeMapGrid()
+        {
+            MapGrid = new TileObject[MapSizeInTile.Item2, MapSizeInTile.Item1];
+            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            {
+                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                {
+                    MapGrid[row, column] =
+                        new TileObject(new Rectangle(column * TileWidth, row * TileHeight, TileWidth, TileHeight),
+                                       MapTextureGrid[row, column]
+                                      );
+                }
+            }
         }
 
         private void ExtractTileSet()
         {
+            TileSetData = Content.Load<Texture2D>(TileSetName);
+            if(TileSetData.Width / TileWidth > 16)
+            {
+                throw new Exception("The TileSet has to many tiles");
+            }
 
+            IsSingleTileSet = true;
+            if(TileSetData.Height / TileHeight > 1)
+            {
+                IsSingleTileSet = false;
+            }
         }
 
         private void ExtractDataFromBitMap()
