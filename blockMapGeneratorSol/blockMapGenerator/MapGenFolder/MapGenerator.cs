@@ -167,7 +167,10 @@ namespace blockMapGenerator.MapGenFolder
                 for (int column = 0; column < MapSizeInTile.Item1; column++)
                 {
                     TileObject localTile = MapGrid[row, column];
-                    SpriteBatch.Draw(TileSetData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
+                    if (localTile.Flag >= 0)
+                    {
+                        SpriteBatch.Draw(TileSetData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
+                    }
                 }
             }
         }
