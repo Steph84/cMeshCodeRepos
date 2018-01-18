@@ -12,6 +12,7 @@ namespace blockMapGenerator.MapGenFolder
         public TileObject(Rectangle pPosition, MapTexture pTexture) : base(pPosition)
         {
             Texture = pTexture;
+            Flag = -1;
         }
     }
 }

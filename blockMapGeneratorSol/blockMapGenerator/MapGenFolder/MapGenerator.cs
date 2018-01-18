@@ -16,7 +16,7 @@ namespace blockMapGenerator.MapGenFolder
         private Texture2D TileSetData { get; set; }
         private Tuple<int, int> MapSizeInTile { get; set; }
         public MapTexture[,] MapTextureGrid { get; private set; }
-        public TileObject[,] MapGrid { get; set; } 
+        public TileObject[,] MapGrid { get; set; }
         private int TileWidth { get; set; }
         private int TileHeight { get; set; }
         private bool IsSingleTileSet { get; set; }
@@ -42,41 +42,49 @@ namespace blockMapGenerator.MapGenFolder
             {
                 for (int column = 0; column < MapSizeInTile.Item1; column++)
                 {
-                    Dictionary<int, bool> DictTextureAround =
-                        new Dictionary<int, bool>(){ {1, false }, {2, false }, {4, false }, {8, false } };
+                    if (MapTextureGrid[row, column] == MapTexture.Wall)
+                    {
 
-                    if (row == 0)
-                        DictTextureAround[1] = true;
-                    else
-                        if(MapTextureGrid[row - 1, column] == MapTexture.Wall)
+                        Dictionary<int, bool> DictTextureAround =
+                        new Dictionary<int, bool>() { { 1, false }, { 2, false }, { 4, false }, { 8, false } };
+
+                        // tile top
+                        if (row == 0)
+                            DictTextureAround[1] = true;
+                        else
+                            if (MapTextureGrid[row - 1, column] == MapTexture.Wall)
                             DictTextureAround[1] = true;
 
-                    if (column == MapSizeInTile.Item1 - 1)
-                        DictTextureAround[2] = true;
-                    else
-                        if (MapTextureGrid[row, column + 1] == MapTexture.Wall)
-                        DictTextureAround[2] = true;
+                        // tile right
+                        if (column == MapSizeInTile.Item1 - 1)
+                            DictTextureAround[2] = true;
+                        else
+                            if (MapTextureGrid[row, column + 1] == MapTexture.Wall)
+                            DictTextureAround[2] = true;
 
-                    if (row == MapSizeInTile.Item2 - 1)
-                        DictTextureAround[4] = true;
-                    else
-                        if (MapTextureGrid[row + 1, column] == MapTexture.Wall)
-                        DictTextureAround[4] = true;
+                        // tile bottom
+                        if (row == MapSizeInTile.Item2 - 1)
+                            DictTextureAround[4] = true;
+                        else
+                            if (MapTextureGrid[row + 1, column] == MapTexture.Wall)
+                            DictTextureAround[4] = true;
 
-                    if (column == 0)
-                        DictTextureAround[8] = true;
-                    else
-                        if (MapTextureGrid[row, column - 1] == MapTexture.Wall)
-                        DictTextureAround[8] = true;
+                        // tile left
+                        if (column == 0)
+                            DictTextureAround[8] = true;
+                        else
+                            if (MapTextureGrid[row, column - 1] == MapTexture.Wall)
+                            DictTextureAround[8] = true;
 
-                    int tempFlag = 0;
-                    foreach (KeyValuePair<int, bool> entry in DictTextureAround)
-                    {
-                        if (entry.Value)
-                            tempFlag += entry.Key;
+                        int tempFlag = 0;
+                        foreach (KeyValuePair<int, bool> entry in DictTextureAround)
+                        {
+                            if (entry.Value)
+                                tempFlag += entry.Key;
+                        }
+
+                        MapGrid[row, column].Flag = tempFlag;
                     }
-
-                    MapGrid[row, column].Flag = tempFlag;
                 }
             }
         }
@@ -99,13 +107,13 @@ namespace blockMapGenerator.MapGenFolder
         private void ExtractTileSet()
         {
             TileSetData = Content.Load<Texture2D>(TileSetName);
-            if(TileSetData.Width / TileWidth > 16)
+            if (TileSetData.Width / TileWidth > 16)
             {
                 throw new Exception("The TileSet has to many tiles");
             }
 
             IsSingleTileSet = true;
-            if(TileSetData.Height / TileHeight > 1)
+            if (TileSetData.Height / TileHeight > 1)
             {
                 IsSingleTileSet = false;
             }
@@ -120,7 +128,7 @@ namespace blockMapGenerator.MapGenFolder
             // extraction color of the BitMap
             Color[] rawData = new Color[MapSizeInTile.Item1 * MapSizeInTile.Item2];
             BitMapData.GetData<Color>(rawData);
-            
+
             // creation of the texture grid
             MapTextureGrid = new MapTexture[MapSizeInTile.Item2, MapSizeInTile.Item1];
             for (int row = 0; row < MapSizeInTile.Item2; row++)
@@ -130,7 +138,7 @@ namespace blockMapGenerator.MapGenFolder
                     Color temp = rawData[row * MapSizeInTile.Item1 + column];
 
                     // if black
-                    if(temp.R == 0 && temp.G == 0 && temp.B == 0)
+                    if (temp.R == 0 && temp.G == 0 && temp.B == 0)
                     {
                         MapTextureGrid[row, column] = MapTexture.Wall;
                     } // if white
@@ -151,18 +159,17 @@ namespace blockMapGenerator.MapGenFolder
             Dirt = 4,
             Water = 5
         }
-        
 
-
-
-
-            
-        // constructor that call all the methods
-
-        // method to extrat tileSet
-
-        // method to read B&W map
-
-        // method write map
+        public void MapDraw(GameTime pGameTime)
+        {
+            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            {
+                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                {
+                    TileObject localTile = MapGrid[row, column];
+                    SpriteBatch.Draw(TileSetData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
+                }
+            }
+        }
     }
 }

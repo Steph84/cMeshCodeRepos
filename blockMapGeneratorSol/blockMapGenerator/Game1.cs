@@ -56,9 +56,13 @@ namespace blockMapGenerator
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            MyMap.MapDraw(gameTime);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
