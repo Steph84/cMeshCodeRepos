@@ -33,6 +33,17 @@ namespace blockMapGenerator
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            #region change window dimension
+            var DisplayWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            var DisplayHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.PreferredBackBufferWidth = 1152;
+            graphics.PreferredBackBufferHeight = 576;
+            int newPosX = (DisplayWidth - 1152) / 2;
+            int newPosY = (DisplayHeight - 576) / 3;
+            Window.Position = new Point(newPosX, newPosY);
+            graphics.ApplyChanges();
+            #endregion
+
             MyMap = new MapGenFolder.MapGenerator(Content, spriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32);
             
 
