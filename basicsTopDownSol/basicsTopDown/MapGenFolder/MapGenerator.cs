@@ -93,7 +93,10 @@ namespace basicsTopDown.MapGenFolder
 
         private void InitilizeMapGrid()
         {
-            GameSizeCoefficient = 2.0d;
+            // basic tile 32x32 but tileSet 96x96 so GameSizeCoefficient / 3
+            GameSizeCoefficient = GameSizeCoefficient / 3.0d;
+
+            // tiles size as shown on the screen
             int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficient, MidpointRounding.AwayFromZero);
             int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficient, MidpointRounding.AwayFromZero);
 
@@ -116,6 +119,10 @@ namespace basicsTopDown.MapGenFolder
             if (TileSetData.Width / TileWidth > 16)
             {
                 throw new Exception("The TileSet has to many tiles");
+            }
+            else if (TileSetData.Width / TileWidth < 16)
+            {
+                throw new Exception("The TileSet has not enough tiles");
             }
 
             IsSingleTileSet = true;
