@@ -13,11 +13,10 @@ namespace basicsTopDown
         WindowDimension MyWindow;
         Menu MyMenu;
         GameRun MyGame;
-
-        Tuple<int, int> GameWindowSize;
+        
         private string MyTitleGameWindow = "TopDown basics";
         private EnumMainState MyState = EnumMainState.MenuTitle;
-        public float GameSizeCoefficient = 1.0f;
+        public double GameSizeCoefficient = 1.0d;
 
         public enum EnumMainState
         {
@@ -43,9 +42,8 @@ namespace basicsTopDown
                                            GraphicsDevice.Viewport,
                                            Window,
                                            graphics);
-            
-            // update Main properties
-            GameWindowSize = new Tuple<int, int>(MyWindow.GameWindowWidth, MyWindow.GameWindowHeight);
+
+            // update GameSizeCoefficient properties
             GameSizeCoefficient = MyWindow.GameSizeCoefficient;
 
             base.Initialize();
@@ -55,8 +53,8 @@ namespace basicsTopDown
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            MyMenu = new Menu(GameWindowSize, Content, spriteBatch);
-            MyGame = new GameRun(GameWindowSize, Content, spriteBatch);
+            MyMenu = new Menu(MyWindow, Content, spriteBatch);
+            MyGame = new GameRun(MyWindow, Content, spriteBatch);
         }
 
         protected override void UnloadContent()

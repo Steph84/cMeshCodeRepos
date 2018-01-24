@@ -19,9 +19,10 @@ namespace basicsTopDown.MapGenFolder
         public TileObject[,] MapGrid { get; set; }
         private int TileWidth { get; set; }
         private int TileHeight { get; set; }
+        private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
 
-        public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight)
+        public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
             Content = pContent;
             SpriteBatch = pSpriteBatch;
@@ -29,6 +30,7 @@ namespace basicsTopDown.MapGenFolder
             TileSetName = pTileSetName;
             TileWidth = pTileWidth;
             TileHeight = pTileHeight;
+            GameSizeCoefficient = pGameSizeCoefficient;
 
             ExtractDataFromBitMap();
             ExtractTileSet();
@@ -91,15 +93,19 @@ namespace basicsTopDown.MapGenFolder
 
         private void InitilizeMapGrid()
         {
+            GameSizeCoefficient = 2.0d;
+            int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficient, MidpointRounding.AwayFromZero);
+            int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficient, MidpointRounding.AwayFromZero);
+
             MapGrid = new TileObject[MapSizeInTile.Item2, MapSizeInTile.Item1];
             for (int row = 0; row < MapSizeInTile.Item2; row++)
             {
                 for (int column = 0; column < MapSizeInTile.Item1; column++)
                 {
                     MapGrid[row, column] =
-                        new TileObject(new Rectangle(column * TileWidth, row * TileHeight, TileWidth, TileHeight),
-                                       MapTextureGrid[row, column]
-                                      );
+                        new TileObject(new Rectangle(column * tileWidthShowing, row * tileHeightShowing,
+                                                     tileWidthShowing, tileHeightShowing),
+                                       MapTextureGrid[row, column]);
                 }
             }
         }

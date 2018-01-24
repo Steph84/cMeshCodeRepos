@@ -10,7 +10,7 @@ namespace basicsTopDown.MenuFolder
         public int DisplayHeight { get; set; }
         public int GameWindowWidth { get; private set; }
         public int GameWindowHeight { get; private set; }
-        public float GameSizeCoefficient { get; set; }
+        public double GameSizeCoefficient { get; set; }
         private GraphicsDeviceManager Graphics { get; set; }
         private GameWindow GameWindow { get; set; }
 
@@ -75,7 +75,7 @@ namespace basicsTopDown.MenuFolder
                 {
                     newGameWindowWidth = ArrayResolution[line, 2];
                     newGameWindowHeight = ArrayResolution[line, 3];
-                    GameSizeCoefficient = ArrayResolution[line, 4] / 10.0f;
+                    GameSizeCoefficient = ArrayResolution[line, 4] / 10.0d;
                 }
                 else
                     break;

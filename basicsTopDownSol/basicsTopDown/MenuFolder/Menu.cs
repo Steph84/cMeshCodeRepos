@@ -11,9 +11,10 @@ namespace basicsTopDown.MenuFolder
 {
     public class Menu
     {
-        public int GameWindowWidth { get; private set; }
-        public int GameWindowHeight { get; private set; }
-
+        private int GameWindowWidth { get; set; }
+        private int GameWindowHeight { get; set; }
+        private double GameSizeCoefficient { get; set; }
+        
         ContentManager Content;
         SpriteBatch SpriteBatch;
         
@@ -66,10 +67,11 @@ namespace basicsTopDown.MenuFolder
         List<float> tweeningOriginPosOut;
 
         #region Constructor Menu
-        public Menu(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
+        public Menu(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
-            GameWindowWidth = pGameWindowSize.Item1;
-            GameWindowHeight = pGameWindowSize.Item2;
+            GameWindowWidth = pGameWindow.GameWindowWidth;
+            GameWindowHeight = pGameWindow.GameWindowHeight;
+            GameSizeCoefficient = pGameWindow.GameSizeCoefficient;
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 

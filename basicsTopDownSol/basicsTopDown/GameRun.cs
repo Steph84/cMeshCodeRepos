@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using basicsTopDown.MenuFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -11,22 +12,24 @@ namespace basicsTopDown
 {
     public class GameRun
     {
-        public int GameWindowWidth { get; private set; }
-        public int GameWindowHeight { get; private set; }
+        private int GameWindowWidth { get; set; }
+        private int GameWindowHeight { get; set; }
+        private double GameSizeCoefficient { get; set; }
 
         ContentManager Content;
         SpriteBatch SpriteBatch;
 
         private MapGenFolder.MapGenerator MyMap { get; set; }
 
-        public GameRun(Tuple<int, int> pGameWindowSize, ContentManager pContent, SpriteBatch pSpriteBatch)
+        public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
-            GameWindowWidth = pGameWindowSize.Item1;
-            GameWindowHeight = pGameWindowSize.Item2;
+            GameWindowWidth = pGameWindow.GameWindowWidth;
+            GameWindowHeight = pGameWindow.GameWindowHeight;
+            GameSizeCoefficient = pGameWindow.GameSizeCoefficient;
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 
-            MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32);
+            MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32, GameSizeCoefficient);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
