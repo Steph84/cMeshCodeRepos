@@ -29,7 +29,7 @@ namespace basicsTopDown
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 
-            MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "tileSetMapGen02", 96, 96, GameSizeCoefficient);
+            MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
