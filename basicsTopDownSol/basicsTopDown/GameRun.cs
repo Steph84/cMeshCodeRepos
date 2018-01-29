@@ -15,7 +15,7 @@ namespace basicsTopDown
         SpriteBatch SpriteBatch;
 
         private MapGenFolder.MapGenerator MyMap { get; set; }
-        private CharacterFolder.Link MyLink { get; set; }
+        private CharacterFolder.Player MyLink { get; set; }
 
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -26,12 +26,12 @@ namespace basicsTopDown
             Content = pContent;
 
             MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
-            MyLink = new CharacterFolder.Link(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
+            MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-
+            SpriteObject.SpriteObjectCollision(pGameTime);
             return pMyState;
         }
 

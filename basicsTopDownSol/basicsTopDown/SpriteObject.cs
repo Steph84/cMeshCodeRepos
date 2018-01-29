@@ -22,7 +22,7 @@ namespace basicsTopDown
         }
 
 
-        public void SpriteObjectUpdate(GameTime pGameTime)
+        public static void SpriteObjectCollision(GameTime pGameTime)
         {
             // detection collision
         }

@@ -38,7 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CharacterFolder\Link.cs" />
+    <Compile Include="CharacterFolder\Player.cs" />
     <Compile Include="CharacterFolder\CharacterObject.cs" />
     <Compile Include="GameRun.cs" />
     <Compile Include="Main.cs" />
