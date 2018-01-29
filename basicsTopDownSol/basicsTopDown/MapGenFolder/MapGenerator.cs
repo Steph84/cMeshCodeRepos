@@ -97,6 +97,9 @@ namespace basicsTopDown.MapGenFolder
             GameSizeCoefficient = GameSizeCoefficient / 3.0d;
 
             // tiles size as shown on the screen
+            //float tileWidthShowing = Convert.ToSingle(TileWidth * GameSizeCoefficient);
+            //float tileHeightShowing = Convert.ToSingle(TileHeight * GameSizeCoefficient);
+
             int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficient, MidpointRounding.AwayFromZero);
             int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficient, MidpointRounding.AwayFromZero);
 
@@ -106,9 +109,14 @@ namespace basicsTopDown.MapGenFolder
                 for (int column = 0; column < MapSizeInTile.Item1; column++)
                 {
                     MapGrid[row, column] =
-                        new TileObject(new Rectangle(column * tileWidthShowing, row * tileHeightShowing,
-                                                     tileWidthShowing, tileHeightShowing),
+                        new TileObject(Content, SpriteBatch,
+                                       new Rectangle(column * tileWidthShowing, row * tileHeightShowing, tileWidthShowing, tileHeightShowing),
+                                       null,
                                        MapTextureGrid[row, column]);
+
+                    // manual update of the sprite texture
+                    MapGrid[row, column].SpriteData = TileSetData;
+                    
                 }
             }
         }
@@ -182,7 +190,7 @@ namespace basicsTopDown.MapGenFolder
                     TileObject localTile = MapGrid[row, column];
                     if (localTile.Flag >= 0)
                     {
-                        SpriteBatch.Draw(TileSetData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
+                        SpriteBatch.Draw(localTile.SpriteData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
                     }
                 }
             }
