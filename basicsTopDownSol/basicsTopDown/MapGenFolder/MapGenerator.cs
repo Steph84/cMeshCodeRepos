@@ -14,13 +14,15 @@ namespace basicsTopDown.MapGenFolder
         private Texture2D BitMapData { get; set; }
         private string TileSetName { get; set; }
         private Texture2D TileSetData { get; set; }
-        private Tuple<int, int> MapSizeInTile { get; set; }
+        public Rectangle MapSizeInTile { get; set; }
         public MapTexture[,] MapTextureGrid { get; private set; }
         public TileObject[,] MapGrid { get; set; }
         private int TileWidth { get; set; }
         private int TileHeight { get; set; }
         private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
+
+        SpriteFont font;
 
         public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
@@ -40,9 +42,9 @@ namespace basicsTopDown.MapGenFolder
 
         private void GenerateMapGrid()
         {
-            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            for (int row = 0; row < MapSizeInTile.Height; row++)
             {
-                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                for (int column = 0; column < MapSizeInTile.Width; column++)
                 {
                     if (MapTextureGrid[row, column] == MapTexture.Wall)
                     {
@@ -58,14 +60,14 @@ namespace basicsTopDown.MapGenFolder
                             DictTextureAround[1] = true;
 
                         // tile right
-                        if (column == MapSizeInTile.Item1 - 1)
+                        if (column == MapSizeInTile.Width - 1)
                             DictTextureAround[2] = true;
                         else
                             if (MapTextureGrid[row, column + 1] == MapTexture.Wall)
                             DictTextureAround[2] = true;
 
                         // tile bottom
-                        if (row == MapSizeInTile.Item2 - 1)
+                        if (row == MapSizeInTile.Height - 1)
                             DictTextureAround[4] = true;
                         else
                             if (MapTextureGrid[row + 1, column] == MapTexture.Wall)
@@ -93,6 +95,8 @@ namespace basicsTopDown.MapGenFolder
 
         private void InitilizeMapGrid()
         {
+            font = Content.Load<SpriteFont>("TimesNewRoman12");
+
             // basic tile 32x32 but tileSet 96x96 so GameSizeCoefficient / 3
             GameSizeCoefficient = GameSizeCoefficient / 3.0d;
 
@@ -103,10 +107,11 @@ namespace basicsTopDown.MapGenFolder
             int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficient, MidpointRounding.AwayFromZero);
             int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficient, MidpointRounding.AwayFromZero);
 
-            MapGrid = new TileObject[MapSizeInTile.Item2, MapSizeInTile.Item1];
-            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            int tileId = 0;
+            MapGrid = new TileObject[MapSizeInTile.Height, MapSizeInTile.Width];
+            for (int row = 0; row < MapSizeInTile.Height; row++)
             {
-                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                for (int column = 0; column < MapSizeInTile.Width; column++)
                 {
                     MapGrid[row, column] =
                         new TileObject(Content, SpriteBatch,
@@ -116,7 +121,9 @@ namespace basicsTopDown.MapGenFolder
 
                     // manual update of the sprite texture
                     MapGrid[row, column].SpriteData = TileSetData;
-                    
+
+                    tileId += 1;
+                    MapGrid[row, column].Id = tileId;
                 }
             }
         }
@@ -144,19 +151,19 @@ namespace basicsTopDown.MapGenFolder
         {
             // BitMap load
             BitMapData = Content.Load<Texture2D>(BitMapName);
-            MapSizeInTile = new Tuple<int, int>(BitMapData.Width, BitMapData.Height);
+            MapSizeInTile = new Rectangle(0, 0, BitMapData.Width, BitMapData.Height);
 
             // extraction color of the BitMap
-            Color[] rawData = new Color[MapSizeInTile.Item1 * MapSizeInTile.Item2];
+            Color[] rawData = new Color[MapSizeInTile.Width * MapSizeInTile.Height];
             BitMapData.GetData<Color>(rawData);
 
             // creation of the texture grid
-            MapTextureGrid = new MapTexture[MapSizeInTile.Item2, MapSizeInTile.Item1];
-            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            MapTextureGrid = new MapTexture[MapSizeInTile.Height, MapSizeInTile.Width];
+            for (int row = 0; row < MapSizeInTile.Height; row++)
             {
-                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                for (int column = 0; column < MapSizeInTile.Width; column++)
                 {
-                    Color temp = rawData[row * MapSizeInTile.Item1 + column];
+                    Color temp = rawData[row * MapSizeInTile.Width + column];
 
                     // if black
                     if (temp.R == 0 && temp.G == 0 && temp.B == 0)
@@ -183,14 +190,21 @@ namespace basicsTopDown.MapGenFolder
 
         public void MapDraw(GameTime pGameTime)
         {
-            for (int row = 0; row < MapSizeInTile.Item2; row++)
+            for (int row = 0; row < MapSizeInTile.Height; row++)
             {
-                for (int column = 0; column < MapSizeInTile.Item1; column++)
+                for (int column = 0; column < MapSizeInTile.Width; column++)
                 {
                     TileObject localTile = MapGrid[row, column];
                     if (localTile.Flag >= 0)
                     {
                         SpriteBatch.Draw(localTile.SpriteData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
+                    }
+
+                    //SpriteBatch.DrawString(font, localTile.Id.ToString(), new Vector2(localTile.Position.X, localTile.Position.Y), Color.White);
+
+                    if(localTile.Id == 271)
+                    {
+                        SpriteBatch.DrawString(font, localTile.Position.ToString(), new Vector2(localTile.Position.X - 50, localTile.Position.Y - 50), Color.Black);
                     }
                 }
             }

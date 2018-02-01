@@ -7,6 +7,7 @@ namespace basicsTopDown.MapGenFolder
 {
     public class TileObject : SpriteObject
     {
+        public int Id { get; set; }
         public MapTexture Texture { get; set; }
         public int Flag { get; set; }
 

@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="CharacterFolder\Player.cs" />
     <Compile Include="CharacterFolder\CharacterObject.cs" />
+    <Compile Include="CollisionObject.cs" />
     <Compile Include="GameRun.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MapGenFolder\MapGenerator.cs" />

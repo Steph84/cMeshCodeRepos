@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using basicsTopDown.MapGenFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace basicsTopDown
 {
@@ -22,9 +24,29 @@ namespace basicsTopDown
         }
 
 
-        public static void SpriteObjectCollision(GameTime pGameTime)
+        public static TileObject SpriteObjectCollision(GameTime pGameTime, MapGenerator pMap, SpriteObject pLink)
         {
-            // detection collision
+            TileObject tile = null;
+
+            for (int row = 0; row < pMap.MapSizeInTile.Height; row++)
+            {
+                for (int column = 0; column < pMap.MapSizeInTile.Width; column++)
+                {
+                    if (pMap.MapGrid[row, column].Texture == MapGenerator.MapTexture.Wall)
+                    {
+                        bool collide = false;
+                        collide = CollisionObject.CheckCollision(pMap.MapGrid[row, column].Position, pLink.Position);
+                        if (collide == true)
+                        {
+                            tile = pMap.MapGrid[row, column];
+                            Console.WriteLine("tile : " + tile.Id);
+                        }
+                    }
+                    
+                }
+            }
+
+            return tile;
         }
 
         public void SpriteObjectDraw(GameTime pGameTime)

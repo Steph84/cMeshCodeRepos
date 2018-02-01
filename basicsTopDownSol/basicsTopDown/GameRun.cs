@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace basicsTopDown
 {
@@ -16,6 +17,7 @@ namespace basicsTopDown
 
         private MapGenFolder.MapGenerator MyMap { get; set; }
         private CharacterFolder.Player MyLink { get; set; }
+        private List<SpriteObject> SpritesList { get ; set; }
 
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -27,11 +29,20 @@ namespace basicsTopDown
 
             MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
             MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
+            SpritesList = new List<SpriteObject>();
+
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            SpriteObject.SpriteObjectCollision(pGameTime);
+            bool IsColliding = false;
+            if(SpriteObject.SpriteObjectCollision(pGameTime, MyMap, MyLink) != null)
+            {
+                IsColliding = true;
+            }
+            
+            MyLink.PlayerControl(pGameTime, IsColliding);
+            
             return pMyState;
         }
 
