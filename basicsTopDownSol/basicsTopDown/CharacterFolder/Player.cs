@@ -10,7 +10,7 @@ namespace basicsTopDown.CharacterFolder
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
 
-        public Player(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName) : base(pContent, pSpriteBatch, pPosition, pSpriteName)
+        public Player(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pFrameSize, pGameSizeCoefficient)
         {
 
         }

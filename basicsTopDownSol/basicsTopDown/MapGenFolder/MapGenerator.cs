@@ -93,15 +93,11 @@ namespace basicsTopDown.MapGenFolder
 
         private void InitilizeMapGrid()
         {
-            // basic tile 32x32 but tileSet 96x96 so GameSizeCoefficient / 3
-            GameSizeCoefficient = GameSizeCoefficient / 3.0d;
-
-            // tiles size as shown on the screen
-            //float tileWidthShowing = Convert.ToSingle(TileWidth * GameSizeCoefficient);
-            //float tileHeightShowing = Convert.ToSingle(TileHeight * GameSizeCoefficient);
-
-            int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficient, MidpointRounding.AwayFromZero);
-            int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficient, MidpointRounding.AwayFromZero);
+            // basic tile 32x32 so have to correct the GameSizeCoef for the tiles
+            double GameSizeCoefficientFixed = GameSizeCoefficient / (TileWidth/32);
+            
+            int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficientFixed, MidpointRounding.AwayFromZero);
+            int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficientFixed, MidpointRounding.AwayFromZero);
 
             int tileId = 0;
             MapGrid = new TileObject[MapSizeInTile.Height, MapSizeInTile.Width];

@@ -41,7 +41,6 @@ namespace basicsTopDown
                             tile = pMap.MapGrid[row, column];
                         }
                     }
-                    
                 }
             }
 

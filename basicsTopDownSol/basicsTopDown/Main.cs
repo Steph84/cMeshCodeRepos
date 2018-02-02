@@ -17,7 +17,7 @@ namespace basicsTopDown
         private string MyTitleGameWindow = "TopDown basics";
         private EnumMainState MyState = EnumMainState.MenuTitle;
         public double GameSizeCoefficient = 1.0d;
-
+        
         public enum EnumMainState
         {
             MenuTitle,
@@ -100,7 +100,8 @@ namespace basicsTopDown
         {
             GraphicsDevice.Clear(Color.LightGreen);
 
-            spriteBatch.Begin();
+            // SamplerState.PointClamp to avoid blur from rescaling pixel art
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
 
             switch (MyState)
             {
