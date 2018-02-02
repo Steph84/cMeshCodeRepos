@@ -22,8 +22,6 @@ namespace basicsTopDown.MapGenFolder
         private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
 
-        SpriteFont font;
-
         public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
             Content = pContent;
@@ -95,8 +93,6 @@ namespace basicsTopDown.MapGenFolder
 
         private void InitilizeMapGrid()
         {
-            font = Content.Load<SpriteFont>("TimesNewRoman12");
-
             // basic tile 32x32 but tileSet 96x96 so GameSizeCoefficient / 3
             GameSizeCoefficient = GameSizeCoefficient / 3.0d;
 
@@ -198,13 +194,6 @@ namespace basicsTopDown.MapGenFolder
                     if (localTile.Flag >= 0)
                     {
                         SpriteBatch.Draw(localTile.SpriteData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
-                    }
-
-                    //SpriteBatch.DrawString(font, localTile.Id.ToString(), new Vector2(localTile.Position.X, localTile.Position.Y), Color.White);
-
-                    if(localTile.Id == 271)
-                    {
-                        SpriteBatch.DrawString(font, localTile.Position.ToString(), new Vector2(localTile.Position.X - 50, localTile.Position.Y - 50), Color.Black);
                     }
                 }
             }

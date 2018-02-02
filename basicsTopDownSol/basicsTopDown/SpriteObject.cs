@@ -24,7 +24,7 @@ namespace basicsTopDown
         }
 
 
-        public static TileObject SpriteObjectCollision(GameTime pGameTime, MapGenerator pMap, SpriteObject pLink)
+        public static TileObject CollisionSpriteOnMap(GameTime pGameTime, MapGenerator pMap, SpriteObject pSprite)
         {
             TileObject tile = null;
 
@@ -35,11 +35,10 @@ namespace basicsTopDown
                     if (pMap.MapGrid[row, column].Texture == MapGenerator.MapTexture.Wall)
                     {
                         bool collide = false;
-                        collide = CollisionObject.CheckCollision(pMap.MapGrid[row, column].Position, pLink.Position);
+                        collide = CollisionObject.CheckCollision(pMap.MapGrid[row, column].Position, pSprite.Position);
                         if (collide == true)
                         {
                             tile = pMap.MapGrid[row, column];
-                            Console.WriteLine("tile : " + tile.Id);
                         }
                     }
                     

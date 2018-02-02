@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace basicsTopDown
@@ -19,6 +20,9 @@ namespace basicsTopDown
         private CharacterFolder.Player MyLink { get; set; }
         private List<SpriteObject> SpritesList { get ; set; }
 
+        // TOREMOVE
+        SpriteFont font;
+
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindow.GameWindowWidth;
@@ -27,22 +31,24 @@ namespace basicsTopDown
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 
+            // TOREMOVE
+            font = Content.Load<SpriteFont>("TimesNewRoman12");
+
             MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
             MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
             SpritesList = new List<SpriteObject>();
-
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            bool IsColliding = false;
-            if(SpriteObject.SpriteObjectCollision(pGameTime, MyMap, MyLink) != null)
+            Rectangle oldPosition = MyLink.Position;
+            MyLink.PlayerControl(pGameTime);
+            if (MyLink.IsMoving == true && SpriteObject.CollisionSpriteOnMap(pGameTime, MyMap, MyLink) != null)
             {
-                IsColliding = true;
+                MyLink.Position = oldPosition;
             }
             
-            MyLink.PlayerControl(pGameTime, IsColliding);
-            
+
             return pMyState;
         }
 

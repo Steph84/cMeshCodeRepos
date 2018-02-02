@@ -70,14 +70,6 @@ namespace basicsTopDown
                 }
             }
 
-            //if (Math.Abs(dx) < Math.Max(pFirstObject.Width, pSecondObject.Width))
-            //{
-            //    if (Math.Abs(dy) < Math.Max(pFirstObject.Height, pSecondObject.Height))
-            //    {
-            //        return true;
-            //    }
-            //}
-
             return hitAlongX && hitAlongY;
         }
     }
