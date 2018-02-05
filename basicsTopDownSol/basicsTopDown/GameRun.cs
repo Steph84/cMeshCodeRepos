@@ -42,20 +42,15 @@ namespace basicsTopDown
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-
-            MyLink.PlayerControl(pGameTime, MyMap);
-
-            MyLink.CharacterUpdate(pGameTime);
-
+            MyLink.SpriteUpdate(pGameTime, MyMap);
             
-
             return pMyState;
         }
 
         public void GameRunDraw(GameTime pGameTime)
         {
             MyMap.MapDraw(pGameTime);
-            MyLink.CharacterDraw(pGameTime);
+            MyLink.SpriteDraw(pGameTime);
         }
     }
 }

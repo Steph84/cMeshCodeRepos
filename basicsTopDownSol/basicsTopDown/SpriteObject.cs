@@ -23,6 +23,16 @@ namespace basicsTopDown
             IsMoving = false;
         }
 
+        public virtual void SpriteUpdate(GameTime pGameTime, Map pMap)
+        {
+
+        }
+
+
+        public virtual void SpriteDraw(GameTime pGameTime)
+        {
+
+        }
 
         public static TileObject CollisionSpriteOnMap(GameTime pGameTime, Map pMap, SpriteObject pSprite)
         {
@@ -43,14 +53,7 @@ namespace basicsTopDown
                     }
                 }
             }
-
             return tile;
-        }
-
-        public void SpriteObjectDraw(GameTime pGameTime)
-        {
-            // not in general
-            // TODO for each subClass
         }
     }
 }

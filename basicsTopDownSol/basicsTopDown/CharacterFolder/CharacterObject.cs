@@ -78,10 +78,11 @@ namespace basicsTopDown.CharacterFolder
             SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
         }
 
-        public void CharacterUpdate(GameTime pGameTime)
+        #region override Update to manange animation
+        public override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
         {
             // CurrentFrame update for the animation
-            if(IsMoving)
+            if (IsMoving)
             {
                 CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
 
@@ -97,8 +98,9 @@ namespace basicsTopDown.CharacterFolder
             SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)Direction * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
         }
-        
-        public void CharacterDraw(GameTime pGameTime)
+        #endregion
+
+        public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
         }

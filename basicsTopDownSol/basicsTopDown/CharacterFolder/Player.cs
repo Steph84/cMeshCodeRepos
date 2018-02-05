@@ -15,21 +15,23 @@ namespace basicsTopDown.CharacterFolder
 
         }
 
-        public void PlayerControl(GameTime pGameTime, MapFolder.Map pMap)
+        #region override Update to manage the Player control
+        public override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
         {
+            base.SpriteUpdate(pGameTime, pMap);
+            
             newState = Keyboard.GetState();
-
             Rectangle oldPosition = Position;
 
             IsMoving = false;
-            
+
             if (newState.IsKeyDown(Keys.Up) && oldState.IsKeyDown(Keys.Up))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X, Position.Y - 2, Position.Width, Position.Height);
                 Direction = EnumCharacterDirection.North;
             }
-            
+
             if (newState.IsKeyDown(Keys.Right) && oldState.IsKeyDown(Keys.Right))
             {
                 IsMoving = true;
@@ -51,13 +53,13 @@ namespace basicsTopDown.CharacterFolder
                 Direction = EnumCharacterDirection.West;
             }
 
-            if (IsMoving == true && SpriteObject.CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+            if (IsMoving == true && CollisionSpriteOnMap(pGameTime, pMap, this) != null)
             {
                 Position = oldPosition;
             }
 
             oldState = newState;
         }
-        
+        #endregion
     }
 }
