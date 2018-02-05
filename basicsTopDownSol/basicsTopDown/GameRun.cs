@@ -16,7 +16,7 @@ namespace basicsTopDown
         ContentManager Content;
         SpriteBatch SpriteBatch;
 
-        private MapGenFolder.MapGenerator MyMap { get; set; }
+        private MapFolder.Map MyMap { get; set; }
         private CharacterFolder.Player MyLink { get; set; }
         private List<SpriteObject> SpritesList { get ; set; }
 
@@ -34,7 +34,7 @@ namespace basicsTopDown
             // TOREMOVE
             font = Content.Load<SpriteFont>("TimesNewRoman12");
 
-            MyMap = new MapGenFolder.MapGenerator(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
+            MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
             //MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
             MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient);
             SpritesList = new List<SpriteObject>();
@@ -42,12 +42,11 @@ namespace basicsTopDown
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            Rectangle oldPosition = MyLink.Position;
-            MyLink.PlayerControl(pGameTime);
-            if (MyLink.IsMoving == true && SpriteObject.CollisionSpriteOnMap(pGameTime, MyMap, MyLink) != null)
-            {
-                MyLink.Position = oldPosition;
-            }
+
+            MyLink.PlayerControl(pGameTime, MyMap);
+
+            MyLink.CharacterUpdate(pGameTime);
+
             
 
             return pMyState;

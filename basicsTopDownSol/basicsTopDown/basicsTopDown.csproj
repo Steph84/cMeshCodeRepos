@@ -43,8 +43,8 @@
     <Compile Include="CollisionObject.cs" />
     <Compile Include="GameRun.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MapGenFolder\MapGenerator.cs" />
-    <Compile Include="MapGenFolder\TileObject.cs" />
+    <Compile Include="MapFolder\Map.cs" />
+    <Compile Include="MapFolder\TileObject.cs" />
     <Compile Include="MenuFolder\LoadMenuData.cs" />
     <Compile Include="MenuFolder\Menu.cs" />
     <Compile Include="MenuFolder\WindowDimension.cs" />

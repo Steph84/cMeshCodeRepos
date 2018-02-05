@@ -15,34 +15,45 @@ namespace basicsTopDown.CharacterFolder
 
         }
 
-        public void PlayerControl(GameTime pGameTime)
+        public void PlayerControl(GameTime pGameTime, MapFolder.Map pMap)
         {
             newState = Keyboard.GetState();
 
+            Rectangle oldPosition = Position;
+
             IsMoving = false;
-
-            if (newState.IsKeyDown(Keys.Left) && oldState.IsKeyDown(Keys.Left))
-            {
-                IsMoving = true;
-                Position = new Rectangle(Position.X - 2, Position.Y, Position.Width, Position.Height);
-            }
-
-            if (newState.IsKeyDown(Keys.Right) && oldState.IsKeyDown(Keys.Right))
-            {
-                IsMoving = true;
-                Position = new Rectangle(Position.X + 2, Position.Y, Position.Width, Position.Height);
-            }
-
+            
             if (newState.IsKeyDown(Keys.Up) && oldState.IsKeyDown(Keys.Up))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X, Position.Y - 2, Position.Width, Position.Height);
+                Direction = EnumCharacterDirection.North;
+            }
+            
+            if (newState.IsKeyDown(Keys.Right) && oldState.IsKeyDown(Keys.Right))
+            {
+                IsMoving = true;
+                Position = new Rectangle(Position.X + 2, Position.Y, Position.Width, Position.Height);
+                Direction = EnumCharacterDirection.East;
             }
 
             if (newState.IsKeyDown(Keys.Down) && oldState.IsKeyDown(Keys.Down))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X, Position.Y + 2, Position.Width, Position.Height);
+                Direction = EnumCharacterDirection.South;
+            }
+
+            if (newState.IsKeyDown(Keys.Left) && oldState.IsKeyDown(Keys.Left))
+            {
+                IsMoving = true;
+                Position = new Rectangle(Position.X - 2, Position.Y, Position.Width, Position.Height);
+                Direction = EnumCharacterDirection.West;
+            }
+
+            if (IsMoving == true && SpriteObject.CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+            {
+                Position = oldPosition;
             }
 
             oldState = newState;

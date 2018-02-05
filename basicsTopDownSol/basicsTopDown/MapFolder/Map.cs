@@ -4,9 +4,9 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace basicsTopDown.MapGenFolder
+namespace basicsTopDown.MapFolder
 {
-    public class MapGenerator
+    public class Map
     {
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
@@ -22,7 +22,7 @@ namespace basicsTopDown.MapGenFolder
         private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
 
-        public MapGenerator(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
+        public Map(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
             Content = pContent;
             SpriteBatch = pSpriteBatch;
