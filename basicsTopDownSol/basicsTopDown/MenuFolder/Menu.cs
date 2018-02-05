@@ -14,10 +14,10 @@ namespace basicsTopDown.MenuFolder
         private int GameWindowWidth { get; set; }
         private int GameWindowHeight { get; set; }
         private double GameSizeCoefficient { get; set; }
-        
-        ContentManager Content;
-        SpriteBatch SpriteBatch;
-        
+
+        private ContentManager Content { get; set; }
+        private SpriteBatch SpriteBatch { get; set; }
+
         LoadMenuData.MenuData MyMenuData;
         List<LoadMenuData.TitleProperties> MyMenuTitles;
         LoadMenuData.MenuSelection MyMenuSelection;

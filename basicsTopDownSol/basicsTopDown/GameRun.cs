@@ -13,12 +13,11 @@ namespace basicsTopDown
         private int GameWindowHeight { get; set; }
         private double GameSizeCoefficient { get; set; }
 
-        ContentManager Content;
-        SpriteBatch SpriteBatch;
+        private ContentManager Content { get; set; }
+        private SpriteBatch SpriteBatch { get; set; }
 
         private MapFolder.Map MyMap { get; set; }
         private CharacterFolder.Player MyLink { get; set; }
-        private List<SpriteObject> SpritesList { get ; set; }
 
         // TOREMOVE
         SpriteFont font;
@@ -35,9 +34,7 @@ namespace basicsTopDown
             font = Content.Load<SpriteFont>("TimesNewRoman12");
 
             MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
-            //MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "link");
             MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient);
-            SpritesList = new List<SpriteObject>();
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)

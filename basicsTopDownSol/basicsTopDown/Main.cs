@@ -7,16 +7,16 @@ namespace basicsTopDown
 {
     public class Main : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics { get; set; }
+        private SpriteBatch spriteBatch { get; set; }
 
-        WindowDimension MyWindow;
-        Menu MyMenu;
-        GameRun MyGame;
-        
+        private WindowDimension MyWindow { get; set; }
+        private Menu MyMenu { get; set; }
+        private GameRun MyGame { get; set; }
+
         private string MyTitleGameWindow = "TopDown basics";
         private EnumMainState MyState = EnumMainState.MenuTitle;
-        public double GameSizeCoefficient = 1.0d;
+        private double GameSizeCoefficient = 1.0d;
         
         public enum EnumMainState
         {

@@ -13,8 +13,8 @@ namespace basicsTopDown
         public Texture2D SpriteData { get; set; }
         public Rectangle Position { get; set; }
 
-        public ContentManager Content { get; set; }
-        public SpriteBatch SpriteBatch { get; set; }
+        protected ContentManager Content { get; set; }
+        protected SpriteBatch SpriteBatch { get; set; }
 
         public SpriteObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName)
         {

@@ -27,6 +27,8 @@ namespace basicsTopDown.CharacterFolder
         private double SpeedAnimation { get; set; }
         private SpriteEffects SpriteEffect { get; set; }
 
+        protected Rectangle SpriteSizeShowing { get;  set;}
+
         Vector2 SpriteOrigin = new Vector2();
 
         // properties for the movement
@@ -34,6 +36,7 @@ namespace basicsTopDown.CharacterFolder
         public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient) : base(pContent, pSpriteBatch, pPosition, pSpriteName)
         {
             FrameSize = pFrameSize;
+            SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
             SpriteData = Content.Load<Texture2D>(pSpriteName);
             Direction = EnumCharacterDirection.East;
 
@@ -70,12 +73,14 @@ namespace basicsTopDown.CharacterFolder
             }
             #endregion
 
+            #region Initialize Sprite size showing
             int spriteWidthShowing = (int)Math.Round(FrameSize.Width * pGameSizeCoefficient, MidpointRounding.AwayFromZero);
             int spriteHeightShowing = (int)Math.Round(FrameSize.Height * pGameSizeCoefficient, MidpointRounding.AwayFromZero);
+            SpriteSizeShowing = new Rectangle(0, 0, spriteWidthShowing, spriteHeightShowing);
 
             Size = new Rectangle(0, 0, spriteWidthShowing, spriteHeightShowing);
             Position = new Rectangle(pPosition.X, pPosition.Y, spriteWidthShowing, spriteHeightShowing);
-            SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
+            #endregion
         }
 
         #region override Update to manange animation

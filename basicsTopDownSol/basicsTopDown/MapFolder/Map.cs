@@ -10,17 +10,19 @@ namespace basicsTopDown.MapFolder
     {
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
+
         private string BitMapName { get; set; }
         private Texture2D BitMapData { get; set; }
         private string TileSetName { get; set; }
         private Texture2D TileSetData { get; set; }
-        public Rectangle MapSizeInTile { get; set; }
-        public MapTexture[,] MapTextureGrid { get; private set; }
-        public TileObject[,] MapGrid { get; set; }
+        private MapTexture[,] MapTextureGrid { get; set; }
         private int TileWidth { get; set; }
         private int TileHeight { get; set; }
         private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
+
+        public TileObject[,] MapGrid { get; set; }
+        public Rectangle MapSizeInTile { get; set; }
 
         public Map(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
