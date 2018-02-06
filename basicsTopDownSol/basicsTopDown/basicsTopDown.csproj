@@ -51,6 +51,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteObject.cs" />
+    <Compile Include="UtilFolder\DebugToolBox.cs" />
     <Compile Include="UtilFolder\KeyBoardManager.cs" />
     <Compile Include="UtilFolder\PersonnalColors.cs" />
     <Compile Include="UtilFolder\TextAlignment.cs" />

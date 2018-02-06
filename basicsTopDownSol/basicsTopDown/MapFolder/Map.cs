@@ -23,6 +23,7 @@ namespace basicsTopDown.MapFolder
 
         public TileObject[,] MapGrid { get; set; }
         public Rectangle MapSizeInTile { get; set; }
+        public Rectangle TileSizeShowing { get; set; }
 
         public Map(ContentManager pContent, SpriteBatch pSpriteBatch, string pBitMapName, string pTileSetName, int pTileWidth, int pTileHeight, double pGameSizeCoefficient)
         {
@@ -100,6 +101,7 @@ namespace basicsTopDown.MapFolder
             
             int tileWidthShowing = (int)Math.Round(TileWidth * GameSizeCoefficientFixed, MidpointRounding.AwayFromZero);
             int tileHeightShowing = (int)Math.Round(TileHeight * GameSizeCoefficientFixed, MidpointRounding.AwayFromZero);
+            TileSizeShowing = new Rectangle(0, 0, tileWidthShowing, tileHeightShowing);
 
             int tileId = 0;
             MapGrid = new TileObject[MapSizeInTile.Height, MapSizeInTile.Width];
@@ -116,7 +118,8 @@ namespace basicsTopDown.MapFolder
 
                     // manual update of the sprite texture
                     MapGrid[row, column].SpriteData = TileSetData;
-
+                    
+                    MapGrid[row, column].Coordinate = new Vector2(column, row);
                     tileId += 1;
                     MapGrid[row, column].Id = tileId;
                 }

@@ -10,6 +10,7 @@ namespace basicsTopDown.MapFolder
         public int Id { get; set; }
         public MapTexture Texture { get; set; }
         public int Flag { get; set; }
+        public Vector2 Coordinate { get; set; }
 
         public TileObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, MapTexture pTexture) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient)
         {

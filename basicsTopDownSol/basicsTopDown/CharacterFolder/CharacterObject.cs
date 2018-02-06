@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using basicsTopDown.UtilFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -19,6 +20,7 @@ namespace basicsTopDown.CharacterFolder
         public string Name { get; set; }
         public EnumDirection DirectionMoving { get; set; }
         public EnumDirection DirectionBumping { get; set; }
+        public Vector2 CoordinateCharacterCenter { get; set; } // coordinate of the center of the sprite
 
         // for animation 
         private Rectangle SourceQuad { get; set; }
@@ -104,12 +106,15 @@ namespace basicsTopDown.CharacterFolder
             // update of the SourceQuad
             SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)DirectionMoving * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
+
+            CoordinateCharacterCenter = new Vector2((Position.X + Position.Width / 2) / pMap.TileSizeShowing.Width, (Position.Y + Position.Height / 2) / pMap.TileSizeShowing.Height);
         }
         #endregion
 
         public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
+            DebugToolBox.ShowLine(Content, SpriteBatch, CoordinateCharacterCenter.ToString(), new Vector2(Position.X, Position.Y));
         }
     }
 }

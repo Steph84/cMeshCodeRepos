@@ -68,7 +68,7 @@ namespace basicsTopDown.CharacterFolder
             if (IsMoving == true && CollisionSpriteOnMap(pGameTime, pMap, this) != null)
             {
                 TileObject tileWall = CollisionSpriteOnMap(pGameTime, pMap, this);
-
+        
                 if (tileWall != null)
                 {
                     DirectionBumping = EnumDirection.None;
