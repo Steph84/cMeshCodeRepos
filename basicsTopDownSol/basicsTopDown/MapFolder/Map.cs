@@ -111,6 +111,7 @@ namespace basicsTopDown.MapFolder
                         new TileObject(Content, SpriteBatch,
                                        new Rectangle(column * tileWidthShowing, row * tileHeightShowing, tileWidthShowing, tileHeightShowing),
                                        null,
+                                       GameSizeCoefficient,
                                        MapTextureGrid[row, column]);
 
                     // manual update of the sprite texture

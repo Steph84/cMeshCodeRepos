@@ -11,7 +11,7 @@ namespace basicsTopDown.MapFolder
         public MapTexture Texture { get; set; }
         public int Flag { get; set; }
 
-        public TileObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, MapTexture pTexture) : base(pContent, pSpriteBatch, pPosition, pSpriteName)
+        public TileObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, MapTexture pTexture) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient)
         {
             Texture = pTexture;
             Flag = -1;

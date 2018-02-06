@@ -8,6 +8,7 @@ namespace basicsTopDown
     public class SpriteObject
     {
         protected bool IsMoving { get; set; }
+        protected double GameSizeCoefficient { get; set; }
         protected Rectangle Size { get; set; }
 
         public Texture2D SpriteData { get; set; }
@@ -16,11 +17,12 @@ namespace basicsTopDown
         protected ContentManager Content { get; set; }
         protected SpriteBatch SpriteBatch { get; set; }
 
-        public SpriteObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName)
+        public SpriteObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient)
         {
             Content = pContent;
             SpriteBatch = pSpriteBatch;
             IsMoving = false;
+            GameSizeCoefficient = pGameSizeCoefficient;
         }
 
         public virtual void SpriteUpdate(GameTime pGameTime, Map pMap)

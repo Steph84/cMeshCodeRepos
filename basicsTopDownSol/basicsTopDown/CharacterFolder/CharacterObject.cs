@@ -5,19 +5,20 @@ using System;
 
 namespace basicsTopDown.CharacterFolder
 {
-    [Flags]
-    public enum EnumCharacterDirection
+    public enum EnumDirection
     {
         North = 0,
         East = 1,
         South = 2,
-        West = 3
+        West = 3,
+        None = 99
     }
 
     public class CharacterObject : SpriteObject
     {
         public string Name { get; set; }
-        public EnumCharacterDirection Direction { get; set; }
+        public EnumDirection DirectionMoving { get; set; }
+        public EnumDirection DirectionBumping { get; set; }
 
         // for animation 
         private Rectangle SourceQuad { get; set; }
@@ -27,18 +28,19 @@ namespace basicsTopDown.CharacterFolder
         private double SpeedAnimation { get; set; }
         private SpriteEffects SpriteEffect { get; set; }
 
-        protected Rectangle SpriteSizeShowing { get;  set;}
+        protected Rectangle SpriteSizeShowing { get;  set; }
+        protected double SpeedWalking { get; set; }
 
         Vector2 SpriteOrigin = new Vector2();
 
         // properties for the movement
 
-        public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient) : base(pContent, pSpriteBatch, pPosition, pSpriteName)
+        public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient)
         {
             FrameSize = pFrameSize;
             SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
             SpriteData = Content.Load<Texture2D>(pSpriteName);
-            Direction = EnumCharacterDirection.East;
+            DirectionMoving = EnumDirection.East;
 
             // for animation
             CurrentFrame = 0;
@@ -100,7 +102,7 @@ namespace basicsTopDown.CharacterFolder
             }
 
             // update of the SourceQuad
-            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)Direction * SourceQuad.Height,
+            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)DirectionMoving * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
         }
         #endregion
