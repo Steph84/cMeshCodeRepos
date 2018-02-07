@@ -86,7 +86,7 @@ namespace basicsTopDown.CharacterFolder
         }
 
         #region override Update to manange animation
-        public override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
+        protected override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
         {
             // CurrentFrame update for the animation
             if (IsMoving)

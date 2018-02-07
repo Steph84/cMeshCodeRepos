@@ -28,7 +28,7 @@ namespace basicsTopDown.CharacterFolder
         }
 
         #region override Update to manage the Player control
-        public override void SpriteUpdate(GameTime pGameTime, Map pMap)
+        protected override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
             base.SpriteUpdate(pGameTime, pMap);
             
