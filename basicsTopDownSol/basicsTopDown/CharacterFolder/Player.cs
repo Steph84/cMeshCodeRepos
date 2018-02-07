@@ -17,8 +17,8 @@ namespace basicsTopDown.CharacterFolder
         public Player(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pFrameSize, pGameSizeCoefficient)
         {
             #region custom player size
-            int tempWidth = SpriteSizeShowing.Width * playerScale;
-            int tempHeight = SpriteSizeShowing.Height * playerScale;
+            int tempWidth = Size.Width * playerScale;
+            int tempHeight = Size.Height * playerScale;
 
             Size = new Rectangle(0, 0, tempWidth, tempHeight);
             Position = new Rectangle(pPosition.X, pPosition.Y, tempWidth, tempHeight);
@@ -28,7 +28,7 @@ namespace basicsTopDown.CharacterFolder
         }
 
         #region override Update to manage the Player control
-        public override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
+        public override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
             base.SpriteUpdate(pGameTime, pMap);
             

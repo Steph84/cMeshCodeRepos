@@ -30,7 +30,6 @@ namespace basicsTopDown.CharacterFolder
         private double SpeedAnimation { get; set; }
         private SpriteEffects SpriteEffect { get; set; }
 
-        protected Rectangle SpriteSizeShowing { get;  set; }
         protected double SpeedWalking { get; set; }
 
         Vector2 SpriteOrigin = new Vector2();
@@ -80,7 +79,6 @@ namespace basicsTopDown.CharacterFolder
             #region Initialize Sprite size showing
             int spriteWidthShowing = (int)Math.Round(FrameSize.Width * pGameSizeCoefficient, MidpointRounding.AwayFromZero);
             int spriteHeightShowing = (int)Math.Round(FrameSize.Height * pGameSizeCoefficient, MidpointRounding.AwayFromZero);
-            SpriteSizeShowing = new Rectangle(0, 0, spriteWidthShowing, spriteHeightShowing);
 
             Size = new Rectangle(0, 0, spriteWidthShowing, spriteHeightShowing);
             Position = new Rectangle(pPosition.X, pPosition.Y, spriteWidthShowing, spriteHeightShowing);
