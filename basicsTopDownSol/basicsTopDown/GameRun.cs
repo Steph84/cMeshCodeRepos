@@ -35,7 +35,7 @@ namespace basicsTopDown
 
             MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
             //MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32, GameSizeCoefficient);
-            MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient);
+            MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient, MyMap);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
