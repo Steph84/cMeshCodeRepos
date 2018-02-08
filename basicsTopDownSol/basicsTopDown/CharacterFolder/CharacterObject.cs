@@ -89,6 +89,50 @@ namespace basicsTopDown.CharacterFolder
             CalculateCharacterCoordinates(Map);
         }
 
+
+        #region override Update to manange animation
+        protected override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
+        {
+            if (IsMoving)
+            {
+                // Update character coordinates
+                CalculateCharacterCoordinates(pMap);
+
+                // CurrentFrame update for the animation
+                CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
+
+                if (CurrentFrame > FrameNumber)
+                    CurrentFrame = 0;
+            }
+            else
+            {
+                CurrentFrame = 0;
+            }
+
+            // update of the SourceQuad
+            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)DirectionMoving * SourceQuad.Height,
+                                       SourceQuad.Width, SourceQuad.Height);
+        }
+        #endregion
+
+        public override void SpriteDraw(GameTime pGameTime)
+        {
+            SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
+            DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Coord9Center.ToString(), new Vector2(Position.X, Position.Y));
+        }
+
+        public static void CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
+        {
+            if(pCharacter != null)
+            {
+                foreach(var property in pCharacter.NSPointsInCoordinate.GetType().GetProperties())
+                {
+                    var donkey = property.GetValue(pCharacter.NSPointsInCoordinate, null);
+                    var kong = property.Name;
+                }
+            }
+        }
+
         private void CalculateCharacterCoordinates(Map pMap)
         {
             #region 9 slices points position of the sprite in pixel
@@ -122,35 +166,5 @@ namespace basicsTopDown.CharacterFolder
             #endregion
         }
 
-        #region override Update to manange animation
-        protected override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
-        {
-            if (IsMoving)
-            {
-                // Update character coordinates
-                CalculateCharacterCoordinates(pMap);
-
-                // CurrentFrame update for the animation
-                CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
-
-                if (CurrentFrame > FrameNumber)
-                    CurrentFrame = 0;
-            }
-            else
-            {
-                CurrentFrame = 0;
-            }
-
-            // update of the SourceQuad
-            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)DirectionMoving * SourceQuad.Height,
-                                       SourceQuad.Width, SourceQuad.Height);
-        }
-        #endregion
-
-        public override void SpriteDraw(GameTime pGameTime)
-        {
-            SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
-            DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Coord9Center.ToString(), new Vector2(Position.X, Position.Y));
-        }
     }
 }
