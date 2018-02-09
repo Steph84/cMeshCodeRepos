@@ -37,89 +37,117 @@ namespace basicsTopDown.CharacterFolder
 
             IsMoving = false;
 
-            if (newState.IsKeyDown(Keys.Up) && oldState.IsKeyDown(Keys.Up))
+            #region Manage SpriteDirection in relation to the keyboard
+            if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.North;
             }
-
-            if (newState.IsKeyDown(Keys.Right) && oldState.IsKeyDown(Keys.Right))
+            else if (KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
+            {
+                IsMoving = true;
+                Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
+                DirectionMoving = EnumDirection.NorthEast;
+            }
+            else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.East;
             }
-
-            if (newState.IsKeyDown(Keys.Down) && oldState.IsKeyDown(Keys.Down))
+            else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
+            {
+                IsMoving = true;
+                Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
+                DirectionMoving = EnumDirection.SouthEast;
+            }
+            else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.South;
             }
-
-            if (newState.IsKeyDown(Keys.Left) && oldState.IsKeyDown(Keys.Left))
+            else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
+            {
+                IsMoving = true;
+                Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
+                DirectionMoving = EnumDirection.SouthWest;
+            }
+            else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.West;
             }
-
-            if (IsMoving == true && CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+            else if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
-                TileObject tileWall = CollisionSpriteOnMap(pGameTime, pMap, this);
-                CollisionCharacterOnMap(pGameTime, pMap, this);
+                IsMoving = true;
+                Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
+                DirectionMoving = EnumDirection.NorthWest;
+            }
+            #endregion
 
-                if (tileWall != null)
-                {
-                    DirectionBumping = EnumDirection.None;
 
-                    if(tileWall.Position.X < Position.X && tileWall.Position.Y < Position.Y)
-                    {
-                        DirectionBumping = EnumDirection.North;
-                    }
+            if (IsMoving == true && CollisionCharacterOnMap(pGameTime, pMap, this) == null)
+            {
+                Position = new Rectangle(oldPosition.X, oldPosition.Y, Position.Width, Position.Height);
 
-                    if (tileWall.Position.X > Position.X && tileWall.Position.Y < Position.Y)
-                    {
-                        DirectionBumping = EnumDirection.East;
-                    }
+                //if (tileWall != null)
+                //{
+                //    DirectionBumping = EnumDirection.None;
 
-                    if (tileWall.Position.X > Position.X && tileWall.Position.Y > Position.Y)
-                    {
-                        DirectionBumping = EnumDirection.South;
-                    }
+                //    if(tileWall.Position.X < Position.X && tileWall.Position.Y < Position.Y)
+                //    {
+                //        DirectionBumping = EnumDirection.North;
+                //    }
 
-                    if (tileWall.Position.X < Position.X && tileWall.Position.Y > Position.Y)
-                    {
-                        DirectionBumping = EnumDirection.West;
-                    }
+                //    if (tileWall.Position.X > Position.X && tileWall.Position.Y < Position.Y)
+                //    {
+                //        DirectionBumping = EnumDirection.East;
+                //    }
 
-                    switch (DirectionBumping)
-                    {
-                        case EnumDirection.North:
-                            Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
-                            break;
-                        case EnumDirection.East:
-                            Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
-                            break;
-                        case EnumDirection.South:
-                            Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
-                            break;
-                        case EnumDirection.West:
-                            Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
-                            break;
-                        case EnumDirection.None:
-                            // nothing to do
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                //    if (tileWall.Position.X > Position.X && tileWall.Position.Y > Position.Y)
+                //    {
+                //        DirectionBumping = EnumDirection.South;
+                //    }
+
+                //    if (tileWall.Position.X < Position.X && tileWall.Position.Y > Position.Y)
+                //    {
+                //        DirectionBumping = EnumDirection.West;
+                //    }
+
+                //switch (DirectionBumping)
+                //{
+                //    case EnumDirection.North:
+                //        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
+                //        break;
+                //    case EnumDirection.East:
+                //        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
+                //        break;
+                //    case EnumDirection.South:
+                //        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
+                //        break;
+                //    case EnumDirection.West:
+                //        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
+                //        break;
+                //    case EnumDirection.None:
+                //        // nothing to do
+                //        break;
+                //    default:
+                //        break;
+                //}
+                //}
 
             }
 
             oldState = newState;
         }
         #endregion
+
+        private bool KeyWentDown(Keys pKey)
+        {
+            return newState.IsKeyDown(pKey) && oldState.IsKeyDown(pKey);
+        }
     }
 }

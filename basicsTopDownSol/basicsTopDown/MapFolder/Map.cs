@@ -15,12 +15,12 @@ namespace basicsTopDown.MapFolder
         private Texture2D BitMapData { get; set; }
         private string TileSetName { get; set; }
         private Texture2D TileSetData { get; set; }
-        private MapTexture[,] MapTextureGrid { get; set; }
         private int TileWidth { get; set; }
         private int TileHeight { get; set; }
         private double GameSizeCoefficient { get; set; }
         private bool IsSingleTileSet { get; set; }
 
+        public MapTexture[,] MapTextureGrid { get; set; }
         public TileObject[,] MapGrid { get; set; }
         public Rectangle MapSizeInTile { get; set; }
         public Rectangle TileSizeShowing { get; set; }

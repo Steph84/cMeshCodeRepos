@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace basicsTopDown.CharacterFolder
 {
@@ -13,6 +15,10 @@ namespace basicsTopDown.CharacterFolder
         East = 1,
         South = 2,
         West = 3,
+        NorthEast = 10,
+        SouthEast = 11,
+        SouthWest = 30,
+        NorthWest = 31,
         None = 99
     }
 
@@ -109,8 +115,15 @@ namespace basicsTopDown.CharacterFolder
                 CurrentFrame = 0;
             }
 
+            // fix sprite direction for diagonales
+            var tempCoefDir = (int)DirectionMoving;
+            if (tempCoefDir >= 10)
+            {
+                tempCoefDir = (int)Math.Floor(tempCoefDir / 10.0d);
+            }
+
             // update of the SourceQuad
-            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, (int)DirectionMoving * SourceQuad.Height,
+            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, tempCoefDir * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
         }
         #endregion
@@ -121,16 +134,27 @@ namespace basicsTopDown.CharacterFolder
             DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Coord9Center.ToString(), new Vector2(Position.X, Position.Y));
         }
 
-        public static void CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
+        public static bool CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
         {
+            bool tempToReturn = false;
+
             if(pCharacter != null)
             {
-                foreach(var property in pCharacter.NSPointsInCoordinate.GetType().GetProperties())
+                List<Vector2> tempListTilesCoord = new List<Vector2>();
+                List<string> tempListPropertiesName = new List<string>();
+
+                foreach(PropertyInfo property in pCharacter.NSPointsInCoordinate.GetType().GetProperties())
                 {
-                    var donkey = property.GetValue(pCharacter.NSPointsInCoordinate, null);
-                    var kong = property.Name;
+                    Vector2 tileCoord = (Vector2)property.GetValue(pCharacter.NSPointsInCoordinate, null);
+                    if(pMap.MapTextureGrid[(int)tileCoord.Y, (int)tileCoord.X] == Map.MapTexture.Wall)
+                    {
+                        tempListTilesCoord.Add(tileCoord);
+                        tempListPropertiesName.Add(property.Name);
+                        tempToReturn = true;
+                    }
                 }
             }
+            return tempToReturn;
         }
 
         private void CalculateCharacterCoordinates(Map pMap)
