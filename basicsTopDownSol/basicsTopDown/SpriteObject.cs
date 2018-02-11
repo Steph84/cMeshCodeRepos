@@ -22,15 +22,15 @@ namespace basicsTopDown
 
         public class NineSlicePoints
         {
-            public Vector2 Coord1North { get; set; }
-            public Vector2 Coord2NorthEast { get; set; }
-            public Vector2 Coord3East { get; set; }
-            public Vector2 Coord4SouthEast { get; set; }
-            public Vector2 Coord5South { get; set; }
-            public Vector2 Coord6SouthWest { get; set; }
-            public Vector2 Coord7West { get; set; }
-            public Vector2 Coord8NorthWest { get; set; }
-            public Vector2 Coord9Center { get; set; }
+            public Vector2 North { get; set; }
+            public Vector2 NorthEast { get; set; }
+            public Vector2 East { get; set; }
+            public Vector2 SouthEast { get; set; }
+            public Vector2 South { get; set; }
+            public Vector2 SouthWest { get; set; }
+            public Vector2 West { get; set; }
+            public Vector2 NorthWest { get; set; }
+            public Vector2 Center { get; set; }
         }
 
         public SpriteObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient)

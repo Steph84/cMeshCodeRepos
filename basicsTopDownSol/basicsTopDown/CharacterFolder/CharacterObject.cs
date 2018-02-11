@@ -116,14 +116,14 @@ namespace basicsTopDown.CharacterFolder
             }
 
             // fix sprite direction for diagonales
-            var tempCoefDir = (int)DirectionMoving;
-            if (tempCoefDir >= 10)
+            var tempCoefDirection = (int)DirectionMoving;
+            if (tempCoefDirection >= 10)
             {
-                tempCoefDir = (int)Math.Floor(tempCoefDir / 10.0d);
+                tempCoefDirection = (int)Math.Floor(tempCoefDirection / 10.0d);
             }
 
             // update of the SourceQuad
-            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, tempCoefDir * SourceQuad.Height,
+            SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, tempCoefDirection * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
         }
         #endregion
@@ -131,18 +131,18 @@ namespace basicsTopDown.CharacterFolder
         public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
-            DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Coord9Center.ToString(), new Vector2(Position.X, Position.Y));
+            DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Center.ToString(), new Vector2(Position.X, Position.Y));
         }
 
-        public static bool CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
+        public static List<EnumDirection> CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
         {
-            bool tempToReturn = false;
+            List<Vector2> tempListTilesCoord = new List<Vector2>();
+            List<string> tempListPropertiesName = new List<string>();
+            List<EnumDirection> tempListDirectionsToReturn = new List<EnumDirection>();
 
-            if(pCharacter != null)
+            if (pCharacter != null)
             {
-                List<Vector2> tempListTilesCoord = new List<Vector2>();
-                List<string> tempListPropertiesName = new List<string>();
-
+                #region Extraction Bumping property
                 foreach(PropertyInfo property in pCharacter.NSPointsInCoordinate.GetType().GetProperties())
                 {
                     Vector2 tileCoord = (Vector2)property.GetValue(pCharacter.NSPointsInCoordinate, null);
@@ -150,11 +150,59 @@ namespace basicsTopDown.CharacterFolder
                     {
                         tempListTilesCoord.Add(tileCoord);
                         tempListPropertiesName.Add(property.Name);
-                        tempToReturn = true;
                     }
                 }
+                #endregion
+
+                #region Conversion Bumping property to Bumping Direction
+                if (tempListPropertiesName.Count != 0)
+                {
+                    foreach(string propName in tempListPropertiesName)
+                    {
+                        if(propName == "North")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.North);
+                        }
+
+                        if (propName == "NorthEast")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.NorthEast);
+                        }
+
+                        if (propName == "East")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.East);
+                        }
+
+                        if (propName == "SouthEast")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.SouthEast);
+                        }
+
+                        if (propName == "South")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.South);
+                        }
+
+                        if (propName == "SouthWest")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.SouthWest);
+                        }
+
+                        if (propName == "West")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.West);
+                        }
+
+                        if (propName == "NorthWest")
+                        {
+                            tempListDirectionsToReturn.Add(EnumDirection.NorthWest);
+                        }
+                    }
+                }
+                #endregion
             }
-            return tempToReturn;
+            return tempListDirectionsToReturn;
         }
 
         private void CalculateCharacterCoordinates(Map pMap)
@@ -162,33 +210,32 @@ namespace basicsTopDown.CharacterFolder
             #region 9 slices points position of the sprite in pixel
             NSPointsInPixel = new NineSlicePoints
             {
-                Coord1North = new Vector2(Position.X + Size.Width / 2, Position.Y),
-                Coord2NorthEast = new Vector2(Position.X + Size.Width, Position.Y),
-                Coord3East = new Vector2(Position.X + Size.Width, Position.Y + Size.Height / 2),
-                Coord4SouthEast = new Vector2(Position.X + Size.Width, Position.Y + Size.Height),
-                Coord5South = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height),
-                Coord6SouthWest = new Vector2(Position.X, Position.Y + Size.Height),
-                Coord7West = new Vector2(Position.X, Position.Y + Size.Height / 2),
-                Coord8NorthWest = new Vector2(Position.X, Position.Y),
-                Coord9Center = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2)
+                North = new Vector2(Position.X + Size.Width / 2, Position.Y),
+                NorthEast = new Vector2(Position.X + Size.Width, Position.Y),
+                East = new Vector2(Position.X + Size.Width, Position.Y + Size.Height / 2),
+                SouthEast = new Vector2(Position.X + Size.Width, Position.Y + Size.Height),
+                South = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height),
+                SouthWest = new Vector2(Position.X, Position.Y + Size.Height),
+                West = new Vector2(Position.X, Position.Y + Size.Height / 2),
+                NorthWest = new Vector2(Position.X, Position.Y),
+                Center = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2)
             };
             #endregion
 
             #region 9 slices points position of the sprite in coordinate
             NSPointsInCoordinate = new NineSlicePoints
             {
-                Coord1North = new Vector2((float)Math.Floor(NSPointsInPixel.Coord1North.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord1North.Y / pMap.TileSizeShowing.Height)),
-                Coord2NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.Coord2NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord2NorthEast.Y / pMap.TileSizeShowing.Height)),
-                Coord3East = new Vector2((float)Math.Floor(NSPointsInPixel.Coord3East.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord3East.Y / pMap.TileSizeShowing.Height)),
-                Coord4SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.Coord4SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord4SouthEast.Y / pMap.TileSizeShowing.Height)),
-                Coord5South = new Vector2((float)Math.Floor(NSPointsInPixel.Coord5South.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord5South.Y / pMap.TileSizeShowing.Height)),
-                Coord6SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.Coord6SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord6SouthWest.Y / pMap.TileSizeShowing.Height)),
-                Coord7West = new Vector2((float)Math.Floor(NSPointsInPixel.Coord7West.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord7West.Y / pMap.TileSizeShowing.Height)),
-                Coord8NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.Coord8NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord8NorthWest.Y / pMap.TileSizeShowing.Height)),
-                Coord9Center = new Vector2((float)Math.Floor(NSPointsInPixel.Coord9Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Coord9Center.Y / pMap.TileSizeShowing.Height))
+                North = new Vector2((float)Math.Floor(NSPointsInPixel.North.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.North.Y / pMap.TileSizeShowing.Height)),
+                NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthEast.Y / pMap.TileSizeShowing.Height)),
+                East = new Vector2((float)Math.Floor(NSPointsInPixel.East.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.East.Y / pMap.TileSizeShowing.Height)),
+                SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthEast.Y / pMap.TileSizeShowing.Height)),
+                South = new Vector2((float)Math.Floor(NSPointsInPixel.South.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.South.Y / pMap.TileSizeShowing.Height)),
+                SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthWest.Y / pMap.TileSizeShowing.Height)),
+                West = new Vector2((float)Math.Floor(NSPointsInPixel.West.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.West.Y / pMap.TileSizeShowing.Height)),
+                NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height)),
+                Center = new Vector2((float)Math.Floor(NSPointsInPixel.Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Center.Y / pMap.TileSizeShowing.Height))
             };
             #endregion
         }
-
     }
 }

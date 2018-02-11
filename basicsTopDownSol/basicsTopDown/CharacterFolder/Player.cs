@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace basicsTopDown.CharacterFolder
 {
@@ -89,9 +90,42 @@ namespace basicsTopDown.CharacterFolder
             #endregion
 
 
-            if (IsMoving == true && CollisionCharacterOnMap(pGameTime, pMap, this) == null)
+            if (IsMoving == true)
             {
-                Position = new Rectangle(oldPosition.X, oldPosition.Y, Position.Width, Position.Height);
+                List<EnumDirection> tempListDirections = CollisionCharacterOnMap(pGameTime, pMap, this);
+
+                if(tempListDirections.Count != 0)
+                {
+                    if(tempListDirections.Count == 1)
+                    {
+                        if((int)tempListDirections[0] < 10)
+                        {
+                            DirectionBumping = tempListDirections[0];
+                        }
+                        else
+                        {
+                            // check the direction moving to conclude
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                    
+                    // manage easy directions
+
+
+
+                // manage harder directions
+                }
+
+                //Position = new Rectangle(oldPosition.X, oldPosition.Y, Position.Width, Position.Height);
+
+                
+
+
+
+
 
                 //if (tileWall != null)
                 //{
