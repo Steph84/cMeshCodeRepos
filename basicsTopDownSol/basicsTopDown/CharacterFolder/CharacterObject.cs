@@ -49,6 +49,7 @@ namespace basicsTopDown.CharacterFolder
             SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
             SpriteData = Content.Load<Texture2D>(pSpriteName);
             DirectionMoving = EnumDirection.East;
+            DirectionBumping = EnumDirection.None;
             Map = pMap;
 
             // for animation
@@ -131,7 +132,7 @@ namespace basicsTopDown.CharacterFolder
         public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
-            DebugToolBox.ShowLine(Content, SpriteBatch, NSPointsInCoordinate.Center.ToString(), new Vector2(Position.X, Position.Y));
+            DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString() + " / " + DirectionBumping.ToString(), new Vector2(Position.X, Position.Y));
         }
 
         public static List<EnumDirection> CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)

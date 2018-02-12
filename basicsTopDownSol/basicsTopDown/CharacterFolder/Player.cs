@@ -11,6 +11,7 @@ namespace basicsTopDown.CharacterFolder
     {
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
+        Rectangle oldPosition = new Rectangle();
 
         int playerScale = 2;
         int playerSpeed = 2;
@@ -34,7 +35,8 @@ namespace basicsTopDown.CharacterFolder
             base.SpriteUpdate(pGameTime, pMap);
             
             newState = Keyboard.GetState();
-            Rectangle oldPosition = Position;
+            oldPosition = Position;
+            DirectionBumping = EnumDirection.None;
 
             IsMoving = false;
 
@@ -98,83 +100,218 @@ namespace basicsTopDown.CharacterFolder
                 {
                     if(tempListDirections.Count == 1)
                     {
+                        #region If only 1 spot hit
                         if((int)tempListDirections[0] < 10)
                         {
                             DirectionBumping = tempListDirections[0];
                         }
                         else
                         {
+                            #region Direction Bumping in relation to Direction Moving
                             // check the direction moving to conclude
+                            switch (DirectionMoving)
+                            {
+                                case EnumDirection.North:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.North:
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        case EnumDirection.NorthEast:
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        case EnumDirection.None:
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.East:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.East:
+                                            DirectionBumping = EnumDirection.East;
+                                            break;
+                                        case EnumDirection.NorthEast:
+                                            DirectionBumping = EnumDirection.East;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            DirectionBumping = EnumDirection.East;
+                                            break;
+                                        case EnumDirection.None:
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.South:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.South:
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.None:
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.West:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.West:
+                                            DirectionBumping = EnumDirection.West;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            DirectionBumping = EnumDirection.West;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            DirectionBumping = EnumDirection.West;
+                                            break;
+                                        case EnumDirection.None:
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.NorthEast:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.NorthEast:
+                                            // very tricky, let's say North
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            DirectionBumping = EnumDirection.East;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.SouthEast:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.NorthEast:
+                                            DirectionBumping = EnumDirection.East;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            // very tricky, let's say South
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.SouthWest:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.NorthEast:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            // very tricky, let's say South
+                                            DirectionBumping = EnumDirection.South;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            DirectionBumping = EnumDirection.West;
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.NorthWest:
+                                    switch (DirectionBumping)
+                                    {
+                                        case EnumDirection.NorthEast:
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        case EnumDirection.SouthEast:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                        case EnumDirection.SouthWest:
+                                            DirectionBumping = EnumDirection.West;
+                                            break;
+                                        case EnumDirection.NorthWest:
+                                            // very tricky, let's say North
+                                            DirectionBumping = EnumDirection.North;
+                                            break;
+                                        default:
+                                            DirectionBumping = EnumDirection.None;
+                                            break;
+                                    }
+                                    break;
+                                case EnumDirection.None:
+                                    break;
+                                default:
+                                    DirectionBumping = EnumDirection.None;
+                                    break;
+                            }
+                            #endregion
                         }
+                        #endregion
                     }
                     else
                     {
+                        #region If more than 1 spot hit
 
+                        #endregion
                     }
-                    
-                    // manage easy directions
-
-
-
-                // manage harder directions
                 }
 
                 //Position = new Rectangle(oldPosition.X, oldPosition.Y, Position.Width, Position.Height);
-
                 
-
-
-
-
-
-                //if (tileWall != null)
-                //{
-                //    DirectionBumping = EnumDirection.None;
-
-                //    if(tileWall.Position.X < Position.X && tileWall.Position.Y < Position.Y)
-                //    {
-                //        DirectionBumping = EnumDirection.North;
-                //    }
-
-                //    if (tileWall.Position.X > Position.X && tileWall.Position.Y < Position.Y)
-                //    {
-                //        DirectionBumping = EnumDirection.East;
-                //    }
-
-                //    if (tileWall.Position.X > Position.X && tileWall.Position.Y > Position.Y)
-                //    {
-                //        DirectionBumping = EnumDirection.South;
-                //    }
-
-                //    if (tileWall.Position.X < Position.X && tileWall.Position.Y > Position.Y)
-                //    {
-                //        DirectionBumping = EnumDirection.West;
-                //    }
-
-                //switch (DirectionBumping)
-                //{
-                //    case EnumDirection.North:
-                //        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
-                //        break;
-                //    case EnumDirection.East:
-                //        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
-                //        break;
-                //    case EnumDirection.South:
-                //        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
-                //        break;
-                //    case EnumDirection.West:
-                //        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
-                //        break;
-                //    case EnumDirection.None:
-                //        // nothing to do
-                //        break;
-                //    default:
-                //        break;
-                //}
-                //}
-
+                switch (DirectionBumping)
+                {
+                    case EnumDirection.North:
+                        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
+                        break;
+                    case EnumDirection.East:
+                        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
+                        break;
+                    case EnumDirection.South:
+                        Position = new Rectangle(Position.X, oldPosition.Y, Position.Width, Position.Height);
+                        break;
+                    case EnumDirection.West:
+                        Position = new Rectangle(oldPosition.X, Position.Y, Position.Width, Position.Height);
+                        break;
+                    case EnumDirection.None:
+                        // nothing to do
+                        break;
+                    default:
+                        break;
+                }
             }
-
             oldState = newState;
         }
         #endregion
