@@ -101,18 +101,20 @@ namespace basicsTopDown.CharacterFolder
                     if(tempListDirections.Count == 1)
                     {
                         #region If only 1 spot hit
+                        // if easy direction
                         if((int)tempListDirections[0] < 10)
                         {
                             DirectionBumping = tempListDirections[0];
                         }
                         else
                         {
+                            // if harder direction
                             #region Direction Bumping in relation to Direction Moving
                             // check the direction moving to conclude
                             switch (DirectionMoving)
                             {
                                 case EnumDirection.North:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.North:
                                             DirectionBumping = EnumDirection.North;
@@ -123,15 +125,13 @@ namespace basicsTopDown.CharacterFolder
                                         case EnumDirection.NorthWest:
                                             DirectionBumping = EnumDirection.North;
                                             break;
-                                        case EnumDirection.None:
-                                            break;
                                         default:
                                             DirectionBumping = EnumDirection.None;
                                             break;
                                     }
                                     break;
                                 case EnumDirection.East:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.East:
                                             DirectionBumping = EnumDirection.East;
@@ -142,15 +142,13 @@ namespace basicsTopDown.CharacterFolder
                                         case EnumDirection.SouthEast:
                                             DirectionBumping = EnumDirection.East;
                                             break;
-                                        case EnumDirection.None:
-                                            break;
                                         default:
                                             DirectionBumping = EnumDirection.None;
                                             break;
                                     }
                                     break;
                                 case EnumDirection.South:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.South:
                                             DirectionBumping = EnumDirection.South;
@@ -161,15 +159,13 @@ namespace basicsTopDown.CharacterFolder
                                         case EnumDirection.SouthWest:
                                             DirectionBumping = EnumDirection.South;
                                             break;
-                                        case EnumDirection.None:
-                                            break;
                                         default:
                                             DirectionBumping = EnumDirection.None;
                                             break;
                                     }
                                     break;
                                 case EnumDirection.West:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.West:
                                             DirectionBumping = EnumDirection.West;
@@ -180,15 +176,13 @@ namespace basicsTopDown.CharacterFolder
                                         case EnumDirection.NorthWest:
                                             DirectionBumping = EnumDirection.West;
                                             break;
-                                        case EnumDirection.None:
-                                            break;
                                         default:
                                             DirectionBumping = EnumDirection.None;
                                             break;
                                     }
                                     break;
                                 case EnumDirection.NorthEast:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.NorthEast:
                                             // very tricky, let's say North
@@ -209,7 +203,7 @@ namespace basicsTopDown.CharacterFolder
                                     }
                                     break;
                                 case EnumDirection.SouthEast:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.NorthEast:
                                             DirectionBumping = EnumDirection.East;
@@ -230,7 +224,7 @@ namespace basicsTopDown.CharacterFolder
                                     }
                                     break;
                                 case EnumDirection.SouthWest:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.NorthEast:
                                             DirectionBumping = EnumDirection.None;
@@ -251,7 +245,7 @@ namespace basicsTopDown.CharacterFolder
                                     }
                                     break;
                                 case EnumDirection.NorthWest:
-                                    switch (DirectionBumping)
+                                    switch (tempListDirections[0])
                                     {
                                         case EnumDirection.NorthEast:
                                             DirectionBumping = EnumDirection.North;
@@ -270,8 +264,6 @@ namespace basicsTopDown.CharacterFolder
                                             DirectionBumping = EnumDirection.None;
                                             break;
                                     }
-                                    break;
-                                case EnumDirection.None:
                                     break;
                                 default:
                                     DirectionBumping = EnumDirection.None;
