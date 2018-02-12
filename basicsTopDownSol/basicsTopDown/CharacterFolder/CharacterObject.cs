@@ -117,7 +117,7 @@ namespace basicsTopDown.CharacterFolder
                 CurrentFrame = 0;
             }
 
-            // set the right tileSet line
+            #region set the right tileSet line
             var tempCoefDirection = 0;
             switch (DirectionMoving)
             {
@@ -133,23 +133,22 @@ namespace basicsTopDown.CharacterFolder
                 case EnumDirection.West:
                     tempCoefDirection = 3;
                     break;
-                case EnumDirection.NorthEast:
+                case EnumDirection.North | EnumDirection.East:
                     tempCoefDirection = 1;
                     break;
-                case EnumDirection.SouthEast:
+                case EnumDirection.South | EnumDirection.East:
                     tempCoefDirection = 1;
                     break;
-                case EnumDirection.SouthWest:
+                case EnumDirection.South | EnumDirection.West:
                     tempCoefDirection = 3;
                     break;
-                case EnumDirection.NorthWest:
+                case EnumDirection.North | EnumDirection.West:
                     tempCoefDirection = 3;
-                    break;
-                case EnumDirection.None:
                     break;
                 default:
                     break;
             }
+            #endregion
 
             // update of the SourceQuad
             SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, tempCoefDirection * SourceQuad.Height,

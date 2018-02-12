@@ -36,15 +36,13 @@ namespace basicsTopDown.CharacterFolder
         #region override Update to manage the Player control
         protected override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
-            base.SpriteUpdate(pGameTime, pMap);
-            
             newState = Keyboard.GetState();
             oldPosition = Position;
             DirectionBumping = EnumDirection.None;
 
             IsMoving = false;
 
-            #region Manage SpriteDirection in relation to the keyboard : 8 Directions
+            #region Manage SpriteDirection in relation to the keyboard : 8 Directions Alternate !!
             if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
@@ -55,7 +53,7 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.NorthEast;
+                DirectionMoving = EnumDirection.North | EnumDirection.East;
             }
             else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
@@ -67,7 +65,7 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.SouthEast;
+                DirectionMoving = EnumDirection.South | EnumDirection.East;
             }
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
@@ -79,7 +77,7 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.SouthWest;
+                DirectionMoving = EnumDirection.South | EnumDirection.West;
             }
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
@@ -91,7 +89,7 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.NorthWest;
+                DirectionMoving = EnumDirection.North | EnumDirection.West;
             }
             #endregion
             
@@ -308,6 +306,8 @@ namespace basicsTopDown.CharacterFolder
                 }
             }
             oldState = newState;
+
+            base.SpriteUpdate(pGameTime, pMap);
         }
         #endregion
 
