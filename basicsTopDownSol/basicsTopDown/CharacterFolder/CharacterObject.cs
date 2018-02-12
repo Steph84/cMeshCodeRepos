@@ -9,17 +9,18 @@ using System.Reflection;
 
 namespace basicsTopDown.CharacterFolder
 {
+    [Flags]
     public enum EnumDirection
     {
-        North = 0,
-        East = 1,
-        South = 2,
-        West = 3,
-        NorthEast = 10,
-        SouthEast = 11,
-        SouthWest = 30,
-        NorthWest = 31,
-        None = 99
+        North = 1,
+        East = 2,
+        South = 4,
+        West = 8,
+        NorthEast = 16,
+        SouthEast = 32,
+        SouthWest = 64,
+        NorthWest = 128,
+        None = 256
     }
 
     public class CharacterObject : SpriteObject
@@ -116,11 +117,38 @@ namespace basicsTopDown.CharacterFolder
                 CurrentFrame = 0;
             }
 
-            // fix sprite direction for diagonales
-            var tempCoefDirection = (int)DirectionMoving;
-            if (tempCoefDirection >= 10)
+            // set the right tileSet line
+            var tempCoefDirection = 0;
+            switch (DirectionMoving)
             {
-                tempCoefDirection = (int)Math.Floor(tempCoefDirection / 10.0d);
+                case EnumDirection.North:
+                    tempCoefDirection = 0;
+                    break;
+                case EnumDirection.East:
+                    tempCoefDirection = 1;
+                    break;
+                case EnumDirection.South:
+                    tempCoefDirection = 2;
+                    break;
+                case EnumDirection.West:
+                    tempCoefDirection = 3;
+                    break;
+                case EnumDirection.NorthEast:
+                    tempCoefDirection = 1;
+                    break;
+                case EnumDirection.SouthEast:
+                    tempCoefDirection = 1;
+                    break;
+                case EnumDirection.SouthWest:
+                    tempCoefDirection = 3;
+                    break;
+                case EnumDirection.NorthWest:
+                    tempCoefDirection = 3;
+                    break;
+                case EnumDirection.None:
+                    break;
+                default:
+                    break;
             }
 
             // update of the SourceQuad
