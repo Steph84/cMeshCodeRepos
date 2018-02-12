@@ -135,11 +135,22 @@ namespace basicsTopDown.CharacterFolder
             DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString() + " / " + DirectionBumping.ToString(), new Vector2(Position.X, Position.Y));
         }
 
-        public static List<EnumDirection> CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
+        public static List<EnumDirection> CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter, int pNumberDirections)
         {
             List<Vector2> tempListTilesCoord = new List<Vector2>();
             List<string> tempListPropertiesName = new List<string>();
             List<EnumDirection> tempListDirectionsToReturn = new List<EnumDirection>();
+
+            #region Manage direction number
+            if(pNumberDirections == 4 || pNumberDirections == 8)
+            {
+                // ok
+            }
+            else
+            {
+                throw new System.Exception("Not right number of directions");
+            }
+            #endregion
 
             if (pCharacter != null)
             {
@@ -155,7 +166,7 @@ namespace basicsTopDown.CharacterFolder
                 }
                 #endregion
 
-                #region Conversion Bumping property to Bumping Direction
+                #region Conversion Bumping property to Bumping Direction (manage direction number)
                 if (tempListPropertiesName.Count != 0)
                 {
                     foreach(string propName in tempListPropertiesName)
@@ -165,19 +176,9 @@ namespace basicsTopDown.CharacterFolder
                             tempListDirectionsToReturn.Add(EnumDirection.North);
                         }
 
-                        if (propName == "NorthEast")
-                        {
-                            tempListDirectionsToReturn.Add(EnumDirection.NorthEast);
-                        }
-
                         if (propName == "East")
                         {
                             tempListDirectionsToReturn.Add(EnumDirection.East);
-                        }
-
-                        if (propName == "SouthEast")
-                        {
-                            tempListDirectionsToReturn.Add(EnumDirection.SouthEast);
                         }
 
                         if (propName == "South")
@@ -185,19 +186,32 @@ namespace basicsTopDown.CharacterFolder
                             tempListDirectionsToReturn.Add(EnumDirection.South);
                         }
 
-                        if (propName == "SouthWest")
-                        {
-                            tempListDirectionsToReturn.Add(EnumDirection.SouthWest);
-                        }
-
                         if (propName == "West")
                         {
                             tempListDirectionsToReturn.Add(EnumDirection.West);
                         }
 
-                        if (propName == "NorthWest")
+                        if (pNumberDirections == 8)
                         {
-                            tempListDirectionsToReturn.Add(EnumDirection.NorthWest);
+                            if (propName == "NorthEast")
+                            {
+                                tempListDirectionsToReturn.Add(EnumDirection.NorthEast);
+                            }
+
+                            if (propName == "SouthEast")
+                            {
+                                tempListDirectionsToReturn.Add(EnumDirection.SouthEast);
+                            }
+
+                            if (propName == "SouthWest")
+                            {
+                                tempListDirectionsToReturn.Add(EnumDirection.SouthWest);
+                            }
+
+                            if (propName == "NorthWest")
+                            {
+                                tempListDirectionsToReturn.Add(EnumDirection.NorthWest);
+                            }
                         }
                     }
                 }
