@@ -206,25 +206,25 @@ namespace basicsTopDown.CharacterFolder
                             UpdateDirectionBumping(EnumDirection.West);
                         }
 
-                        if (propName == "NorthEast")
-                        {
-                            UpdateDirectionBumping(EnumDirection.NorthEast);
-                        }
+                        //if (propName == "NorthEast")
+                        //{
+                        //    UpdateDirectionBumping(EnumDirection.NorthEast);
+                        //}
 
-                        if (propName == "SouthEast")
-                        {
-                            UpdateDirectionBumping(EnumDirection.SouthEast);
-                        }
+                        //if (propName == "SouthEast")
+                        //{
+                        //    UpdateDirectionBumping(EnumDirection.SouthEast);
+                        //}
 
-                        if (propName == "SouthWest")
-                        {
-                            UpdateDirectionBumping(EnumDirection.SouthWest);
-                        }
+                        //if (propName == "SouthWest")
+                        //{
+                        //    UpdateDirectionBumping(EnumDirection.SouthWest);
+                        //}
 
-                        if (propName == "NorthWest")
-                        {
-                            UpdateDirectionBumping(EnumDirection.NorthWest);
-                        }
+                        //if (propName == "NorthWest")
+                        //{
+                        //    UpdateDirectionBumping(EnumDirection.NorthWest);
+                        //}
                     }
                 }
                 #endregion
@@ -238,14 +238,14 @@ namespace basicsTopDown.CharacterFolder
             NSPointsInPixel = new NineSlicePoints
             {
                 North = new Vector2(Position.X + Size.Width / 2, Position.Y),
-                NorthEast = new Vector2(Position.X + Size.Width, Position.Y),
                 East = new Vector2(Position.X + Size.Width, Position.Y + Size.Height / 2),
-                SouthEast = new Vector2(Position.X + Size.Width, Position.Y + Size.Height),
                 South = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height),
-                SouthWest = new Vector2(Position.X, Position.Y + Size.Height),
                 West = new Vector2(Position.X, Position.Y + Size.Height / 2),
-                NorthWest = new Vector2(Position.X, Position.Y),
                 Center = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2)
+                //NorthEast = new Vector2(Position.X + Size.Width, Position.Y),
+                //SouthEast = new Vector2(Position.X + Size.Width, Position.Y + Size.Height),
+                //SouthWest = new Vector2(Position.X, Position.Y + Size.Height),
+                //NorthWest = new Vector2(Position.X, Position.Y),
             };
             #endregion
 
@@ -253,14 +253,14 @@ namespace basicsTopDown.CharacterFolder
             NSPointsInCoordinate = new NineSlicePoints
             {
                 North = new Vector2((float)Math.Floor(NSPointsInPixel.North.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.North.Y / pMap.TileSizeShowing.Height)),
-                NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthEast.Y / pMap.TileSizeShowing.Height)),
                 East = new Vector2((float)Math.Floor(NSPointsInPixel.East.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.East.Y / pMap.TileSizeShowing.Height)),
-                SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthEast.Y / pMap.TileSizeShowing.Height)),
                 South = new Vector2((float)Math.Floor(NSPointsInPixel.South.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.South.Y / pMap.TileSizeShowing.Height)),
-                SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthWest.Y / pMap.TileSizeShowing.Height)),
                 West = new Vector2((float)Math.Floor(NSPointsInPixel.West.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.West.Y / pMap.TileSizeShowing.Height)),
-                NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height)),
                 Center = new Vector2((float)Math.Floor(NSPointsInPixel.Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Center.Y / pMap.TileSizeShowing.Height))
+                //NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthEast.Y / pMap.TileSizeShowing.Height)),
+                //SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthEast.Y / pMap.TileSizeShowing.Height)),
+                //SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthWest.Y / pMap.TileSizeShowing.Height)),
+                //NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height)),
             };
             #endregion
         }

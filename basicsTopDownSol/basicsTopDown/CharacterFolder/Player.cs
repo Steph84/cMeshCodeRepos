@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 
 namespace basicsTopDown.CharacterFolder
 {
@@ -43,7 +42,7 @@ namespace basicsTopDown.CharacterFolder
 
             IsMoving = false;
 
-            #region Manage SpriteDirection in relation to the keyboard : 8 Directions Alternate !!
+            #region Manage SpriteDirection in relation to the keyboard : 8 Directions
             if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
@@ -100,17 +99,38 @@ namespace basicsTopDown.CharacterFolder
 
                 if(DirectionBumping != EnumDirection.None)
                 {
+                    var numberOfFlags = 0;
                     var checkTypeValues = Enum.GetValues(typeof(EnumDirection));
                     foreach (EnumDirection value in checkTypeValues)
                     {
-                        var item0 = DirectionBumping & value;
-                        var item1 = (DirectionBumping & value) == value;
-                        var item2 = (DirectionBumping & value) > 0;
-                        var item3 = DirectionBumping.HasFlag(value);
+                        if(DirectionBumping.HasFlag(value))
+                        {
+                            numberOfFlags++;
+                        }
+                        //var item0 = DirectionBumping & value;
+                        //var item1 = (DirectionBumping & value) == value;
+                        //var item2 = (DirectionBumping & value) > 0;
                     }
 
-
-
+                    switch (numberOfFlags)
+                    {
+                        case 1:
+                            // depend on the DirectionMoving
+                            // 5 possible directions
+                            break;
+                        case 2:
+                            // depend on the DirectionMoving and on the flags Bumping
+                            // 2 or 3 possible directions
+                            break;
+                        case 3:
+                            // depend on the flags Bumping
+                            // 1 possible direction
+                            break;
+                        case 4:
+                            throw new System.Exception("Collision error !!");
+                        default:
+                            break;
+                    }
                 }
 
                 //if(ListHitDirections.Count != 0)
