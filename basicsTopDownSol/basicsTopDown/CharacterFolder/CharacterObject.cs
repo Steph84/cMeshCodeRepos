@@ -162,23 +162,11 @@ namespace basicsTopDown.CharacterFolder
             DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString() + " / " + DirectionBumping.ToString(), new Vector2(Position.X, Position.Y));
         }
 
-        public static List<EnumDirection> CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter, int pNumberDirections)
+        public void CollisionCharacterOnMap(GameTime pGameTime, Map pMap, CharacterObject pCharacter)
         {
             List<Vector2> tempListTilesCoord = new List<Vector2>();
             List<string> tempListPropertiesName = new List<string>();
-            List<EnumDirection> tempListDirectionsToReturn = new List<EnumDirection>();
-
-            #region Manage direction number
-            if(pNumberDirections == 4 || pNumberDirections == 8)
-            {
-                // ok
-            }
-            else
-            {
-                throw new System.Exception("Not right number of directions");
-            }
-            #endregion
-
+            
             if (pCharacter != null)
             {
                 #region Extraction Bumping property
@@ -200,53 +188,50 @@ namespace basicsTopDown.CharacterFolder
                     {
                         if(propName == "North")
                         {
-                            tempListDirectionsToReturn.Add(EnumDirection.North);
+                            UpdateDirectionBumping(EnumDirection.North);
                         }
 
                         if (propName == "East")
                         {
-                            tempListDirectionsToReturn.Add(EnumDirection.East);
+                            UpdateDirectionBumping(EnumDirection.East);
                         }
 
                         if (propName == "South")
                         {
-                            tempListDirectionsToReturn.Add(EnumDirection.South);
+                            UpdateDirectionBumping(EnumDirection.South);
                         }
 
                         if (propName == "West")
                         {
-                            tempListDirectionsToReturn.Add(EnumDirection.West);
+                            UpdateDirectionBumping(EnumDirection.West);
                         }
 
-                        if (pNumberDirections == 8)
+                        if (propName == "NorthEast")
                         {
-                            if (propName == "NorthEast")
-                            {
-                                tempListDirectionsToReturn.Add(EnumDirection.NorthEast);
-                            }
+                            UpdateDirectionBumping(EnumDirection.NorthEast);
+                        }
 
-                            if (propName == "SouthEast")
-                            {
-                                tempListDirectionsToReturn.Add(EnumDirection.SouthEast);
-                            }
+                        if (propName == "SouthEast")
+                        {
+                            UpdateDirectionBumping(EnumDirection.SouthEast);
+                        }
 
-                            if (propName == "SouthWest")
-                            {
-                                tempListDirectionsToReturn.Add(EnumDirection.SouthWest);
-                            }
+                        if (propName == "SouthWest")
+                        {
+                            UpdateDirectionBumping(EnumDirection.SouthWest);
+                        }
 
-                            if (propName == "NorthWest")
-                            {
-                                tempListDirectionsToReturn.Add(EnumDirection.NorthWest);
-                            }
+                        if (propName == "NorthWest")
+                        {
+                            UpdateDirectionBumping(EnumDirection.NorthWest);
                         }
                     }
                 }
                 #endregion
             }
-            return tempListDirectionsToReturn;
         }
 
+        #region Method to calculate Charcater positions (9 slices) in pixel and in coordinates
         private void CalculateCharacterCoordinates(Map pMap)
         {
             #region 9 slices points position of the sprite in pixel
@@ -279,5 +264,16 @@ namespace basicsTopDown.CharacterFolder
             };
             #endregion
         }
+        #endregion
+
+        #region Method to update DirectionBumping member
+        private void UpdateDirectionBumping(EnumDirection pEnumToAdd)
+        {
+            if (DirectionBumping == EnumDirection.None)
+                DirectionBumping = pEnumToAdd;
+            else
+                DirectionBumping = DirectionBumping | pEnumToAdd;
+        }
+        #endregion
     }
 }
