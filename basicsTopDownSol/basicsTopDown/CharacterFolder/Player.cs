@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
 
 namespace basicsTopDown.CharacterFolder
@@ -99,29 +100,17 @@ namespace basicsTopDown.CharacterFolder
 
                 if(DirectionBumping != EnumDirection.None)
                 {
-                    switch (DirectionBumping)
+                    var checkTypeValues = Enum.GetValues(typeof(EnumDirection));
+                    foreach (EnumDirection value in checkTypeValues)
                     {
-                        case EnumDirection.North:
-                            break;
-                        case EnumDirection.East:
-                            break;
-                        case EnumDirection.South:
-                            break;
-                        case EnumDirection.West:
-                            break;
-                        case EnumDirection.NorthEast:
-                            break;
-                        case EnumDirection.SouthEast:
-                            break;
-                        case EnumDirection.SouthWest:
-                            break;
-                        case EnumDirection.NorthWest:
-                            break;
-                        case EnumDirection.None:
-                            break;
-                        default:
-                            break;
+                        var item0 = DirectionBumping & value;
+                        var item1 = (DirectionBumping & value) == value;
+                        var item2 = (DirectionBumping & value) > 0;
+                        var item3 = DirectionBumping.HasFlag(value);
                     }
+
+
+
                 }
 
                 //if(ListHitDirections.Count != 0)
