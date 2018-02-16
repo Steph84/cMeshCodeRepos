@@ -116,6 +116,8 @@ namespace basicsTopDown.CharacterFolder
                     }
                     #endregion
 
+                    // if 1 flag hit, have to check the diagonal on the same side to fix the stuff
+
                     #region Precise the DirectionBumping depending on the flags number
                     switch (numberOfFlags)
                     {
@@ -136,10 +138,10 @@ namespace basicsTopDown.CharacterFolder
                                         case EnumDirection.West:
                                             DirectionBumping = EnumDirection.West;
                                             break;
-                                        case EnumDirection.NorthEast:
+                                        case EnumDirection.North | EnumDirection.East:
                                             // ambiguity
                                             break;
-                                        case EnumDirection.NorthWest:
+                                        case EnumDirection.North | EnumDirection.West:
                                             // ambiguity
                                             break;
                                         default:

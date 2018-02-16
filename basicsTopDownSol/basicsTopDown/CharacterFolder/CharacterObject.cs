@@ -28,6 +28,7 @@ namespace basicsTopDown.CharacterFolder
         public string Name { get; set; }
         public EnumDirection DirectionMoving { get; set; }
         public EnumDirection DirectionBumping { get; set; }
+        public EnumDirection CornerCollision { get; set; }
 
         // for animation 
         private Rectangle SourceQuad { get; set; }
@@ -51,6 +52,7 @@ namespace basicsTopDown.CharacterFolder
             SpriteData = Content.Load<Texture2D>(pSpriteName);
             DirectionMoving = EnumDirection.East;
             DirectionBumping = EnumDirection.None;
+            CornerCollision = EnumDirection.None;
             Map = pMap;
 
             // for animation
@@ -186,44 +188,53 @@ namespace basicsTopDown.CharacterFolder
                 {
                     foreach(string propName in tempListPropertiesName)
                     {
+                        int counter = 0;
+
                         if(propName == "North")
                         {
-                            UpdateDirectionBumping(EnumDirection.North);
+                            DirectionBumping = UpdateDirectionBumping(DirectionBumping, EnumDirection.North);
+                            counter++;
                         }
 
                         if (propName == "East")
                         {
-                            UpdateDirectionBumping(EnumDirection.East);
+                            DirectionBumping = UpdateDirectionBumping(DirectionBumping,EnumDirection.East);
+                            counter++;
                         }
 
                         if (propName == "South")
                         {
-                            UpdateDirectionBumping(EnumDirection.South);
+                            DirectionBumping = UpdateDirectionBumping(DirectionBumping,EnumDirection.South);
+                            counter++;
                         }
 
                         if (propName == "West")
                         {
-                            UpdateDirectionBumping(EnumDirection.West);
+                            DirectionBumping = UpdateDirectionBumping(DirectionBumping,EnumDirection.West);
+                            counter++;
                         }
 
-                        //if (propName == "NorthEast")
+                        //if (counter++ == 1)
                         //{
-                        //    UpdateDirectionBumping(EnumDirection.NorthEast);
-                        //}
+                        //    if (tempListPropertiesName.Contains("NorthEast"))
+                        //    {
+                        //        CornerCollision = UpdateDirectionBumping(CornerCollision, EnumDirection.NorthEast);
+                        //    }
 
-                        //if (propName == "SouthEast")
-                        //{
-                        //    UpdateDirectionBumping(EnumDirection.SouthEast);
-                        //}
+                        //    if (tempListPropertiesName.Contains("SouthEast"))
+                        //    {
+                        //        CornerCollision = UpdateDirectionBumping(CornerCollision, EnumDirection.SouthEast);
+                        //    }
 
-                        //if (propName == "SouthWest")
-                        //{
-                        //    UpdateDirectionBumping(EnumDirection.SouthWest);
-                        //}
+                        //    if (tempListPropertiesName.Contains("SouthWest"))
+                        //    {
+                        //        CornerCollision = UpdateDirectionBumping(CornerCollision, EnumDirection.SouthWest);
+                        //    }
 
-                        //if (propName == "NorthWest")
-                        //{
-                        //    UpdateDirectionBumping(EnumDirection.NorthWest);
+                        //    if (tempListPropertiesName.Contains("NorthWest"))
+                        //    {
+                        //        CornerCollision = UpdateDirectionBumping(CornerCollision, EnumDirection.NorthWest);
+                        //    }
                         //}
                     }
                 }
@@ -241,11 +252,11 @@ namespace basicsTopDown.CharacterFolder
                 East = new Vector2(Position.X + Size.Width, Position.Y + Size.Height / 2),
                 South = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height),
                 West = new Vector2(Position.X, Position.Y + Size.Height / 2),
-                Center = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2)
+                Center = new Vector2(Position.X + Size.Width / 2, Position.Y + Size.Height / 2),
                 //NorthEast = new Vector2(Position.X + Size.Width, Position.Y),
                 //SouthEast = new Vector2(Position.X + Size.Width, Position.Y + Size.Height),
                 //SouthWest = new Vector2(Position.X, Position.Y + Size.Height),
-                //NorthWest = new Vector2(Position.X, Position.Y),
+                //NorthWest = new Vector2(Position.X, Position.Y)
             };
             #endregion
 
@@ -256,23 +267,25 @@ namespace basicsTopDown.CharacterFolder
                 East = new Vector2((float)Math.Floor(NSPointsInPixel.East.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.East.Y / pMap.TileSizeShowing.Height)),
                 South = new Vector2((float)Math.Floor(NSPointsInPixel.South.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.South.Y / pMap.TileSizeShowing.Height)),
                 West = new Vector2((float)Math.Floor(NSPointsInPixel.West.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.West.Y / pMap.TileSizeShowing.Height)),
-                Center = new Vector2((float)Math.Floor(NSPointsInPixel.Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Center.Y / pMap.TileSizeShowing.Height))
+                Center = new Vector2((float)Math.Floor(NSPointsInPixel.Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Center.Y / pMap.TileSizeShowing.Height)),
                 //NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthEast.Y / pMap.TileSizeShowing.Height)),
                 //SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthEast.Y / pMap.TileSizeShowing.Height)),
                 //SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthWest.Y / pMap.TileSizeShowing.Height)),
-                //NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height)),
+                //NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height))
             };
             #endregion
         }
         #endregion
 
         #region Method to update DirectionBumping member
-        private void UpdateDirectionBumping(EnumDirection pEnumToAdd)
+        private EnumDirection UpdateDirectionBumping(EnumDirection pEnumToModify, EnumDirection pEnumToAdd)
         {
-            if (DirectionBumping == EnumDirection.None)
-                DirectionBumping = pEnumToAdd;
+            if (pEnumToModify == EnumDirection.None)
+                pEnumToModify = pEnumToAdd;
             else
-                DirectionBumping = DirectionBumping | pEnumToAdd;
+                pEnumToModify = pEnumToModify | pEnumToAdd;
+
+            return pEnumToModify;
         }
         #endregion
     }
