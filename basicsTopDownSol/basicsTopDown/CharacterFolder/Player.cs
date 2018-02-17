@@ -99,6 +99,11 @@ namespace basicsTopDown.CharacterFolder
             {
                 //CollisionCharacterOnMap(pGameTime, pMap, this);
 
+                if(CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+                {
+                    Position = oldPosition;
+                }
+
                 #region Correct the DirectionBumping
                 //    if(DirectionBumping != EnumDirection.None)
                 //    {
