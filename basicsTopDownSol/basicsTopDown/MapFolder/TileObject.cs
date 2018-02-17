@@ -12,7 +12,7 @@ namespace basicsTopDown.MapFolder
         public int Flag { get; set; }
         public Vector2 Coordinate { get; set; }
 
-        public TileObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, MapTexture pTexture) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient)
+        public TileObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, Map pMap, MapTexture pTexture) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient, pMap)
         {
             Texture = pTexture;
             Flag = -1;
