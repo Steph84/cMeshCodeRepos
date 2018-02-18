@@ -11,7 +11,6 @@ namespace basicsTopDown.CharacterFolder
     {
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
-        Rectangle oldPosition = new Rectangle();
 
         int playerScale = 2;
         int playerSpeed = 2;
@@ -34,15 +33,16 @@ namespace basicsTopDown.CharacterFolder
         }
 
         #region override Update to manage the Player control
-        protected override void SpriteUpdate(GameTime pGameTime, Map pMap)
+        public override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
+            // save the OldPosition before moving
+            OldPosition = Position;
+
+            #region Manage SpriteDirection in relation to the keyboard : 8 Directions
             newState = Keyboard.GetState();
-            oldPosition = Position;
-            DirectionBumping = EnumDirection.None;
 
             IsMoving = false;
 
-            #region Manage SpriteDirection in relation to the keyboard : 8 Directions
             if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
@@ -91,20 +91,13 @@ namespace basicsTopDown.CharacterFolder
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.North | EnumDirection.West;
             }
-            #endregion
-            
-            base.SpriteUpdate(pGameTime, pMap);
 
-            if (IsMoving == true)
-            {
-                //CollisionCharacterOnMap(pGameTime, pMap, this);
-
-                if(CollisionSpriteOnMap(pGameTime, pMap, this) != null)
-                {
-                    Position = oldPosition;
-                }
-            }
             oldState = newState;
+
+            #endregion
+
+            // Call the CharacterUpdate
+            base.SpriteUpdate(pGameTime, pMap);
         }
         #endregion
 

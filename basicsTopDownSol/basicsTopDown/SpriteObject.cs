@@ -6,20 +6,36 @@ using System;
 
 namespace basicsTopDown
 {
+    [Flags]
+    public enum EnumDirection
+    {
+        North = 1,
+        East = 2,
+        South = 4,
+        West = 8,
+        NorthEast = 16,
+        SouthEast = 32,
+        SouthWest = 64,
+        NorthWest = 128,
+        None = 256
+    }
+
     public class SpriteObject
     {
-        protected bool IsMoving { get; set; }
-        protected double GameSizeCoefficient { get; set; }
-        protected Rectangle Size { get; set; }
-
         public Texture2D SpriteData { get; set; }
         public Rectangle Position { get; set; }
         public NineSlicePoints NSPointsInPixel { get; set; }
         public NineSlicePoints NSPointsInCoordinate { get; set; }
+        public EnumDirection DirectionMoving { get; set; }
+        public EnumDirection DirectionBumping { get; set; }
 
+        protected bool IsMoving { get; set; }
+        protected double GameSizeCoefficient { get; set; }
+        protected Rectangle Size { get; set; }
         protected ContentManager Content { get; set; }
         protected SpriteBatch SpriteBatch { get; set; }
         protected Map Map { get; set; }
+        protected Rectangle OldPosition = new Rectangle();
 
         public class NineSlicePoints
         {
@@ -44,20 +60,21 @@ namespace basicsTopDown
         }
 
         #region SpriteUpdate
-        // method to run for each character
-        public void RunSpriteUpdate(GameTime pGameTime, Map pMap)
+        public virtual void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
-            SpriteUpdate(pGameTime, pMap); // call the virtual method
-
-            // Update character coordinates
+            #region Manage collision Sprite on Map
             if (IsMoving == true)
             {
+                DirectionBumping = EnumDirection.None;
                 CalculateSpriteCoordinates(pMap);
-            }
-        }
 
-        // virtual method to override
-        protected virtual void SpriteUpdate(GameTime pGameTime, Map pMap) { }
+                if (CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+                {
+                    Position = OldPosition;
+                }
+            }
+            #endregion
+        }
         #endregion
 
         public virtual void SpriteDraw(GameTime pGameTime) { }

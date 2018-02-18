@@ -9,26 +9,10 @@ using System.Reflection;
 
 namespace basicsTopDown.CharacterFolder
 {
-    [Flags]
-    public enum EnumDirection
-    {
-        North = 1,
-        East = 2,
-        South = 4,
-        West = 8,
-        NorthEast = 16,
-        SouthEast = 32,
-        SouthWest = 64,
-        NorthWest = 128,
-        None = 256
-    }
 
     public class CharacterObject : SpriteObject
     {
         public string Name { get; set; }
-        public EnumDirection DirectionMoving { get; set; }
-        public EnumDirection DirectionBumping { get; set; }
-        public EnumDirection CornerCollision { get; set; }
 
         // for animation 
         private Rectangle SourceQuad { get; set; }
@@ -51,7 +35,6 @@ namespace basicsTopDown.CharacterFolder
             SpriteData = Content.Load<Texture2D>(pSpriteName);
             DirectionMoving = EnumDirection.East;
             DirectionBumping = EnumDirection.None;
-            CornerCollision = EnumDirection.None;
 
             // for animation
             CurrentFrame = 0;
@@ -99,11 +82,11 @@ namespace basicsTopDown.CharacterFolder
 
 
         #region override Update to manange animation
-        protected override void SpriteUpdate(GameTime pGameTime, MapFolder.Map pMap)
+        public override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
+            #region CurrentFrame update for the animation
             if (IsMoving)
             {
-                // CurrentFrame update for the animation
                 CurrentFrame = CurrentFrame + (SpeedAnimation * pGameTime.ElapsedGameTime.Milliseconds / 1000.0d);
 
                 if (CurrentFrame > FrameNumber)
@@ -113,6 +96,7 @@ namespace basicsTopDown.CharacterFolder
             {
                 CurrentFrame = 0;
             }
+            #endregion
 
             #region set the right tileSet line
             var tempCoefDirection = 0;
@@ -150,6 +134,9 @@ namespace basicsTopDown.CharacterFolder
             // update of the SourceQuad
             SourceQuad = new Rectangle((int)CurrentFrame * SourceQuad.Width, tempCoefDirection * SourceQuad.Height,
                                        SourceQuad.Width, SourceQuad.Height);
+
+            // call the SpriteUpdate
+            base.SpriteUpdate(pGameTime, pMap);
         }
         #endregion
 

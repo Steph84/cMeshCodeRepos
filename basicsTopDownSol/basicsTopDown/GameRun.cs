@@ -40,7 +40,7 @@ namespace basicsTopDown
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            MyLink.RunSpriteUpdate(pGameTime, MyMap);
+            MyLink.SpriteUpdate(pGameTime, MyMap);
             
             return pMyState;
         }
