@@ -37,6 +37,7 @@ namespace basicsTopDown.CharacterFolder
         {
             // save the OldPosition before moving
             OldPosition = Position;
+            OldNSPointsInPixel = NSPointsInPixel;
 
             #region Manage SpriteDirection in relation to the keyboard : 8 Directions
             newState = Keyboard.GetState();

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
+using static basicsTopDown.MapFolder.Map;
 
 namespace basicsTopDown
 {
@@ -24,8 +27,6 @@ namespace basicsTopDown
     {
         public Texture2D SpriteData { get; set; }
         public Rectangle Position { get; set; }
-        public NineSlicePoints NSPointsInPixel { get; set; }
-        public NineSlicePoints NSPointsInCoordinate { get; set; }
         public EnumDirection DirectionMoving { get; set; }
         public EnumDirection DirectionBumping { get; set; }
 
@@ -35,8 +36,12 @@ namespace basicsTopDown
         protected ContentManager Content { get; set; }
         protected SpriteBatch SpriteBatch { get; set; }
         protected Map Map { get; set; }
-        protected Rectangle OldPosition = new Rectangle();
+        protected Rectangle OldPosition { get; set; }
+        protected NineSlicePoints NSPointsInPixel { get; set; }
+        protected NineSlicePoints OldNSPointsInPixel { get; set; }
 
+        private NineSlicePoints NSPointsInCoordinate { get; set; }
+        
         public class NineSlicePoints
         {
             //public Vector2 North { get; set; }
@@ -68,6 +73,90 @@ namespace basicsTopDown
                 DirectionBumping = EnumDirection.None;
                 CalculateSpriteCoordinates(pMap);
 
+                // if there is a sprite colliding into specific texture at the end of the movement
+                if(CheckCollisionOnTexture(pMap, MapTexture.Wall))
+                {
+                    // let's go back in time to correct the position
+
+                    #region Process the segments equation
+                    Dictionary<string, List<Vector2>> DictStartEndPoints = new Dictionary<string, List<Vector2>>();
+                    Dictionary<string, Tuple<float, float>> DictSegmentEquations = new Dictionary<string, Tuple<float, float>>();
+
+                    // extract Old positions
+                    foreach (PropertyInfo property in OldNSPointsInPixel.GetType().GetProperties())
+                    {
+                        if (property.Name != "Center")
+                        {
+                            Vector2 tempCoord = (Vector2)property.GetValue(OldNSPointsInPixel, null);
+                            DictStartEndPoints.Add(property.Name, new List<Vector2>() { tempCoord });
+                        }
+                    }
+
+                    // extract current virtual positions
+                    foreach (PropertyInfo property in NSPointsInPixel.GetType().GetProperties())
+                    {
+                        if (property.Name != "Center")
+                        {
+                            Vector2 tempCoord = (Vector2)property.GetValue(NSPointsInPixel, null);
+                            DictStartEndPoints[property.Name].Add(tempCoord);
+                        }
+                    }
+
+                    // calculate the segements equation
+                    foreach(KeyValuePair<string, List<Vector2>> startEndPoint in DictStartEndPoints)
+                    {
+                        DictSegmentEquations.Add(startEndPoint.Key, CalculateSegmentEquation(startEndPoint.Value[0], startEndPoint.Value[1]));
+                    }
+                    #endregion
+
+                    #region Create list of abscissas to parse
+                    Dictionary<string, List<float>> DictListAbscissa = new Dictionary<string, List<float>>();
+                    foreach (KeyValuePair<string, List<Vector2>> startEndPointBis in DictStartEndPoints)
+                    {
+                        DictListAbscissa.Add(startEndPointBis.Key, new List<float>());
+                        float tempVal = startEndPointBis.Value[0].X + 0.5f;
+                        while(tempVal <= startEndPointBis.Value[1].X)
+                        {
+                            DictListAbscissa[startEndPointBis.Key].Add(tempVal);
+                            tempVal += 0.5f;
+                        }
+                    }
+                    #endregion
+
+                    #region Parse abscissas
+                    Dictionary<string, int?> DictStepColliding = new Dictionary<string, int?>();
+                    foreach (KeyValuePair<string, List<float>> listAbscissas in DictListAbscissa)
+                    {
+                        DictStepColliding.Add(listAbscissas.Key, null);
+
+                        for (int i = 0; i < listAbscissas.Value.Count; i++)
+                        {
+                            float localItem = listAbscissas.Value[i];
+
+                            float tempY = CalculateOrdonateViaAbscissa(localItem, DictSegmentEquations[listAbscissas.Key]);
+                            Vector2 tempTile = CalculateCoordinatesInTileWithPixel(new Vector2(localItem, tempY), pMap.TileSizeShowing);
+
+                            if (pMap.MapTextureGrid[(int)tempTile.Y, (int)tempTile.X] == MapTexture.Wall)
+                            {
+                                DictStepColliding[listAbscissas.Key] = i;
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
+
+
+                    int a = 1;
+
+                    // create lists of x coordinate to parse for each corner
+
+                    // parse the lists with the 4 equations to check when the sprite collide
+
+                    // manage the slide after the collide
+
+                }
+
+                // old collision method
                 if (CollisionSpriteOnMap(pGameTime, pMap, this) != null)
                 {
                     Position = OldPosition;
@@ -78,6 +167,42 @@ namespace basicsTopDown
         #endregion
 
         public virtual void SpriteDraw(GameTime pGameTime) { }
+
+        #region Method to calculate Y=f(X)
+        private float CalculateOrdonateViaAbscissa(float pX, Tuple<float, float> pGradientYIntersect)
+        {
+            return (pX * pGradientYIntersect.Item1 + pGradientYIntersect.Item2);
+        }
+        #endregion
+        
+        #region Method to calculate the segement equation
+        private Tuple<float, float> CalculateSegmentEquation(Vector2 pStartPoint, Vector2 pEndPoint)
+        {
+            float gradient = 0;
+            float yIntercept = 0;
+
+            gradient = (pEndPoint.Y - pStartPoint.Y) / (pEndPoint.X - pStartPoint.X);
+            yIntercept = pStartPoint.Y - (pStartPoint.X * gradient);
+
+            return new Tuple<float, float>(gradient, yIntercept);
+        }
+        #endregion
+
+        #region Method to check if the sprite collide with a specific texture on the map
+        private bool CheckCollisionOnTexture(Map pMap, MapTexture pTexture)
+        {
+            foreach (PropertyInfo property in NSPointsInCoordinate.GetType().GetProperties())
+            {
+                Vector2 tileCoord = (Vector2)property.GetValue(NSPointsInCoordinate, null);
+
+                if (pMap.MapTextureGrid[(int)tileCoord.Y, (int)tileCoord.X] == MapTexture.Wall)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
 
         #region Method to check if a sprite collide with the map basic
         public static TileObject CollisionSpriteOnMap(GameTime pGameTime, Map pMap, SpriteObject pSprite)
@@ -128,13 +253,20 @@ namespace basicsTopDown
                 //East = new Vector2((float)Math.Floor(NSPointsInPixel.East.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.East.Y / pMap.TileSizeShowing.Height)),
                 //South = new Vector2((float)Math.Floor(NSPointsInPixel.South.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.South.Y / pMap.TileSizeShowing.Height)),
                 //West = new Vector2((float)Math.Floor(NSPointsInPixel.West.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.West.Y / pMap.TileSizeShowing.Height)),
-                Center = new Vector2((float)Math.Floor(NSPointsInPixel.Center.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.Center.Y / pMap.TileSizeShowing.Height)),
-                NorthEast = new Vector2((float)Math.Floor(NSPointsInPixel.NorthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthEast.Y / pMap.TileSizeShowing.Height)),
-                SouthEast = new Vector2((float)Math.Floor(NSPointsInPixel.SouthEast.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthEast.Y / pMap.TileSizeShowing.Height)),
-                SouthWest = new Vector2((float)Math.Floor(NSPointsInPixel.SouthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.SouthWest.Y / pMap.TileSizeShowing.Height)),
-                NorthWest = new Vector2((float)Math.Floor(NSPointsInPixel.NorthWest.X / pMap.TileSizeShowing.Width), (float)Math.Floor(NSPointsInPixel.NorthWest.Y / pMap.TileSizeShowing.Height))
+                Center = CalculateCoordinatesInTileWithPixel(NSPointsInPixel.Center, pMap.TileSizeShowing),
+                NorthEast = CalculateCoordinatesInTileWithPixel(NSPointsInPixel.NorthEast, pMap.TileSizeShowing),
+                SouthEast = CalculateCoordinatesInTileWithPixel(NSPointsInPixel.SouthEast, pMap.TileSizeShowing),
+                SouthWest = CalculateCoordinatesInTileWithPixel(NSPointsInPixel.SouthWest, pMap.TileSizeShowing),
+                NorthWest = CalculateCoordinatesInTileWithPixel(NSPointsInPixel.NorthWest, pMap.TileSizeShowing)
             };
             #endregion
+        }
+        #endregion
+
+        #region Method to calculate coordinates in tile with coordinates in pixel
+        private Vector2 CalculateCoordinatesInTileWithPixel(Vector2 pCoordInPixel, Rectangle pTileSize)
+        {
+            return new Vector2((float)Math.Floor(pCoordInPixel.X / pTileSize.Width), (float)Math.Floor(pCoordInPixel.Y / pTileSize.Height));
         }
         #endregion
     }
