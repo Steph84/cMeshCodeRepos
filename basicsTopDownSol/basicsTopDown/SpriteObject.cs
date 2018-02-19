@@ -114,7 +114,7 @@ namespace basicsTopDown
                     foreach (KeyValuePair<string, List<Vector2>> startEndPointBis in DictStartEndPoints)
                     {
                         DictListAbscissa.Add(startEndPointBis.Key, new List<float>());
-                        float tempVal = startEndPointBis.Value[0].X + 0.5f;
+                        float tempVal = startEndPointBis.Value[0].X;
                         while(tempVal <= startEndPointBis.Value[1].X)
                         {
                             DictListAbscissa[startEndPointBis.Key].Add(tempVal);
@@ -139,12 +139,34 @@ namespace basicsTopDown
                             if (pMap.MapTextureGrid[(int)tempTile.Y, (int)tempTile.X] == MapTexture.Wall)
                             {
                                 DictStepColliding[listAbscissas.Key] = i;
-                                break;
+                                continue;
                             }
                         }
                     }
                     #endregion
 
+                    int stepToGoBack = 999;
+                    foreach(KeyValuePair<string, int?> stepColliding in DictStepColliding)
+                    {
+                        if(stepColliding.Value != null)
+                        {
+                            if (stepToGoBack > stepColliding.Value - 1)
+                            {
+                                stepToGoBack = (int)stepColliding.Value - 1;
+                            }
+                        }
+                    }
+                    
+                    if(stepToGoBack == -1)
+                    {
+                        Position = OldPosition;
+                    }
+                    else if(stepToGoBack < 999)
+                    {
+                        float xBack = DictListAbscissa["NorthWest"][stepToGoBack];
+                        float yBack = CalculateOrdonateViaAbscissa(xBack, DictSegmentEquations["NorthWest"]);
+                        //Position = new Rectangle(xBack, yBack, Position.Width, Position.Height);
+                    }
 
                     int a = 1;
 
@@ -157,10 +179,10 @@ namespace basicsTopDown
                 }
 
                 // old collision method
-                if (CollisionSpriteOnMap(pGameTime, pMap, this) != null)
-                {
-                    Position = OldPosition;
-                }
+                //if (CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+                //{
+                //    Position = OldPosition;
+                //}
             }
             #endregion
         }
@@ -180,8 +202,10 @@ namespace basicsTopDown
         {
             float gradient = 0;
             float yIntercept = 0;
-
-            gradient = (pEndPoint.Y - pStartPoint.Y) / (pEndPoint.X - pStartPoint.X);
+            //if (pEndPoint.X != pStartPoint.X)
+            //{
+            //    gradient = (pEndPoint.Y - pStartPoint.Y) / (pEndPoint.X - pStartPoint.X);
+            //}
             yIntercept = pStartPoint.Y - (pStartPoint.X * gradient);
 
             return new Tuple<float, float>(gradient, yIntercept);

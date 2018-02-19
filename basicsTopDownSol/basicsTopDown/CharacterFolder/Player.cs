@@ -13,7 +13,7 @@ namespace basicsTopDown.CharacterFolder
         KeyboardState newState = new KeyboardState();
 
         int playerScale = 2;
-        int playerSpeed = 2;
+        int playerSpeed = 6;
 
         public int DirectionNumber { get; set; }
 
