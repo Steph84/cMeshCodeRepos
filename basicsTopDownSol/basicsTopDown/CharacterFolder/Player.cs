@@ -13,7 +13,7 @@ namespace basicsTopDown.CharacterFolder
         KeyboardState newState = new KeyboardState();
 
         int playerScale = 2;
-        int playerSpeed = 6;
+        int playerSpeed = 2;
 
         public int DirectionNumber { get; set; }
 
@@ -36,7 +36,8 @@ namespace basicsTopDown.CharacterFolder
         public override void SpriteUpdate(GameTime pGameTime, Map pMap)
         {
             // save the OldPosition before moving
-            OldPosition = Position;
+            OldPosition = new Rectangle(Position.X, Position.Y, Position.Width, Position.Height);
+            //Console.WriteLine("Old1" + OldPosition);
             OldNSPointsInPixel = NSPointsInPixel;
 
             #region Manage SpriteDirection in relation to the keyboard : 8 Directions
@@ -97,6 +98,9 @@ namespace basicsTopDown.CharacterFolder
 
             #endregion
 
+            //Console.WriteLine("Pos" + Position);
+
+            //Console.WriteLine("Old2" + OldPosition);
             // Call the CharacterUpdate
             base.SpriteUpdate(pGameTime, pMap);
         }
