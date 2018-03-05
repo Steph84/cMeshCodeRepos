@@ -55,7 +55,8 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.North | EnumDirection.East;
+                //DirectionMoving = EnumDirection.North | EnumDirection.East;
+                DirectionMoving = EnumDirection.NorthEast;
             }
             else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
@@ -67,7 +68,8 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.South | EnumDirection.East;
+                //DirectionMoving = EnumDirection.South | EnumDirection.East;
+                DirectionMoving = EnumDirection.SouthEast;
             }
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
@@ -79,7 +81,8 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.South | EnumDirection.West;
+                //DirectionMoving = EnumDirection.South | EnumDirection.West;
+                DirectionMoving = EnumDirection.SouthWest;
             }
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
@@ -91,7 +94,8 @@ namespace basicsTopDown.CharacterFolder
             {
                 IsMoving = true;
                 Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
-                DirectionMoving = EnumDirection.North | EnumDirection.West;
+                //DirectionMoving = EnumDirection.North | EnumDirection.West;
+                DirectionMoving = EnumDirection.NorthWest;
             }
 
             oldState = newState;

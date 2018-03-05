@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using basicsTopDown.UtilFolder;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -196,6 +197,8 @@ namespace basicsTopDown.MapFolder
                     {
                         SpriteBatch.Draw(localTile.SpriteData, localTile.Position, new Rectangle(localTile.Flag * TileWidth, 0, TileWidth, TileHeight), Color.White);
                     }
+
+                    //DebugToolBox.ShowLine(Content, SpriteBatch, localTile.Id.ToString(), new Vector2(localTile.Position.X + 8, localTile.Position.Y + 16));
                 }
             }
         }

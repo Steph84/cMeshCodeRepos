@@ -73,130 +73,169 @@ namespace basicsTopDown
                 DirectionBumping = EnumDirection.None;
                 CalculateSpriteCoordinates(pMap);
 
+                #region
                 // if there is a sprite colliding into specific texture at the end of the movement
                 //if(CheckCollisionOnTexture(pMap, MapTexture.Wall))
                 //{
-                    // let's go back in time to correct the position
+                // let's go back in time to correct the position
 
-                #region Process the segments equation
-                Dictionary<string, List<Vector2>> DictStartEndPoints = new Dictionary<string, List<Vector2>>();
-                Dictionary<string, Tuple<float, float>> DictSegmentEquations = new Dictionary<string, Tuple<float, float>>();
+                //#region Process the segments equation
+                //Dictionary<string, List<Vector2>> DictStartEndPoints = new Dictionary<string, List<Vector2>>();
+                //Dictionary<string, Tuple<float, float>> DictSegmentEquations = new Dictionary<string, Tuple<float, float>>();
 
-                // extract Old positions
-                foreach (PropertyInfo property in OldNSPointsInPixel.GetType().GetProperties())
-                {
-                    if (property.Name != "Center")
-                    {
-                        Vector2 tempCoord = (Vector2)property.GetValue(OldNSPointsInPixel, null);
-                        DictStartEndPoints.Add(property.Name, new List<Vector2>() { tempCoord });
-                    }
-                }
-
-                // extract current virtual positions
-                foreach (PropertyInfo property in NSPointsInPixel.GetType().GetProperties())
-                {
-                    if (property.Name != "Center")
-                    {
-                        Vector2 tempCoord = (Vector2)property.GetValue(NSPointsInPixel, null);
-                        DictStartEndPoints[property.Name].Add(tempCoord);
-                    }
-                }
-
-                // calculate the segements equation
-                foreach(KeyValuePair<string, List<Vector2>> startEndPoint in DictStartEndPoints)
-                {
-                    DictSegmentEquations.Add(startEndPoint.Key, CalculateSegmentEquation(startEndPoint.Value[0], startEndPoint.Value[1]));
-                }
-                #endregion
-
-                #region Create list of abscissas to parse
-                Dictionary<string, List<float>> DictListAbscissa = new Dictionary<string, List<float>>();
-                foreach (KeyValuePair<string, List<Vector2>> startEndPointBis in DictStartEndPoints)
-                {
-                    DictListAbscissa.Add(startEndPointBis.Key, new List<float>());
-                    float tempVal = startEndPointBis.Value[0].X;
-                    int sign = Math.Sign(startEndPointBis.Value[1].X - startEndPointBis.Value[0].X);
-
-                    if(sign == +1)
-                    {
-                        while (tempVal <= startEndPointBis.Value[1].X)
-                        {
-                            DictListAbscissa[startEndPointBis.Key].Add(tempVal);
-                            tempVal += 0.5f;
-                        }
-                    }
-
-                    if(sign == -1)
-                    {
-                        while (tempVal >= startEndPointBis.Value[1].X)
-                        {
-                            DictListAbscissa[startEndPointBis.Key].Add(tempVal);
-                            tempVal -= 0.5f;
-                        }
-                    }
-                }
-                #endregion
-
-                #region Parse abscissas
-                Dictionary<string, int?> DictStepColliding = new Dictionary<string, int?>();
-                foreach (KeyValuePair<string, List<float>> listAbscissas in DictListAbscissa)
-                {
-                    DictStepColliding.Add(listAbscissas.Key, null);
-
-                    for (int i = 0; i < listAbscissas.Value.Count; i++)
-                    {
-                        float localItem = listAbscissas.Value[i];
-
-                        float tempY = CalculateOrdonateViaAbscissa(localItem, DictSegmentEquations[listAbscissas.Key]);
-                        Vector2 tempTile = CalculateCoordinatesInTileWithPixel(new Vector2(localItem, tempY), pMap.TileSizeShowing);
-
-                        if (pMap.MapTextureGrid[(int)tempTile.Y, (int)tempTile.X] == MapTexture.Wall)
-                        {
-                            DictStepColliding[listAbscissas.Key] = i;
-                            continue;
-                        }
-                    }
-                }
-                #endregion
-
-                int stepToGoBack = 999;
-                foreach(KeyValuePair<string, int?> stepColliding in DictStepColliding)
-                {
-                    if(stepColliding.Value != null)
-                    {
-                        if (stepToGoBack > stepColliding.Value - 4)
-                        {
-                            stepToGoBack = (int)stepColliding.Value - 4;
-                        }
-                    }
-                }
-                    
-                if(stepToGoBack < 0)
-                {
-                    Position = OldPosition;
-                }
-                else if(stepToGoBack < 999)
-                {
-                    float xBack = DictListAbscissa["NorthWest"][stepToGoBack];
-                    float yBack = CalculateOrdonateViaAbscissa(xBack, DictSegmentEquations["NorthWest"]);
-                    Position = new Rectangle((int)xBack, (int)yBack, Position.Width, Position.Height);
-                }
-
-                int a = 1;
-
-                    // create lists of x coordinate to parse for each corner
-
-                    // parse the lists with the 4 equations to check when the sprite collide
-
-                    // manage the slide after the collide
-
+                //// extract Old positions
+                //foreach (PropertyInfo property in OldNSPointsInPixel.GetType().GetProperties())
+                //{
+                //    if (property.Name != "Center")
+                //    {
+                //        Vector2 tempCoord = (Vector2)property.GetValue(OldNSPointsInPixel, null);
+                //        DictStartEndPoints.Add(property.Name, new List<Vector2>() { tempCoord });
+                //    }
                 //}
 
-                // old collision method
-                //if (CollisionSpriteOnMap(pGameTime, pMap, this) != null)
+                //// extract current virtual positions
+                //foreach (PropertyInfo property in NSPointsInPixel.GetType().GetProperties())
+                //{
+                //    if (property.Name != "Center")
+                //    {
+                //        Vector2 tempCoord = (Vector2)property.GetValue(NSPointsInPixel, null);
+                //        DictStartEndPoints[property.Name].Add(tempCoord);
+                //    }
+                //}
+
+                //// calculate the segements equation
+                //foreach(KeyValuePair<string, List<Vector2>> startEndPoint in DictStartEndPoints)
+                //{
+                //    DictSegmentEquations.Add(startEndPoint.Key, CalculateSegmentEquation(startEndPoint.Value[0], startEndPoint.Value[1]));
+                //}
+                //#endregion
+
+                //#region Create list of abscissas to parse
+                //Dictionary<string, List<float>> DictListAbscissa = new Dictionary<string, List<float>>();
+                //foreach (KeyValuePair<string, List<Vector2>> startEndPointBis in DictStartEndPoints)
+                //{
+                //    DictListAbscissa.Add(startEndPointBis.Key, new List<float>());
+                //    float tempVal = startEndPointBis.Value[0].X;
+                //    int sign = Math.Sign(startEndPointBis.Value[1].X - startEndPointBis.Value[0].X);
+
+                //    if(sign == +1)
+                //    {
+                //        while (tempVal <= startEndPointBis.Value[1].X)
+                //        {
+                //            DictListAbscissa[startEndPointBis.Key].Add(tempVal);
+                //            tempVal += 0.5f;
+                //        }
+                //    }
+
+                //    if(sign == -1)
+                //    {
+                //        while (tempVal >= startEndPointBis.Value[1].X)
+                //        {
+                //            DictListAbscissa[startEndPointBis.Key].Add(tempVal);
+                //            tempVal -= 0.5f;
+                //        }
+                //    }
+                //}
+                //#endregion
+
+                //#region Parse abscissas
+                //Dictionary<string, int?> DictStepColliding = new Dictionary<string, int?>();
+                //foreach (KeyValuePair<string, List<float>> listAbscissas in DictListAbscissa)
+                //{
+                //    DictStepColliding.Add(listAbscissas.Key, null);
+
+                //    for (int i = 0; i < listAbscissas.Value.Count; i++)
+                //    {
+                //        float localItem = listAbscissas.Value[i];
+
+                //        float tempY = CalculateOrdonateViaAbscissa(localItem, DictSegmentEquations[listAbscissas.Key]);
+                //        Vector2 tempTile = CalculateCoordinatesInTileWithPixel(new Vector2(localItem, tempY), pMap.TileSizeShowing);
+
+                //        if (pMap.MapTextureGrid[(int)tempTile.Y, (int)tempTile.X] == MapTexture.Wall)
+                //        {
+                //            DictStepColliding[listAbscissas.Key] = i;
+                //            continue;
+                //        }
+                //    }
+                //}
+                //#endregion
+
+                //int stepToGoBack = 999;
+                //foreach(KeyValuePair<string, int?> stepColliding in DictStepColliding)
+                //{
+                //    if(stepColliding.Value != null)
+                //    {
+                //        if (stepToGoBack > stepColliding.Value - 4)
+                //        {
+                //            stepToGoBack = (int)stepColliding.Value - 4;
+                //        }
+                //    }
+                //}
+
+                //if(stepToGoBack < 0)
                 //{
                 //    Position = OldPosition;
                 //}
+                //else if(stepToGoBack < 999)
+                //{
+                //    float xBack = DictListAbscissa["NorthWest"][stepToGoBack];
+                //    float yBack = CalculateOrdonateViaAbscissa(xBack, DictSegmentEquations["NorthWest"]);
+                //    Position = new Rectangle((int)xBack, (int)yBack, Position.Width, Position.Height);
+                //}
+
+                //int a = 1;
+
+                // create lists of x coordinate to parse for each corner
+
+                // parse the lists with the 4 equations to check when the sprite collide
+
+                // manage the slide after the collide
+
+                //}
+                #endregion
+
+                // old collision method
+                TileObject tileCollided = CollisionSpriteOnMap(pGameTime, pMap, Position);
+                if (tileCollided != null)
+                {
+                    // if movement is diagonal
+                    if(DirectionMoving == EnumDirection.NorthEast
+                        || DirectionMoving == EnumDirection.SouthEast 
+                        || DirectionMoving ==  EnumDirection.SouthWest
+                        || DirectionMoving == EnumDirection.NorthWest)
+                    {
+                        // check the movement along X
+                        Rectangle tempPositionAlongX = new Rectangle(Position.X, OldPosition.Y, OldPosition.Width, OldPosition.Height);
+                        bool collideAlongX = CollisionSpriteOnMap(pGameTime, pMap, tempPositionAlongX) != null;
+
+                        // check the movement along Y
+                        Rectangle tempPositionAlongY = new Rectangle(OldPosition.X, Position.Y, OldPosition.Width, OldPosition.Height);
+                        bool collideAlongY = CollisionSpriteOnMap(pGameTime, pMap, tempPositionAlongY) != null;
+                        
+                        // if both collide (corner)
+                        if (collideAlongX && collideAlongY)
+                        {
+                            Position = OldPosition;
+                            return;
+                        }
+
+                        // if along X collide, let's move along Y
+                        if (collideAlongX)
+                        {
+                            Position = tempPositionAlongY;
+                        }
+
+                        // if along Y collide, let's move along X
+                        if (collideAlongY)
+                        {
+                            Position = tempPositionAlongX;
+                        }
+                    }
+                    else // if no diagonal, back to the old position
+                    {
+                        Position = OldPosition;
+                    }
+                }
             }
             #endregion
         }
@@ -243,7 +282,7 @@ namespace basicsTopDown
         #endregion
 
         #region Method to check if a sprite collide with the map basic
-        public static TileObject CollisionSpriteOnMap(GameTime pGameTime, Map pMap, SpriteObject pSprite)
+        public static TileObject CollisionSpriteOnMap(GameTime pGameTime, Map pMap, Rectangle pSpritePosition)
         {
             TileObject tile = null;
 
@@ -254,7 +293,7 @@ namespace basicsTopDown
                     if (pMap.MapGrid[row, column].Texture == Map.MapTexture.Wall)
                     {
                         bool collide = false;
-                        collide = CollisionObject.CheckCollision(pMap.MapGrid[row, column].Position, pSprite.Position);
+                        collide = CollisionObject.CheckCollision(pMap.MapGrid[row, column].Position, pSpritePosition);
                         if (collide == true)
                         {
                             tile = pMap.MapGrid[row, column];

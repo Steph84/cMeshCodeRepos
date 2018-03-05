@@ -24,9 +24,9 @@ namespace basicsTopDown
             bool hitAlongX = false;
             bool hitAlongY = false;
 
-            if (dx < 0)
+            if (dx <= 0)
             {
-                if (Math.Abs(dx) < pFirstObject.Width)
+                if (Math.Abs(dx) <= pFirstObject.Width)
                 {
                     hitAlongX = true;
                 }
@@ -37,7 +37,7 @@ namespace basicsTopDown
             }
             else
             {
-                if (Math.Abs(dx) < pSecondObject.Width)
+                if (Math.Abs(dx) <= pSecondObject.Width)
                 {
                     hitAlongX = true;
                 }
@@ -47,9 +47,9 @@ namespace basicsTopDown
                 }
             }
             
-            if (dy < 0)
+            if (dy <= 0)
             {
-                if (Math.Abs(dy) < pFirstObject.Height)
+                if (Math.Abs(dy) <= pFirstObject.Height)
                 {
                     hitAlongY = true;
                 }
@@ -60,7 +60,7 @@ namespace basicsTopDown
             }
             else
             {
-                if (Math.Abs(dy) < pSecondObject.Height)
+                if (Math.Abs(dy) <= pSecondObject.Height)
                 {
                     hitAlongY = true;
                 }

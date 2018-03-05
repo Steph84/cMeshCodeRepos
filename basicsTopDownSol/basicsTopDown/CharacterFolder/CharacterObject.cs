@@ -126,6 +126,18 @@ namespace basicsTopDown.CharacterFolder
                 case EnumDirection.North | EnumDirection.West:
                     tempCoefDirection = 3;
                     break;
+                case EnumDirection.NorthEast:
+                    tempCoefDirection = 1;
+                    break;
+                case EnumDirection.SouthEast:
+                    tempCoefDirection = 1;
+                    break;
+                case EnumDirection.SouthWest:
+                    tempCoefDirection = 3;
+                    break;
+                case EnumDirection.NorthWest:
+                    tempCoefDirection = 3;
+                    break;
                 default:
                     break;
             }
@@ -143,7 +155,8 @@ namespace basicsTopDown.CharacterFolder
         public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
-            DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString() + " / " + DirectionBumping.ToString(), new Vector2(Position.X, Position.Y));
+            //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString() + " / " + DirectionBumping.ToString(), new Vector2(Position.X, Position.Y));
+            DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
         }
         
         #region Method to update DirectionBumping member
