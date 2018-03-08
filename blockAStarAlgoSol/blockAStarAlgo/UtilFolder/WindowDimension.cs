@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace basicsTopDown.MenuFolder
+namespace blockAStarAlgo.UtilFolder
 {
     public class WindowDimension
     {
@@ -20,7 +20,7 @@ namespace basicsTopDown.MenuFolder
         bool IsFullScreen = false;
 
         // Array for the GameWindow in relation to the resolution
-        int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
+        int[,] ArrayResolution = new int[4, 5] {  // displayRes / gameWindowRes
                                                     { 1024, 768, 1152, 576, 10 },
                                                     { 1920, 1080, 1728, 864, 15 },
                                                     { 2560, 1440, 2304, 1152, 20 },
@@ -48,7 +48,7 @@ namespace basicsTopDown.MenuFolder
             pGameWindow.AllowAltF4 = AllowAltF4;
             pGameWindow.IsBorderless = IsBorderless;
 
-            if(IsFullScreen == true)
+            if (IsFullScreen == true)
             {
                 Graphics.PreferredBackBufferWidth = DisplayWidth;
                 Graphics.PreferredBackBufferHeight = DisplayHeight;
@@ -82,7 +82,7 @@ namespace basicsTopDown.MenuFolder
             }
 
             // check if the GameWindow overlap the Display
-            if(newGameWindowWidth > DisplayWidth)
+            if (newGameWindowWidth > DisplayWidth)
             {
                 // if so, don t bother, switch to fullScreen
                 newGameWindowWidth = DisplayWidth;
@@ -98,7 +98,7 @@ namespace basicsTopDown.MenuFolder
                 newPosY = (DisplayHeight - newGameWindowHeight) / 3;
                 GameWindow.Position = new Point(newPosX, newPosY);
             }
-            
+
             // update the GameWindow
             Graphics.PreferredBackBufferWidth = newGameWindowWidth;
             Graphics.PreferredBackBufferHeight = newGameWindowHeight;

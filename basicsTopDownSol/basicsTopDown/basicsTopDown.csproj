@@ -47,7 +47,6 @@
     <Compile Include="MapFolder\TileObject.cs" />
     <Compile Include="MenuFolder\LoadMenuData.cs" />
     <Compile Include="MenuFolder\Menu.cs" />
-    <Compile Include="MenuFolder\WindowDimension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteObject.cs" />
@@ -56,6 +55,7 @@
     <Compile Include="UtilFolder\PersonnalColors.cs" />
     <Compile Include="UtilFolder\TextAlignment.cs" />
     <Compile Include="UtilFolder\Tweening.cs" />
+    <Compile Include="UtilFolder\WindowDimension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

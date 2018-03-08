@@ -1,10 +1,9 @@
-﻿using basicsTopDown.MenuFolder;
-using basicsTopDown.UtilFolder;
+﻿using blockAStarAlgo.UtilFolder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace basicsTopDown
+namespace blockAStarAlgo
 {
     public class Main : Game
     {
@@ -12,13 +11,12 @@ namespace basicsTopDown
         private SpriteBatch spriteBatch { get; set; }
 
         private WindowDimension MyWindow { get; set; }
-        private Menu MyMenu { get; set; }
         private GameRun MyGame { get; set; }
 
-        private string MyTitleGameWindow = "TopDown basics";
-        private EnumMainState MyState = EnumMainState.MenuTitle;
+        private string MyTitleGameWindow = "A Star algorithm";
+        private EnumMainState MyState = EnumMainState.GamePlayable;
         private double GameSizeCoefficient = 1.0d;
-        
+
         public enum EnumMainState
         {
             MenuTitle,
@@ -28,7 +26,7 @@ namespace basicsTopDown
             GameAnimation,
             GamePlayable
         }
-        
+
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,8 +51,7 @@ namespace basicsTopDown
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            MyMenu = new Menu(MyWindow, Content, spriteBatch);
+            
             MyGame = new GameRun(MyWindow, Content, spriteBatch);
         }
 
@@ -66,34 +63,14 @@ namespace basicsTopDown
         {
             switch (MyState)
             {
-                case EnumMainState.MenuTitle:
-                    MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
-                    break;
-
-                case EnumMainState.MenuInstructions:
-                    MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
-                    break;
-
-                case EnumMainState.MenuCredits:
-                    MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
-                    break;
-
-                case EnumMainState.GameAnimation:
-                    // animation
-                    break;
-
                 case EnumMainState.GamePlayable:
                     MyGame.GameRunUpdate(gameTime, MyState);
-                    break;
-
-                case EnumMainState.MenuQuit:
-                    Exit();
                     break;
 
                 default:
                     break;
             }
-            
+
             base.Update(gameTime);
         }
 
@@ -106,22 +83,6 @@ namespace basicsTopDown
 
             switch (MyState)
             {
-                case EnumMainState.MenuTitle:
-                    MyMenu.MenuTitleDraw(gameTime);
-                    break;
-
-                case EnumMainState.MenuInstructions:
-                    MyMenu.MenuInstructionsDraw(gameTime);
-                    break;
-
-                case EnumMainState.MenuCredits:
-                    MyMenu.MenuCreditsDraw(gameTime);
-                    break;
-
-                case EnumMainState.GameAnimation:
-                    // animation
-                    break;
-
                 case EnumMainState.GamePlayable:
                     MyGame.GameRunDraw(gameTime);
                     break;
@@ -129,9 +90,9 @@ namespace basicsTopDown
                 default:
                     break;
             }
-            
+
             spriteBatch.End();
-        
+
             base.Draw(gameTime);
         }
     }

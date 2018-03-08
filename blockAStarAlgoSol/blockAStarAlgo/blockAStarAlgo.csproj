@@ -38,9 +38,18 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="CharacterFolder\CharacterObject.cs" />
+    <Compile Include="CharacterFolder\Player.cs" />
+    <Compile Include="CollisionObject.cs" />
+    <Compile Include="GameRun.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="MapFolder\Map.cs" />
+    <Compile Include="MapFolder\TileObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpriteObject.cs" />
+    <Compile Include="UtilFolder\DebugToolBox.cs" />
+    <Compile Include="UtilFolder\WindowDimension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
