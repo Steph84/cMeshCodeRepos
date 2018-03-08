@@ -7,6 +7,17 @@ using System.Collections.Generic;
 
 namespace basicsTopDown.MapFolder
 {
+    public enum MapTexture
+    {
+        Void = 0,
+        Wall = 1,
+        Floor = 2,
+        Grass = 3,
+        Dirt = 4,
+        Water = 5,
+        Sand = 6
+    }
+
     public class Map
     {
         private ContentManager Content { get; set; }
@@ -38,22 +49,25 @@ namespace basicsTopDown.MapFolder
 
             ExtractDataFromBitMap();
             ExtractTileSet();
-            InitilizeMapGrid();
-            GenerateMapGrid();
+            InitializeMapGrid();
+            ComputeFlagValue();
         }
 
-        private void GenerateMapGrid()
+        #region Determine the flag for each tile
+        private void ComputeFlagValue()
         {
             for (int row = 0; row < MapSizeInTile.Height; row++)
             {
                 for (int column = 0; column < MapSizeInTile.Width; column++)
                 {
+                    // if there is a wall at this tile
                     if (MapTextureGrid[row, column] == MapTexture.Wall)
                     {
-
+                        // initialize dictionnary for compute flag
                         Dictionary<int, bool> DictTextureAround =
                         new Dictionary<int, bool>() { { 1, false }, { 2, false }, { 4, false }, { 8, false } };
 
+                        #region Check the texture all around
                         // tile top
                         if (row == 0)
                             DictTextureAround[1] = true;
@@ -81,21 +95,24 @@ namespace basicsTopDown.MapFolder
                         else
                             if (MapTextureGrid[row, column - 1] == MapTexture.Wall)
                             DictTextureAround[8] = true;
+                        #endregion
 
+                        // update the flag for each tile
                         int tempFlag = 0;
                         foreach (KeyValuePair<int, bool> entry in DictTextureAround)
                         {
                             if (entry.Value)
                                 tempFlag += entry.Key;
                         }
-
                         MapGrid[row, column].Flag = tempFlag;
                     }
                 }
             }
         }
+        #endregion
 
-        private void InitilizeMapGrid()
+        #region Initialization of the map grid
+        private void InitializeMapGrid()
         {
             // basic tile 32x32 so have to correct the GameSizeCoef for the tiles
             double GameSizeCoefficientFixed = GameSizeCoefficient / (TileWidth/32);
@@ -125,7 +142,9 @@ namespace basicsTopDown.MapFolder
                 }
             }
         }
+        #endregion
 
+        #region Extraction of the tile set
         private void ExtractTileSet()
         {
             TileSetData = Content.Load<Texture2D>(TileSetName);
@@ -144,7 +163,9 @@ namespace basicsTopDown.MapFolder
                 IsSingleTileSet = false;
             }
         }
+        #endregion
 
+        #region Extraction of the map data from the BitMap
         private void ExtractDataFromBitMap()
         {
             // BitMap load
@@ -175,16 +196,7 @@ namespace basicsTopDown.MapFolder
                 }
             }
         }
-
-        public enum MapTexture
-        {
-            Void = 0,
-            Wall = 1,
-            Floor = 2,
-            Grass = 3,
-            Dirt = 4,
-            Water = 5
-        }
+        #endregion
 
         public void MapDraw(GameTime pGameTime)
         {

@@ -24,6 +24,7 @@ namespace basicsTopDown
             bool hitAlongX = false;
             bool hitAlongY = false;
 
+            #region Check DX
             if (dx <= 0)
             {
                 if (Math.Abs(dx) <= pFirstObject.Width)
@@ -46,7 +47,9 @@ namespace basicsTopDown
                     return false;
                 }
             }
-            
+            #endregion
+
+            #region Check DY
             if (dy <= 0)
             {
                 if (Math.Abs(dy) <= pFirstObject.Height)
@@ -69,6 +72,7 @@ namespace basicsTopDown
                     return false;
                 }
             }
+            #endregion
 
             return hitAlongX && hitAlongY;
         }

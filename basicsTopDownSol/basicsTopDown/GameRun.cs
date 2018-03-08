@@ -19,9 +19,6 @@ namespace basicsTopDown
         private MapFolder.Map MyMap { get; set; }
         private CharacterFolder.Player MyLink { get; set; }
 
-        // TOREMOVE
-        SpriteFont font;
-
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindow.GameWindowWidth;
@@ -30,12 +27,9 @@ namespace basicsTopDown
             SpriteBatch = pSpriteBatch;
             Content = pContent;
 
-            // TOREMOVE
-            font = Content.Load<SpriteFont>("TimesNewRoman12");
-
             MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "wallsTopDownTileSet", 96, 96, GameSizeCoefficient);
             //MyMap = new MapFolder.Map(Content, SpriteBatch, "testMapBitMap", "tileSetMapGen01", 32, 32, GameSizeCoefficient);
-            MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient, MyMap, 8);
+            MyLink = new CharacterFolder.Player(Content, SpriteBatch, new Rectangle(100, 100, 0, 0), "linkWalkingAnimation", new Rectangle(0, 0, 16, 24), GameSizeCoefficient, MyMap);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
