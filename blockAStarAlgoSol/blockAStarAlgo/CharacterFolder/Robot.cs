@@ -4,16 +4,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Collections.Generic;
 
 namespace blockAStarAlgo.CharacterFolder
 {
     public class Robot : CharacterObject
     {
-        KeyboardState oldState = new KeyboardState();
-        KeyboardState newState = new KeyboardState();
-
         double robotScale = 1.8d;
         int robotSpeed = 2;
+
+        public bool TargetLocked { get; set; }
+        public List<int> Path { get; set; }
 
         public Robot(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pFrameSize, pGameSizeCoefficient, pMap)
         {
@@ -26,7 +27,10 @@ namespace blockAStarAlgo.CharacterFolder
             #endregion
 
             // custom robot speed walk
-            SpeedWalking = robotSpeed * GameSizeCoefficient;
+            SpeedMove = robotSpeed * GameSizeCoefficient;
+
+            TargetLocked = false;
+            Path = null;
         }
 
         #region override Update to manage the Player control
@@ -37,7 +41,6 @@ namespace blockAStarAlgo.CharacterFolder
             OldNSPointsInPixel = NSPointsInPixel;
 
             #region Manage SpriteDirection in relation to the keyboard : 8 Directions
-            newState = Keyboard.GetState();
 
             IsMoving = false;
 
@@ -45,9 +48,19 @@ namespace blockAStarAlgo.CharacterFolder
             DirectionMoving = EnumDirection.West;
             // call method to A Star with arguments like
             // map, target, mapUnveiled, mapVisible in relation to the walls
-            PathFinding.AStar();
 
-            oldState = newState;
+            // if target, AStar
+            if(TargetLocked)
+            {
+                if (Path == null)
+                {
+                    Path = PathFinding.AStar(pMap);
+                }
+            }
+            else
+            {
+                PathFinding.Explore(pMap, this);
+            }
 
             #endregion
 

@@ -1,5 +1,4 @@
 ﻿using blockAStarAlgo.MapFolder;
-using blockAStarAlgo.UtilFolder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -19,9 +18,7 @@ namespace blockAStarAlgo.CharacterFolder
         private double CurrentFrame { get; set; }
         private double SpeedAnimation { get; set; }
         private SpriteEffects SpriteEffect { get; set; }
-
-        protected double SpeedWalking { get; set; }
-
+        
         Vector2 SpriteOrigin = new Vector2();
 
         public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient, pMap)

@@ -22,8 +22,9 @@ namespace blockAStarAlgo
         public Texture2D SpriteData { get; set; }
         public Rectangle Position { get; set; }
         public EnumDirection DirectionMoving { get; set; }
+        public bool IsMoving { get; set; }
+        public double SpeedMove { get; set; }
 
-        protected bool IsMoving { get; set; }
         protected double GameSizeCoefficient { get; set; }
         protected Rectangle Size { get; set; }
         protected ContentManager Content { get; set; }
