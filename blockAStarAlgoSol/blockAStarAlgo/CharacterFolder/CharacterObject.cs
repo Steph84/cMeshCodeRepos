@@ -138,7 +138,7 @@ namespace blockAStarAlgo.CharacterFolder
         public override void SpriteDraw(GameTime pGameTime)
         {
             SpriteBatch.Draw(SpriteData, Position, SourceQuad, Color.White, 0, SpriteOrigin, SpriteEffect, 0);
-            DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
+            //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
         }
     }
 }

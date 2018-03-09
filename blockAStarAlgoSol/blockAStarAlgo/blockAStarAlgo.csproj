@@ -39,6 +39,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CharacterFolder\CharacterObject.cs" />
+    <Compile Include="CharacterFolder\Robot.cs" />
     <Compile Include="CharacterFolder\Player.cs" />
     <Compile Include="CollisionObject.cs" />
     <Compile Include="GameRun.cs" />
