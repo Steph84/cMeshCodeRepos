@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AlgoFolder\PathFinding.cs" />
     <Compile Include="CharacterFolder\CharacterObject.cs" />
     <Compile Include="CharacterFolder\Robot.cs" />
     <Compile Include="CharacterFolder\Player.cs" />

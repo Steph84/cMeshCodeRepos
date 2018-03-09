@@ -1,4 +1,5 @@
-﻿using blockAStarAlgo.MapFolder;
+﻿using blockAStarAlgo.AlgoFolder;
+using blockAStarAlgo.MapFolder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,7 +12,7 @@ namespace blockAStarAlgo.CharacterFolder
         KeyboardState oldState = new KeyboardState();
         KeyboardState newState = new KeyboardState();
 
-        double robotScale = 1.5d;
+        double robotScale = 1.8d;
         int robotSpeed = 2;
 
         public Robot(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pFrameSize, pGameSizeCoefficient, pMap)
@@ -39,8 +40,12 @@ namespace blockAStarAlgo.CharacterFolder
             newState = Keyboard.GetState();
 
             IsMoving = false;
-            
+
             // algo for movement
+            DirectionMoving = EnumDirection.West;
+            // call method to A Star with arguments like
+            // map, target, mapUnveiled, mapVisible in relation to the walls
+            PathFinding.AStar();
 
             oldState = newState;
 
