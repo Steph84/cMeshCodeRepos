@@ -20,8 +20,8 @@ namespace blockAStarAlgo.AlgoFolder
 
         public static void Explore(Map pMap, CharacterFolder.CharacterObject pCharacter)
         {
-            pCharacter.DirectionMoving = EnumDirection.North;
-            pCharacter.SpeedMove = 1;
+            //pCharacter.DirectionMoving = EnumDirection.North;
+            pCharacter.SpeedMove = 2;
 
             switch (pCharacter.DirectionMoving)
             {
@@ -30,15 +30,30 @@ namespace blockAStarAlgo.AlgoFolder
                     pCharacter.Position = new Rectangle(pCharacter.Position.X, pCharacter.Position.Y - (int)pCharacter.SpeedMove, pCharacter.Position.Width, pCharacter.Position.Height);
                     break;
                 case EnumDirection.East:
+                    pCharacter.IsMoving = true;
+                    pCharacter.Position = new Rectangle(pCharacter.Position.X + (int)pCharacter.SpeedMove, pCharacter.Position.Y, pCharacter.Position.Width, pCharacter.Position.Height);
                     break;
                 case EnumDirection.South:
+                    pCharacter.IsMoving = true;
+                    pCharacter.Position = new Rectangle(pCharacter.Position.X, pCharacter.Position.Y + (int)pCharacter.SpeedMove, pCharacter.Position.Width, pCharacter.Position.Height);
                     break;
                 case EnumDirection.West:
-                    break;
-                case EnumDirection.None:
+                    pCharacter.IsMoving = true;
+                    pCharacter.Position = new Rectangle(pCharacter.Position.X - (int)pCharacter.SpeedMove, pCharacter.Position.Y, pCharacter.Position.Width, pCharacter.Position.Height);
                     break;
                 default:
                     break;
+            }
+
+            if(pCharacter.IsCollidingWall)
+            {
+                var rand = new Random();
+                EnumDirection[] allValues = (EnumDirection[])Enum.GetValues(typeof(EnumDirection));
+                
+                //allValues = allValues - pCharacter.DirectionMoving;
+                EnumDirection value = allValues[rand.Next(allValues.Length)];
+                pCharacter.DirectionMoving = value;
+                pCharacter.IsCollidingWall = false;
             }
         }
     }

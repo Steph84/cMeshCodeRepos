@@ -13,8 +13,7 @@ namespace blockAStarAlgo
         North = 1,
         East = 2,
         South = 4,
-        West = 8,
-        None = 16
+        West = 8
     }
 
     public class SpriteObject
@@ -23,6 +22,7 @@ namespace blockAStarAlgo
         public Rectangle Position { get; set; }
         public EnumDirection DirectionMoving { get; set; }
         public bool IsMoving { get; set; }
+        public bool IsCollidingWall { get; set; }
         public double SpeedMove { get; set; }
 
         protected double GameSizeCoefficient { get; set; }
@@ -56,6 +56,7 @@ namespace blockAStarAlgo
             Content = pContent;
             SpriteBatch = pSpriteBatch;
             IsMoving = false;
+            IsCollidingWall = false;
             GameSizeCoefficient = pGameSizeCoefficient;
             Map = pMap;
 
@@ -77,6 +78,8 @@ namespace blockAStarAlgo
                 TileObject tileCollided = CollisionSpriteOnMap(pGameTime, pMap, Position, TextureListToCheck);
                 if (tileCollided != null)
                 {
+                    //IsCollidingWall = true;
+
                     // if DirectionMoving has more than 1 flag : diagonale movement
                     if ((DirectionMoving & (DirectionMoving - 1)) != 0)
                     {
@@ -113,6 +116,10 @@ namespace blockAStarAlgo
                     {
                         Position = OldPosition;
                     }
+                }
+                else
+                {
+                    IsCollidingWall = false;
                 }
             }
             #endregion
