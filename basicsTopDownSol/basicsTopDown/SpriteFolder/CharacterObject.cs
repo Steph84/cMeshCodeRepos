@@ -7,7 +7,7 @@ using System;
 namespace basicsTopDown.SpriteFolder
 {
 
-    public class CharacterObject : SpriteObject
+    public class CharacterObject : MoveableObject
     {
         public string Name { get; set; }
 
@@ -19,21 +19,19 @@ namespace basicsTopDown.SpriteFolder
         private double SpeedAnimation { get; set; }
         private SpriteEffects SpriteEffect { get; set; }
 
-        protected double SpeedWalking { get; set; }
-
         Vector2 SpriteOrigin = new Vector2();
 
-        public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient, pMap)
+        public CharacterObject(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, Rectangle pFrameSize, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient, pFrameSize, pMap)
         {
+            // for animation
             FrameSize = pFrameSize;
             SourceQuad = new Rectangle(0, 0, FrameSize.Width, FrameSize.Height);
-            SpriteData = Content.Load<Texture2D>(pSpriteName);
-            DirectionMoving = EnumDirection.East;
-
-            // for animation
             CurrentFrame = 0;
             SpeedAnimation = 10;
             SpriteEffect = SpriteEffects.None;
+
+            SpriteData = Content.Load<Texture2D>(pSpriteName);
+            DirectionMoving = EnumDirection.East;
 
             #region Check the line number
             // an animation tileSet is made of 4 lines

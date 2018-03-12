@@ -38,6 +38,7 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="SpriteFolder\MoveableObject.cs" />
     <Compile Include="SpriteFolder\Player.cs" />
     <Compile Include="SpriteFolder\CharacterObject.cs" />
     <Compile Include="CollisionObject.cs" />

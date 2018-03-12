@@ -130,7 +130,7 @@ namespace basicsTopDown
                     MapGrid[row, column] =
                         new TileObject(Content, SpriteBatch,
                                        new Rectangle(column * tileWidthShowing, row * tileHeightShowing, tileWidthShowing, tileHeightShowing),
-                                       null, GameSizeCoefficient, this,
+                                       null, GameSizeCoefficient,
                                        MapTextureGrid[row, column]);
 
                     // manual update of the sprite texture

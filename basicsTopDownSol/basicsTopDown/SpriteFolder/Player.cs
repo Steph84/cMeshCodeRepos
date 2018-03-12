@@ -13,7 +13,7 @@ namespace basicsTopDown.SpriteFolder
         double playerScale = 1.5d;
         int playerSpeed = 2;
 
-        public Player(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, Rectangle pFrameSize, double pGameSizeCoefficient, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pFrameSize, pGameSizeCoefficient, pMap)
+        public Player(ContentManager pContent, SpriteBatch pSpriteBatch, Rectangle pPosition, string pSpriteName, double pGameSizeCoefficient, Rectangle pFrameSize, Map pMap) : base(pContent, pSpriteBatch, pPosition, pSpriteName, pGameSizeCoefficient, pFrameSize, pMap)
         {
             #region custom player size
             int tempWidth = (int)(Size.Width * playerScale);
@@ -24,7 +24,7 @@ namespace basicsTopDown.SpriteFolder
             #endregion
 
             // custom player speed walk
-            SpeedWalking = playerSpeed * GameSizeCoefficient;
+            SpeedMove = playerSpeed * GameSizeCoefficient;
         }
 
         #region override Update to manage the Player control
@@ -43,49 +43,49 @@ namespace basicsTopDown.SpriteFolder
             if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X, Position.Y - (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.North;
             } // North East
             else if (KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X + (int)SpeedMove, Position.Y - (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.North | EnumDirection.East;
             } // East
             else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X + (int)SpeedMove, Position.Y, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.East;
             } // South East
             else if (!KeyWentDown(Keys.Up) && KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X + (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X + (int)SpeedMove, Position.Y + (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.South | EnumDirection.East;
             } // South
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && !KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X, Position.Y + (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.South;
             } // South West
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y + (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X - (int)SpeedMove, Position.Y + (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.South | EnumDirection.West;
             } // West
             else if (!KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X - (int)SpeedMove, Position.Y, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.West;
             } // North West
             else if (KeyWentDown(Keys.Up) && !KeyWentDown(Keys.Right) && !KeyWentDown(Keys.Down) && KeyWentDown(Keys.Left))
             {
                 IsMoving = true;
-                Position = new Rectangle(Position.X - (int)SpeedWalking, Position.Y - (int)SpeedWalking, Position.Width, Position.Height);
+                Position = new Rectangle(Position.X - (int)SpeedMove, Position.Y - (int)SpeedMove, Position.Width, Position.Height);
                 DirectionMoving = EnumDirection.North | EnumDirection.West;
             }
 
