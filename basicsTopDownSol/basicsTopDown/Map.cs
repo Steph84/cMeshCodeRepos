@@ -1,11 +1,11 @@
-﻿using basicsTopDown.UtilFolder;
+﻿using basicsTopDown.SpriteFolder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
-namespace basicsTopDown.MapFolder
+namespace basicsTopDown
 {
     public enum MapTexture
     {

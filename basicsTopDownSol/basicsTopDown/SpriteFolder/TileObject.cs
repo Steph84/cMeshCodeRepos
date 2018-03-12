@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using static basicsTopDown.MapFolder.Map;
 
-namespace basicsTopDown.MapFolder
+namespace basicsTopDown.SpriteFolder
 {
     public class TileObject : SpriteObject
     {

@@ -1,11 +1,10 @@
-﻿using basicsTopDown.MapFolder;
-using basicsTopDown.UtilFolder;
+﻿using basicsTopDown.UtilFolder;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 
-namespace basicsTopDown.CharacterFolder
+namespace basicsTopDown.SpriteFolder
 {
 
     public class CharacterObject : SpriteObject
