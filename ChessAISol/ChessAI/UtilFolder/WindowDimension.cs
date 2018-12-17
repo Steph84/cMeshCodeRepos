@@ -20,7 +20,7 @@ namespace ChessAI.UtilFolder
         bool IsFullScreen = false;
 
         // Array for the GameWindow in relation to the resolution
-        int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
+        public int [,] ArrayResolution = new int [4,5] {  // displayRes / gameWindowRes
                                                     { 1024, 768, 1152, 576, 10 },
                                                     { 1920, 1080, 1728, 864, 15 },
                                                     { 2560, 1440, 2304, 1152, 20 },

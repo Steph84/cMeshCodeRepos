@@ -14,7 +14,7 @@ namespace ChessAI
         private GameRun MyGame { get; set; }
 
         private string MyTitleGameWindow = "TopDown basics";
-        private EnumMainState MyState = EnumMainState.MenuTitle;
+        private EnumMainState MyState = EnumMainState.GamePlayable;
         private double GameSizeCoefficient = 1.0d;
         
         public enum EnumMainState

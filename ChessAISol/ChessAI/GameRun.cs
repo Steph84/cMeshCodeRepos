@@ -14,6 +14,8 @@ namespace ChessAI
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
 
+        public ChessBoard ChessBoard { get; set; }
+
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindow.GameWindowWidth;
@@ -21,6 +23,8 @@ namespace ChessAI
             GameSizeCoefficient = pGameWindow.GameSizeCoefficient;
             SpriteBatch = pSpriteBatch;
             Content = pContent;
+
+            ChessBoard = new ChessBoard(pGameWindow, pContent, pSpriteBatch);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
@@ -32,7 +36,7 @@ namespace ChessAI
 
         public void GameRunDraw(GameTime pGameTime)
         {
-
+            ChessBoard.ChessBoardDraw(pGameTime);
         }
     }
 }
