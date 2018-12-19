@@ -13,7 +13,7 @@ namespace ChessAI
         //private Menu MyMenu { get; set; }
         private GameRun MyGame { get; set; }
 
-        private string MyTitleGameWindow = "TopDown basics";
+        private string MyTitleGameWindow = "Chess AI";
         private EnumMainState MyState = EnumMainState.GamePlayable;
         private double GameSizeCoefficient = 1.0d;
         

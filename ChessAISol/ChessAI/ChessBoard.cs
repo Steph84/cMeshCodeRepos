@@ -13,20 +13,16 @@ namespace ChessAI
     public class ChessBoard
     {
         private WindowDimension GameWindow { get; set; }
-
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
 
         private int RowNumber { get; set; }
         private int ColumnNumber { get; set; }
+        private int SquareSize { get; set; }
         public BoardSquare[,] Board { get; set; }
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
-
-
-        Vector2 SpriteOrigin = new Vector2();
-        SpriteEffects SpriteEffect = SpriteEffects.None;
 
         public class BoardSquare
         {
@@ -46,24 +42,27 @@ namespace ChessAI
 
             DarkSquare = Content.Load<Texture2D>("square brown dark_1x");
             LightSquare = Content.Load<Texture2D>("square brown light_1x");
+            
+            // we need 8 squares from the standard of 576
+            // it means that each square have to be 576/8 = 72, multiply by gameSizeCoef
+            SquareSize = (int)((GameWindow.ArrayResolution[0, 3] / RowNumber) * GameWindow.GameSizeCoefficient);
 
             InitializeChessBoard();
+
+            Piece.LoadPieceTextures(Content);
+            InitializeChessPieces();
         }
 
         private void InitializeChessBoard()
         {
             Board = new BoardSquare[RowNumber, ColumnNumber];
 
-            // we need 8 squares from the standard of 576
-            // it means that each square have to be 576/8 = 72, multiply by gameSizeCoef
-            int squareSize = (int)((GameWindow.ArrayResolution[0, 3] / RowNumber) * GameWindow.GameSizeCoefficient);
-
             for (int row = 0; row < RowNumber; row++)
             {
                 for (int column = 0; column < ColumnNumber; column++)
                 {
                     Board[row, column] = new BoardSquare();
-                    Board[row, column].SquareDestination = new Rectangle(column * squareSize, row * squareSize, squareSize, squareSize);
+                    Board[row, column].SquareDestination = new Rectangle(column * SquareSize, row * SquareSize, SquareSize, SquareSize);
                     if (IsEven(row + column))
                     {
                         Board[row, column].SquareTexture = LightSquare;
@@ -72,6 +71,34 @@ namespace ChessAI
                     {
                         Board[row, column].SquareTexture = DarkSquare;
                     }
+                    Board[row, column].Piece = null;
+                }
+            }
+        }
+
+        // TODO
+        private void InitializeChessPieces()
+        {
+            foreach (Piece.Color color in (Piece.Color[])Enum.GetValues(typeof(Piece.Color)))
+            {
+                for (int i = 1; i < 7; i++)
+                {
+                    Piece tempP = null;
+                    if (i == 1)
+                    {
+                        // queen and king
+                    }
+
+                    if (i < 3)
+                    {
+                        // rook, bishop and knight
+                    }
+
+                    // pawns
+                    tempP = new Piece(color, Piece.Type.Pawn, i);
+
+                    // add to the chessboard
+
                 }
             }
         }
