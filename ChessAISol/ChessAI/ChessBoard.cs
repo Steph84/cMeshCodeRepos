@@ -42,7 +42,7 @@ namespace ChessAI
 
             DarkSquare = Content.Load<Texture2D>("square brown dark_1x");
             LightSquare = Content.Load<Texture2D>("square brown light_1x");
-            
+
             // we need 8 squares from the standard of 576
             // it means that each square have to be 576/8 = 72, multiply by gameSizeCoef
             SquareSize = (int)((GameWindow.ArrayResolution[0, 3] / RowNumber) * GameWindow.GameSizeCoefficient);
@@ -76,29 +76,35 @@ namespace ChessAI
             }
         }
 
-        // TODO
         private void InitializeChessPieces()
         {
             foreach (Piece.Color color in (Piece.Color[])Enum.GetValues(typeof(Piece.Color)))
             {
-                for (int i = 1; i < 7; i++)
+                for (int i = 1; i < 9; i++)
                 {
-                    Piece tempP = null;
                     if (i == 1)
                     {
-                        // queen and king
+                        // create King and Queen
+                        Piece tempQ = new Piece(color, Piece.Type.Queen, i);
+                        Piece tempK = new Piece(color, Piece.Type.King, i);
+                        Board[tempQ.Position.Y, tempQ.Position.X].Piece = tempQ;
+                        Board[tempK.Position.Y, tempK.Position.X].Piece = tempK;
                     }
 
                     if (i < 3)
                     {
-                        // rook, bishop and knight
+                        // create Rooks, Bishops and Knights
+                        Piece tempR = new Piece(color, Piece.Type.Rook, i);
+                        Piece tempB = new Piece(color, Piece.Type.Bishop, i);
+                        Piece tempKn = new Piece(color, Piece.Type.Knight, i);
+                        Board[tempR.Position.Y, tempR.Position.X].Piece = tempR;
+                        Board[tempB.Position.Y, tempB.Position.X].Piece = tempB;
+                        Board[tempKn.Position.Y, tempKn.Position.X].Piece = tempKn;
                     }
 
                     // pawns
-                    tempP = new Piece(color, Piece.Type.Pawn, i);
-
-                    // add to the chessboard
-
+                    Piece tempP = new Piece(color, Piece.Type.Pawn, i);
+                    Board[tempP.Position.Y, tempP.Position.X].Piece = tempP;
                 }
             }
         }
@@ -111,6 +117,10 @@ namespace ChessAI
                 {
                     var tempSquare = Board[row, column];
                     SpriteBatch.Draw(tempSquare.SquareTexture, tempSquare.SquareDestination, null, Color.White);
+                    if(tempSquare.Piece != null)
+                    {
+                        SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
+                    }
                 }
             }
             //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));

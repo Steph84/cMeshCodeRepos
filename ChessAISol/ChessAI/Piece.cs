@@ -16,7 +16,7 @@ namespace ChessAI
         public int Index { get; set; }
         public Color PieceColor { get; set; }
         public Type PieceType { get; set; }
-        public Vector2 Position { get; set; }
+        public Point Position { get; set; }
         public Texture2D PieceTexture { get; set; }
         private static Dictionary<Type, Texture2D> DictCorresWhitePieceText { get; set; }
         private static Dictionary<Type, Texture2D> DictCorresBlackPieceText { get; set; }
@@ -47,8 +47,7 @@ namespace ChessAI
             InitPosition();
             InitTexture();
         }
-
-        // TODO
+        
         private void InitPosition()
         {
             switch (PieceColor)
@@ -61,17 +60,28 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
-                                    Position = new Vector2(0, 1);
+                                    Position = new Point(0, 1);
                                     break;
                                 case 2:
+                                    Position = new Point(1, 1);
                                     break;
                                 case 3:
+                                    Position = new Point(2, 1);
                                     break;
                                 case 4:
+                                    Position = new Point(3, 1);
                                     break;
                                 case 5:
+                                    Position = new Point(4, 1);
                                     break;
                                 case 6:
+                                    Position = new Point(5, 1);
+                                    break;
+                                case 7:
+                                    Position = new Point(6, 1);
+                                    break;
+                                case 8:
+                                    Position = new Point(7, 1);
                                     break;
                                 default:
                                     break;
@@ -81,8 +91,11 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(0, 0);
                                     break;
                                 case 2:
+                                    Position = new Point(7, 0);
+                                    break;
                                 default:
                                     break;
                             }
@@ -91,8 +104,11 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(1, 0);
                                     break;
                                 case 2:
+                                    Position = new Point(6, 0);
+                                    break;
                                 default:
                                     break;
                             }
@@ -101,15 +117,20 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(2, 0);
                                     break;
                                 case 2:
+                                    Position = new Point(5, 0);
+                                    break;
                                 default:
                                     break;
                             }
                             break;
                         case Type.Queen:
+                            Position = new Point(3, 0);
                             break;
                         case Type.King:
+                            Position = new Point(4, 0);
                             break;
                         default:
                             break;
@@ -125,17 +146,28 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
-                                    Position = new Vector2(0, 6);
+                                    Position = new Point(0, 6);
                                     break;
                                 case 2:
+                                    Position = new Point(1, 6);
                                     break;
                                 case 3:
+                                    Position = new Point(2, 6);
                                     break;
                                 case 4:
+                                    Position = new Point(3, 6);
                                     break;
                                 case 5:
+                                    Position = new Point(4, 6);
                                     break;
                                 case 6:
+                                    Position = new Point(5, 6);
+                                    break;
+                                case 7:
+                                    Position = new Point(6, 6);
+                                    break;
+                                case 8:
+                                    Position = new Point(7, 6);
                                     break;
                                 default:
                                     break;
@@ -145,8 +177,11 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(0, 7);
                                     break;
                                 case 2:
+                                    Position = new Point(7, 7);
+                                    break;
                                 default:
                                     break;
                             }
@@ -155,8 +190,11 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(1, 7);
                                     break;
                                 case 2:
+                                    Position = new Point(6, 7);
+                                    break;
                                 default:
                                     break;
                             }
@@ -165,15 +203,20 @@ namespace ChessAI
                             switch (Index)
                             {
                                 case 1:
+                                    Position = new Point(2, 7);
                                     break;
                                 case 2:
+                                    Position = new Point(5, 7);
+                                    break;
                                 default:
                                     break;
                             }
                             break;
                         case Type.Queen:
+                            Position = new Point(3, 7);
                             break;
                         case Type.King:
+                            Position = new Point(4, 7);
                             break;
                         default:
                             break;
@@ -221,13 +264,6 @@ namespace ChessAI
                 {Type.Queen, Content.Load<Texture2D>("w_queen_1x") },
                 {Type.King, Content.Load<Texture2D>("w_king_1x") }
             };
-            //DictCorresWhitePieceText = new Dictionary<Type, Texture2D>();
-            //DictCorresWhitePieceText[Type.Pawn] = Content.Load<Texture2D>("w_pawn_1x");
-            //DictCorresWhitePieceText[Type.Rook] = Content.Load<Texture2D>("w_rook_1x");
-            //DictCorresWhitePieceText[Type.Knight] = Content.Load<Texture2D>("w_knight_1x");
-            //DictCorresWhitePieceText[Type.Bishop] = Content.Load<Texture2D>("w_bishop_1x");
-            //DictCorresWhitePieceText[Type.Queen] = Content.Load<Texture2D>("w_queen_1x");
-            //DictCorresWhitePieceText[Type.King] = Content.Load<Texture2D>("w_king_1x");
         }
     }
 }
