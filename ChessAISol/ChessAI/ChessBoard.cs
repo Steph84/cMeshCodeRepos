@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,9 @@ namespace ChessAI
 
         private int RowNumber { get; set; }
         private int ColumnNumber { get; set; }
-        private int SquareSize { get; set; }
-        public BoardSquare[,] Board { get; set; }
+        public static int SquareSize { get; set; }
+        private static int BoardSize { get; set; }
+        public static BoardSquare[,] Board { get; set; }
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
@@ -46,6 +48,7 @@ namespace ChessAI
             // we need 8 squares from the standard of 576
             // it means that each square have to be 576/8 = 72, multiply by gameSizeCoef
             SquareSize = (int)((GameWindow.ArrayResolution[0, 3] / RowNumber) * GameWindow.GameSizeCoefficient);
+            BoardSize = SquareSize * RowNumber;
 
             InitializeChessBoard();
 
@@ -131,7 +134,20 @@ namespace ChessAI
         {
             return value % 2 == 0;
         }
+
+        public static BoardSquare InWhichSquareAreWe(MouseState currentState)
+        {
+            if(currentState.X < BoardSize && currentState.X > 0 && currentState.Y < BoardSize && currentState.Y > 0)
+            {
+                int tempRow = (int)Math.Floor((decimal)(currentState.Y / SquareSize));
+                int tempCol = (int)Math.Floor((decimal)(currentState.X / SquareSize));
+
+                return Board[tempRow, tempCol];
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }
-
-//MapTextureGrid[row, column]

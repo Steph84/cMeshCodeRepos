@@ -45,6 +45,8 @@ namespace ChessAI
             // update GameSizeCoefficient properties
             GameSizeCoefficient = MyWindow.GameSizeCoefficient;
 
+            this.IsMouseVisible = true;
+
             base.Initialize();
         }
 

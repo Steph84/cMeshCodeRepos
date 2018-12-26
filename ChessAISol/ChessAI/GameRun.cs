@@ -15,6 +15,7 @@ namespace ChessAI
         private SpriteBatch SpriteBatch { get; set; }
 
         public ChessBoard ChessBoard { get; set; }
+        public Player Player { get; set; }
 
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
@@ -25,11 +26,12 @@ namespace ChessAI
             Content = pContent;
 
             ChessBoard = new ChessBoard(pGameWindow, pContent, pSpriteBatch);
+            Player = new Player(pSpriteBatch);
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-
+            Player.PlayerUpdate(pGameTime);
 
             return pMyState;
         }
@@ -37,6 +39,7 @@ namespace ChessAI
         public void GameRunDraw(GameTime pGameTime)
         {
             ChessBoard.ChessBoardDraw(pGameTime);
+            Player.PlayerDraw(pGameTime);
         }
     }
 }
