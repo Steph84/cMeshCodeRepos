@@ -1,11 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ChessAI
 {
@@ -18,9 +14,13 @@ namespace ChessAI
         public Type PieceType { get; set; }
         public Point Position { get; set; }
         public Texture2D PieceTexture { get; set; }
-        private static Dictionary<Type, Texture2D> DictCorresWhitePieceText { get; set; }
-        private static Dictionary<Type, Texture2D> DictCorresBlackPieceText { get; set; }
+        public List<Point> ListPossibleMoves { get; set; }
+        public int NbMove { get; set; }
+        public int Speed { get; set; }
 
+        static Dictionary<Type, Texture2D> DictCorresWhitePieceText;
+        static Dictionary<Type, Texture2D> DictCorresBlackPieceText;
+        
         public enum Type
         {
             Pawn = 1,
@@ -44,10 +44,36 @@ namespace ChessAI
             PieceColor = pieceColor;
             PieceType = pieceType;
             Index = index;
+            NbMove = 0;
+            ListPossibleMoves = new List<Point>();
             InitPosition();
             InitTexture();
+            InitSpeed();
         }
         
+        private void InitSpeed()
+        {
+            switch (PieceType)
+            {
+                case Type.Pawn:
+                    Speed = 2;
+                    break;
+                case Type.Knight:
+                    Speed = -1; // specific movement
+                    break;
+                case Type.King:
+                    Speed = 1;
+                    break;
+                case Type.Rook:
+                case Type.Bishop:
+                case Type.Queen:
+                    Speed = 7; // max movement in a 8x8 board
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void InitPosition()
         {
             switch (PieceColor)

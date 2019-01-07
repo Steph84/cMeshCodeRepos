@@ -40,12 +40,38 @@ namespace ChessAI
             if (newState.LeftButton == ButtonState.Pressed && oldState.LeftButton != ButtonState.Released)
             {
                 temp = EnumMouse.Press;
-                BoardSquare tempSquare = InWhichSquareAreWe(newState);
-                if (tempSquare != null && tempSquare.Piece != null && tempSquare.Piece.PieceColor == Piece.Color.White)
+                BoardSquare tempSquare = InWhichSquareAreWeByPixel(newState);
+
+                // if we are on the chess board
+                if (tempSquare != null)
                 {
-                    Piece = tempSquare.Piece;
-                    IsHolding = true;
-                    tempSquare.Piece = null;
+                    // if I don't have a piece in my hand
+                    if (Piece == null)
+                    {
+                        if (tempSquare.Piece != null && tempSquare.Piece.PieceColor == Piece.Color.White)
+                        {
+                            Piece = tempSquare.Piece;
+                            IsHolding = true;
+                            tempSquare.Piece = null;
+
+                            // as soon as I have the piece, I find all the possible moves
+
+                        }
+                    }
+                    // if I do have a piece in my hand
+                    else
+                    {
+                        // if we are on an empty square
+                        if (tempSquare.Piece == null)
+                        {
+                            // check if the move is correct
+                        }
+                        // if we are on square with a piece
+                        else
+                        {
+
+                        }
+                    }
                 }
             }
             else if (newState.LeftButton == ButtonState.Pressed && oldState.LeftButton == ButtonState.Released)

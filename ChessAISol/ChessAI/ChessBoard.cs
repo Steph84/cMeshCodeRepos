@@ -17,14 +17,24 @@ namespace ChessAI
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
 
-        private int RowNumber { get; set; }
-        private int ColumnNumber { get; set; }
+        private static int RowNumber { get; set; }
+        private static int ColumnNumber { get; set; }
         public static int SquareSize { get; set; }
         private static int BoardSize { get; set; }
         public static BoardSquare[,] Board { get; set; }
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
+
+        [Flags]
+        public enum EnumDirection
+        {
+            North = 1,
+            East = 2,
+            South = 4,
+            West = 8,
+            None = 16
+        }
 
         public class BoardSquare
         {
@@ -54,6 +64,79 @@ namespace ChessAI
 
             Piece.LoadPieceTextures(Content);
             InitializeChessPieces();
+
+            SearchPossibleMoves();
+        }
+
+        // TODO
+        private void SearchPossibleMoves()
+        {
+            for (int row = 0; row < RowNumber; row++)
+            {
+                for (int column = 0; column < ColumnNumber; column++)
+                {
+                    BoardSquare tempSquare = Board[row, column];
+                    if (tempSquare.Piece != null)
+                    {
+                        // check possible moves
+                        switch (tempSquare.Piece.PieceType)
+                        {
+                            case Piece.Type.Pawn:
+                                {
+                                    for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                    {
+                                        Point tempCoord = new Point();
+
+                                        switch (tempSquare.Piece.PieceColor)
+                                        {
+                                            case Piece.Color.Black:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
+                                                break;
+                                            case Piece.Color.White:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        BoardSquare item = InWhichSquareAreWeByCoord(tempCoord);
+
+                                        if (item == null)
+                                        {
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            if (item.Piece == null)
+                                            {
+                                                tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case Piece.Type.Rook:
+                                break;
+                            case Piece.Type.Knight:
+                                break;
+                            case Piece.Type.Bishop:
+                                break;
+                            case Piece.Type.Queen:
+                                break;
+                            case Piece.Type.King:
+                                break;
+                            default:
+                                break;
+                        }
+
+
+                    }
+                }
+            }
         }
 
         private void InitializeChessBoard()
@@ -120,7 +203,7 @@ namespace ChessAI
                 {
                     var tempSquare = Board[row, column];
                     SpriteBatch.Draw(tempSquare.SquareTexture, tempSquare.SquareDestination, null, Color.White);
-                    if(tempSquare.Piece != null)
+                    if (tempSquare.Piece != null)
                     {
                         SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
                     }
@@ -135,14 +218,26 @@ namespace ChessAI
             return value % 2 == 0;
         }
 
-        public static BoardSquare InWhichSquareAreWe(MouseState currentState)
+        public static BoardSquare InWhichSquareAreWeByPixel(MouseState currentState)
         {
-            if(currentState.X < BoardSize && currentState.X > 0 && currentState.Y < BoardSize && currentState.Y > 0)
+            if (currentState.X < BoardSize && currentState.X > 0 && currentState.Y < BoardSize && currentState.Y > 0)
             {
                 int tempRow = (int)Math.Floor((decimal)(currentState.Y / SquareSize));
                 int tempCol = (int)Math.Floor((decimal)(currentState.X / SquareSize));
 
                 return Board[tempRow, tempCol];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private static BoardSquare InWhichSquareAreWeByCoord(Point posToCheck)
+        {
+            if (posToCheck.X < ColumnNumber && posToCheck.X >= 0 && posToCheck.Y < RowNumber && posToCheck.Y >= 0)
+            {
+                return Board[posToCheck.Y, posToCheck.X];
             }
             else
             {
