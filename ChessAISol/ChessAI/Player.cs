@@ -48,7 +48,7 @@ namespace ChessAI
                     // if I don't have a piece in my hand
                     if (Piece == null)
                     {
-                        if (tempSquare.Piece != null && tempSquare.Piece.PieceColor == Piece.Color.White)
+                        if (tempSquare.Piece != null && tempSquare.Piece.PieceColor == Piece.PieceColors.White)
                         {
                             Piece = tempSquare.Piece;
                             IsHolding = true;

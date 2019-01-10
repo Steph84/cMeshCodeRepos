@@ -4,15 +4,13 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static ChessAI.Piece;
 
 namespace ChessAI
 {
     public class ChessBoard
     {
+        #region Attributes
         private WindowDimension GameWindow { get; set; }
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
@@ -25,16 +23,7 @@ namespace ChessAI
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
-
-        [Flags]
-        public enum EnumDirection
-        {
-            North = 1,
-            East = 2,
-            South = 4,
-            West = 8,
-            None = 16
-        }
+        #endregion
 
         public class BoardSquare
         {
@@ -68,6 +57,7 @@ namespace ChessAI
             SearchPossibleMoves();
         }
 
+        #region Methods
         // TODO
         private void SearchPossibleMoves()
         {
@@ -81,6 +71,7 @@ namespace ChessAI
                         // check possible moves
                         switch (tempSquare.Piece.PieceType)
                         {
+                            #region PAWN TODO dig eat
                             case Piece.Type.Pawn:
                                 {
                                     for (int i = 1; i <= tempSquare.Piece.Speed; i++)
@@ -89,10 +80,10 @@ namespace ChessAI
 
                                         switch (tempSquare.Piece.PieceColor)
                                         {
-                                            case Piece.Color.Black:
+                                            case PieceColors.Black:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
                                                 break;
-                                            case Piece.Color.White:
+                                            case PieceColors.White:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
                                                 break;
                                             default:
@@ -116,24 +107,111 @@ namespace ChessAI
                                                 break;
                                             }
                                         }
+
+                                        // TODO manage diagonal eat...
                                     }
                                 }
                                 break;
+                            #endregion
                             case Piece.Type.Rook:
                                 break;
+                            #region KNIGHT
                             case Piece.Type.Knight:
+                                {
+                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    {
+                                        Point tempCoord = new Point();
+                                        switch (dir)
+                                        {
+                                            case EnumDirection.NorthNorthEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 2);
+                                                break;
+                                            case EnumDirection.NorthEastEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y - 1);
+                                                break;
+                                            case EnumDirection.SouthEastEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y + 1);
+                                                break;
+                                            case EnumDirection.SouthSouthEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 2);
+                                                break;
+                                            case EnumDirection.SouthSouthWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 2);
+                                                break;
+                                            case EnumDirection.SouthWestWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y + 1);
+                                                break;
+                                            case EnumDirection.NorthWestWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y - 1);
+                                                break;
+                                            case EnumDirection.NorthNorthWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 2);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        BoardSquare item = InWhichSquareAreWeByCoord(tempCoord);
+                                        if (item != null && item.Piece == null)
+                                        {
+                                            tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                        }
+                                    }
+                                }
                                 break;
+                            #endregion
                             case Piece.Type.Bishop:
                                 break;
                             case Piece.Type.Queen:
                                 break;
+                            #region KING
                             case Piece.Type.King:
+                                {
+                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    {
+                                        Point tempCoord = new Point();
+                                        switch (dir)
+                                        {
+                                            case EnumDirection.North:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - 1);
+                                                break;
+                                            case EnumDirection.NorthEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 1);
+                                                break;
+                                            case EnumDirection.East:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y);
+                                                break;
+                                            case EnumDirection.SouthEast:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 1);
+                                                break;
+                                            case EnumDirection.South:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + 1);
+                                                break;
+                                            case EnumDirection.SouthWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 1);
+                                                break;
+                                            case EnumDirection.West:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y);
+                                                break;
+                                            case EnumDirection.NorthWest:
+                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 1);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+
+                                        BoardSquare item = InWhichSquareAreWeByCoord(tempCoord);
+                                        if (item != null && item.Piece == null)
+                                        {
+                                            tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                        }
+                                    }
+                                }
                                 break;
+                            #endregion
                             default:
                                 break;
                         }
-
-
                     }
                 }
             }
@@ -164,7 +242,7 @@ namespace ChessAI
 
         private void InitializeChessPieces()
         {
-            foreach (Piece.Color color in (Piece.Color[])Enum.GetValues(typeof(Piece.Color)))
+            foreach (Piece.PieceColors color in (Piece.PieceColors[])Enum.GetValues(typeof(Piece.PieceColors)))
             {
                 for (int i = 1; i < 9; i++)
                 {
@@ -244,5 +322,6 @@ namespace ChessAI
                 return null;
             }
         }
+        #endregion
     }
 }

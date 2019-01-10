@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace ChessAI
@@ -10,13 +11,15 @@ namespace ChessAI
         #region Attributes
         public bool IsOnTheBoard { get; set; }
         public int Index { get; set; }
-        public Color PieceColor { get; set; }
+        public PieceColors PieceColor { get; set; }
         public Type PieceType { get; set; }
         public Point Position { get; set; }
         public Texture2D PieceTexture { get; set; }
         public List<Point> ListPossibleMoves { get; set; }
         public int NbMove { get; set; }
         public int Speed { get; set; }
+        public List<EnumDirection> ListDirections { get; set; }
+        #endregion
 
         static Dictionary<Type, Texture2D> DictCorresWhitePieceText;
         static Dictionary<Type, Texture2D> DictCorresBlackPieceText;
@@ -31,14 +34,34 @@ namespace ChessAI
             King = 6
         }
 
-        public enum Color
+        public enum PieceColors
         {
             Black = 0,
             White = 1
         }
-        #endregion
+        
+        public enum EnumDirection
+        {
+            None = 0,
+            North = 1,
+            NorthNorthEast = 2,
+            NorthEast = 3,
+            NorthEastEast = 4,
+            East = 5,
+            SouthEastEast = 6,
+            SouthEast = 7,
+            SouthSouthEast = 8,
+            South = 9,
+            SouthSouthWest = 10,
+            SouthWest = 11,
+            SouthWestWest = 12,
+            West = 13,
+            NorthWestWest = 14,
+            NorthWest = 15,
+            NorthNorthWest = 16
+        }
 
-        public Piece(Color pieceColor, Type pieceType, int index)
+        public Piece(PieceColors pieceColor, Type pieceType, int index)
         {
             IsOnTheBoard = true;
             PieceColor = pieceColor;
@@ -49,8 +72,67 @@ namespace ChessAI
             InitPosition();
             InitTexture();
             InitSpeed();
+            InitListDirections();
         }
-        
+
+        #region Methods
+        private void InitListDirections()
+        {
+            switch (PieceType)
+            {
+                case Type.Pawn:
+                    ListDirections = null;
+                    break;
+                case Type.Knight:
+                    ListDirections = new List<EnumDirection>()
+                    {
+                        EnumDirection.NorthNorthEast,
+                        EnumDirection.NorthEastEast,
+                        EnumDirection.SouthEastEast,
+                        EnumDirection.SouthSouthEast,
+                        EnumDirection.SouthSouthWest,
+                        EnumDirection.SouthWestWest,
+                        EnumDirection.NorthWestWest,
+                        EnumDirection.NorthNorthWest
+                    };
+                    break;
+                case Type.Rook:
+                    ListDirections = new List<EnumDirection>()
+                    {
+                        EnumDirection.North,
+                        EnumDirection.East,
+                        EnumDirection.South,
+                        EnumDirection.West,
+                    };
+                    break;
+                case Type.Bishop:
+                    ListDirections = new List<EnumDirection>()
+                    {
+                        EnumDirection.NorthEast,
+                        EnumDirection.SouthEast,
+                        EnumDirection.SouthWest,
+                        EnumDirection.NorthWest
+                    };
+                    break;
+                case Type.King:
+                case Type.Queen:
+                    ListDirections = new List<EnumDirection>()
+                    {
+                        EnumDirection.North,
+                        EnumDirection.NorthEast,
+                        EnumDirection.East,
+                        EnumDirection.SouthEast,
+                        EnumDirection.South,
+                        EnumDirection.SouthWest,
+                        EnumDirection.West,
+                        EnumDirection.NorthWest
+                    };
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void InitSpeed()
         {
             switch (PieceType)
@@ -79,7 +161,7 @@ namespace ChessAI
             switch (PieceColor)
             {
                 #region Black
-                case Color.Black:
+                case PieceColors.Black:
                     switch (PieceType)
                     {
                         case Type.Pawn:
@@ -165,7 +247,7 @@ namespace ChessAI
                 #endregion
 
                 #region White
-                case Color.White:
+                case PieceColors.White:
                     switch (PieceType)
                     {
                         case Type.Pawn:
@@ -258,10 +340,10 @@ namespace ChessAI
         {
             switch (PieceColor)
             {
-                case Color.Black:
+                case PieceColors.Black:
                     PieceTexture = DictCorresBlackPieceText[PieceType];
                     break;
-                case Color.White:
+                case PieceColors.White:
                     PieceTexture = DictCorresWhitePieceText[PieceType];
                     break;
                 default:
@@ -291,5 +373,6 @@ namespace ChessAI
                 {Type.King, Content.Load<Texture2D>("w_king_1x") }
             };
         }
+        #endregion
     }
 }
