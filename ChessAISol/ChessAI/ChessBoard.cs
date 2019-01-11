@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using static ChessAI.Piece;
+using System.Collections.Generic;
 
 namespace ChessAI
 {
@@ -20,6 +20,7 @@ namespace ChessAI
         public static int SquareSize { get; set; }
         private static int BoardSize { get; set; }
         public static BoardSquare[,] Board { get; set; }
+        public static List<Piece> OffBoardPieces { get; set; }
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
@@ -28,6 +29,7 @@ namespace ChessAI
         public class BoardSquare
         {
             public Rectangle SquareDestination { get; set; }
+            public Point SquareCoordinate { get; set; }
             public Texture2D SquareTexture { get; set; }
             public Piece Piece { get; set; }
         }
@@ -58,8 +60,7 @@ namespace ChessAI
         }
 
         #region Methods
-        // TODO
-        private void SearchPossibleMoves()
+        public static void SearchPossibleMoves()
         {
             for (int row = 0; row < RowNumber; row++)
             {
@@ -80,10 +81,10 @@ namespace ChessAI
 
                                         switch (tempSquare.Piece.PieceColor)
                                         {
-                                            case PieceColors.Black:
+                                            case Piece.PieceColors.Black:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
                                                 break;
-                                            case PieceColors.White:
+                                            case Piece.PieceColors.White:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
                                                 break;
                                             default:
@@ -113,8 +114,36 @@ namespace ChessAI
                                 }
                                 break;
                             #endregion
+                            #region ROOK
                             case Piece.Type.Rook:
+                                {
+                                    for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                    {
+                                        foreach (var dir in tempSquare.Piece.ListDirections)
+                                        {
+                                            Point tempCoord = new Point();
+                                            switch (dir)
+                                            {
+                                                case Piece.EnumDirection.North:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                case Piece.EnumDirection.East:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y);
+                                                    break;
+                                                case Piece.EnumDirection.South:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.West:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
                                 break;
+                            #endregion
                             #region KNIGHT
                             case Piece.Type.Knight:
                                 {
@@ -123,28 +152,28 @@ namespace ChessAI
                                         Point tempCoord = new Point();
                                         switch (dir)
                                         {
-                                            case EnumDirection.NorthNorthEast:
+                                            case Piece.EnumDirection.NorthNorthEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 2);
                                                 break;
-                                            case EnumDirection.NorthEastEast:
+                                            case Piece.EnumDirection.NorthEastEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y - 1);
                                                 break;
-                                            case EnumDirection.SouthEastEast:
+                                            case Piece.EnumDirection.SouthEastEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y + 1);
                                                 break;
-                                            case EnumDirection.SouthSouthEast:
+                                            case Piece.EnumDirection.SouthSouthEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 2);
                                                 break;
-                                            case EnumDirection.SouthSouthWest:
+                                            case Piece.EnumDirection.SouthSouthWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 2);
                                                 break;
-                                            case EnumDirection.SouthWestWest:
+                                            case Piece.EnumDirection.SouthWestWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y + 1);
                                                 break;
-                                            case EnumDirection.NorthWestWest:
+                                            case Piece.EnumDirection.NorthWestWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y - 1);
                                                 break;
-                                            case EnumDirection.NorthNorthWest:
+                                            case Piece.EnumDirection.NorthNorthWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 2);
                                                 break;
                                             default:
@@ -160,10 +189,78 @@ namespace ChessAI
                                 }
                                 break;
                             #endregion
+                            #region BISHOP
                             case Piece.Type.Bishop:
+                                {
+                                    for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                    {
+                                        foreach (var dir in tempSquare.Piece.ListDirections)
+                                        {
+                                            Point tempCoord = new Point();
+                                            switch (dir)
+                                            {
+                                                case Piece.EnumDirection.NorthEast:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                case Piece.EnumDirection.SouthEast:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.SouthWest:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.NorthWest:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
                                 break;
+                            #endregion
+                            #region QUEEN
                             case Piece.Type.Queen:
+                                {
+                                    for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                    {
+                                        foreach (var dir in tempSquare.Piece.ListDirections)
+                                        {
+                                            Point tempCoord = new Point();
+                                            switch (dir)
+                                            {
+                                                case Piece.EnumDirection.North:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                case Piece.EnumDirection.NorthEast:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                case Piece.EnumDirection.East:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y);
+                                                    break;
+                                                case Piece.EnumDirection.SouthEast:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.South:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.SouthWest:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 1);
+                                                    break;
+                                                case Piece.EnumDirection.West:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y);
+                                                    break;
+                                                case Piece.EnumDirection.NorthWest:
+                                                    tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 1);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                }
                                 break;
+                            #endregion
                             #region KING
                             case Piece.Type.King:
                                 {
@@ -172,28 +269,28 @@ namespace ChessAI
                                         Point tempCoord = new Point();
                                         switch (dir)
                                         {
-                                            case EnumDirection.North:
+                                            case Piece.EnumDirection.North:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - 1);
                                                 break;
-                                            case EnumDirection.NorthEast:
+                                            case Piece.EnumDirection.NorthEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 1);
                                                 break;
-                                            case EnumDirection.East:
+                                            case Piece.EnumDirection.East:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y);
                                                 break;
-                                            case EnumDirection.SouthEast:
+                                            case Piece.EnumDirection.SouthEast:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 1);
                                                 break;
-                                            case EnumDirection.South:
+                                            case Piece.EnumDirection.South:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + 1);
                                                 break;
-                                            case EnumDirection.SouthWest:
+                                            case Piece.EnumDirection.SouthWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 1);
                                                 break;
-                                            case EnumDirection.West:
+                                            case Piece.EnumDirection.West:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y);
                                                 break;
-                                            case EnumDirection.NorthWest:
+                                            case Piece.EnumDirection.NorthWest:
                                                 tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 1);
                                                 break;
                                             default:
@@ -236,6 +333,7 @@ namespace ChessAI
                         Board[row, column].SquareTexture = DarkSquare;
                     }
                     Board[row, column].Piece = null;
+                    Board[row, column].SquareCoordinate = new Point(column, row);
                 }
             }
         }
@@ -273,23 +371,6 @@ namespace ChessAI
             }
         }
 
-        public void ChessBoardDraw(GameTime pGameTime)
-        {
-            for (int row = 0; row < RowNumber; row++)
-            {
-                for (int column = 0; column < ColumnNumber; column++)
-                {
-                    var tempSquare = Board[row, column];
-                    SpriteBatch.Draw(tempSquare.SquareTexture, tempSquare.SquareDestination, null, Color.White);
-                    if (tempSquare.Piece != null)
-                    {
-                        SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
-                    }
-                }
-            }
-            //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
-        }
-
         // if the number is even (pair)
         private bool IsEven(int value)
         {
@@ -321,6 +402,25 @@ namespace ChessAI
             {
                 return null;
             }
+        }
+        #endregion
+
+        #region Game Methods
+        public void ChessBoardDraw(GameTime pGameTime)
+        {
+            for (int row = 0; row < RowNumber; row++)
+            {
+                for (int column = 0; column < ColumnNumber; column++)
+                {
+                    var tempSquare = Board[row, column];
+                    SpriteBatch.Draw(tempSquare.SquareTexture, tempSquare.SquareDestination, null, Color.White);
+                    if (tempSquare.Piece != null)
+                    {
+                        SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
+                    }
+                }
+            }
+            //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
         }
         #endregion
     }

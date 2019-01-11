@@ -9,7 +9,6 @@ namespace ChessAI
     public class Piece
     {
         #region Attributes
-        public bool IsOnTheBoard { get; set; }
         public int Index { get; set; }
         public PieceColors PieceColor { get; set; }
         public Type PieceType { get; set; }
@@ -63,7 +62,6 @@ namespace ChessAI
 
         public Piece(PieceColors pieceColor, Type pieceType, int index)
         {
-            IsOnTheBoard = true;
             PieceColor = pieceColor;
             PieceType = pieceType;
             Index = index;
