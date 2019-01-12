@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 
 namespace ChessAI
@@ -22,7 +21,7 @@ namespace ChessAI
 
         static Dictionary<Type, Texture2D> DictCorresWhitePieceText;
         static Dictionary<Type, Texture2D> DictCorresBlackPieceText;
-        
+
         public enum Type
         {
             Pawn = 1,
@@ -38,7 +37,7 @@ namespace ChessAI
             Black = 0,
             White = 1
         }
-        
+
         public enum EnumDirection
         {
             None = 0,
@@ -79,7 +78,27 @@ namespace ChessAI
             switch (PieceType)
             {
                 case Type.Pawn:
-                    ListDirections = null;
+                    switch (PieceColor)
+                    {
+                        case PieceColors.Black:
+                            ListDirections = new List<EnumDirection>()
+                            {
+                                EnumDirection.SouthEast,
+                                EnumDirection.South,
+                                EnumDirection.SouthWest
+                            };
+                            break;
+                        case PieceColors.White:
+                            ListDirections = new List<EnumDirection>()
+                            {
+                                EnumDirection.North,
+                                EnumDirection.NorthEast,
+                                EnumDirection.NorthWest
+                            };
+                            break;
+                        default:
+                            break;
+                    }
                     break;
                 case Type.Knight:
                     ListDirections = new List<EnumDirection>()

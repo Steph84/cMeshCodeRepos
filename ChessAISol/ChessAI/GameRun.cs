@@ -16,7 +16,16 @@ namespace ChessAI
 
         public ChessBoard ChessBoard { get; set; }
         public Player Player { get; set; }
+        public Computer Computer { get; set; }
+        public PlayerTurn Turn { get; set; }
 
+        public enum PlayerTurn
+        {
+            Computer = 0,
+            Player = 1,
+            None = 2
+        }
+        
         public GameRun(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindowWidth = pGameWindow.GameWindowWidth;
@@ -27,11 +36,23 @@ namespace ChessAI
 
             ChessBoard = new ChessBoard(pGameWindow, pContent, pSpriteBatch);
             Player = new Player(pSpriteBatch);
+            Computer = new Computer();
+            Turn = PlayerTurn.Player;
         }
 
         public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
         {
-            Player.PlayerUpdate(pGameTime);
+            switch (Turn)
+            {
+                case PlayerTurn.Computer:
+                    Turn = Computer.ComputerUpdate(pGameTime, Turn);
+                    break;
+                case PlayerTurn.Player:
+                    Turn = Player.PlayerUpdate(pGameTime, Turn);
+                    break;
+                default:
+                    break;
+            }
 
             return pMyState;
         }

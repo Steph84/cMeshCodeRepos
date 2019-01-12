@@ -15,10 +15,11 @@ namespace ChessAI
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
 
-        private static int RowNumber { get; set; }
-        private static int ColumnNumber { get; set; }
-        public static int SquareSize { get; set; }
         private static int BoardSize { get; set; }
+
+        public static int RowNumber { get; set; }
+        public static int ColumnNumber { get; set; }
+        public static int SquareSize { get; set; }
         public static BoardSquare[,] Board { get; set; }
         public static List<Piece> OffBoardPieces { get; set; }
 
@@ -67,50 +68,106 @@ namespace ChessAI
             {
                 for (int column = 0; column < ColumnNumber; column++)
                 {
-                    BoardSquare tempSquare = Board[row, column];
-                    if (tempSquare.Piece != null)
+                    BoardSquare sqrToProbe = Board[row, column];
+                    if (sqrToProbe.Piece != null)
                     {
-                        tempSquare.Piece.ListPossibleMoves = new List<Point>();
+                        sqrToProbe.Piece.ListPossibleMoves = new List<Point>();
                         // check possible moves
-                        switch (tempSquare.Piece.PieceType)
+                        switch (sqrToProbe.Piece.PieceType)
                         {
                             #region PAWN TODO dig eat
                             case Piece.Type.Pawn:
                                 {
-                                    for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
-                                        Point tempCoord = new Point();
+                                        for (int i = 1; i <= sqrToProbe.Piece.Speed; i++)
+                                        {
+                                            Point tempCoord = new Point();
 
-                                        switch (tempSquare.Piece.PieceColor)
-                                        {
-                                            case Piece.PieceColors.Black:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
-                                                break;
-                                            case Piece.PieceColors.White:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
-                                                break;
-                                            default:
-                                                break;
-                                        }
-
-                                        BoardSquare item = InWhichSquareAreWeByCoord(tempCoord);
-                                        if (item == null)
-                                        {
-                                            break;
-                                        }
-                                        else
-                                        {
-                                            if (item.Piece == null)
+                                            switch (sqrToProbe.Piece.PieceColor)
                                             {
-                                                tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                #region Black piece
+                                                case Piece.PieceColors.Black:
+                                                    {
+                                                        switch (dir)
+                                                        {
+                                                            case Piece.EnumDirection.SouthEast:
+                                                                if (i == 1)
+                                                                {
+                                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y + i);
+                                                                }
+                                                                break;
+                                                            case Piece.EnumDirection.South:
+                                                                tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y + i);
+                                                                break;
+                                                            case Piece.EnumDirection.SouthWest:
+                                                                if (i == 1)
+                                                                {
+                                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y + i);
+                                                                }
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                    break;
+                                                #endregion
+                                                #region White piece
+                                                case Piece.PieceColors.White:
+                                                    {
+                                                        switch (dir)
+                                                        {
+                                                            case Piece.EnumDirection.North:
+                                                                tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y - i);
+                                                                break;
+                                                            case Piece.EnumDirection.NorthEast:
+                                                                if (i == 1)
+                                                                {
+                                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y - i);
+                                                                }
+                                                                break;
+                                                            case Piece.EnumDirection.NorthWest:
+                                                                if (i == 1)
+                                                                {
+                                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y - i);
+                                                                }
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                    break;
+                                                #endregion
+                                                default:
+                                                    break;
+                                            }
+
+                                            BoardSquare item = InWhichSquareAreWeByCoord(tempCoord);
+                                            if (item == null)
+                                            {
+                                                continue;
                                             }
                                             else
                                             {
-                                                break;
+                                                if (item.Piece == null)
+                                                {
+                                                    if (dir == Piece.EnumDirection.North || dir == Piece.EnumDirection.South)
+                                                    {
+                                                        sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor
+                                                        && dir != Piece.EnumDirection.North
+                                                        && dir != Piece.EnumDirection.South)
+                                                    {
+                                                        sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    }
+                                                    continue;
+                                                }
                                             }
                                         }
-
-                                        // TODO manage diagonal eat...
                                     }
                                 }
                                 break;
@@ -118,24 +175,24 @@ namespace ChessAI
                             #region ROOK
                             case Piece.Type.Rook:
                                 {
-                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
-                                        for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                        for (int i = 1; i <= sqrToProbe.Piece.Speed; i++)
                                         {
                                             Point tempCoord = new Point();
                                             switch (dir)
                                             {
                                                 case Piece.EnumDirection.North:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 case Piece.EnumDirection.East:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y);
                                                     break;
                                                 case Piece.EnumDirection.South:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.West:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y);
                                                     break;
                                                 default:
                                                     break;
@@ -150,13 +207,13 @@ namespace ChessAI
                                             {
                                                 if (item.Piece == null)
                                                 {
-                                                    tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                 }
                                                 else
                                                 {
-                                                    if(tempSquare.Piece.PieceColor != item.Piece.PieceColor)
+                                                    if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor)
                                                     {
-                                                        tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                        sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                     }
                                                     break;
                                                 }
@@ -169,34 +226,34 @@ namespace ChessAI
                             #region KNIGHT
                             case Piece.Type.Knight:
                                 {
-                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
                                         Point tempCoord = new Point();
                                         switch (dir)
                                         {
                                             case Piece.EnumDirection.NorthNorthEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 2);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 1, sqrToProbe.Piece.Position.Y - 2);
                                                 break;
                                             case Piece.EnumDirection.NorthEastEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y - 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 2, sqrToProbe.Piece.Position.Y - 1);
                                                 break;
                                             case Piece.EnumDirection.SouthEastEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 2, tempSquare.Piece.Position.Y + 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 2, sqrToProbe.Piece.Position.Y + 1);
                                                 break;
                                             case Piece.EnumDirection.SouthSouthEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 2);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 1, sqrToProbe.Piece.Position.Y + 2);
                                                 break;
                                             case Piece.EnumDirection.SouthSouthWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 2);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 1, sqrToProbe.Piece.Position.Y + 2);
                                                 break;
                                             case Piece.EnumDirection.SouthWestWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y + 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 2, sqrToProbe.Piece.Position.Y + 1);
                                                 break;
                                             case Piece.EnumDirection.NorthWestWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 2, tempSquare.Piece.Position.Y - 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 2, sqrToProbe.Piece.Position.Y - 1);
                                                 break;
                                             case Piece.EnumDirection.NorthNorthWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 2);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 1, sqrToProbe.Piece.Position.Y - 2);
                                                 break;
                                             default:
                                                 break;
@@ -211,13 +268,13 @@ namespace ChessAI
                                         {
                                             if (item.Piece == null)
                                             {
-                                                tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                             }
                                             else
                                             {
-                                                if (tempSquare.Piece.PieceColor != item.Piece.PieceColor)
+                                                if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor)
                                                 {
-                                                    tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                 }
                                                 continue;
                                             }
@@ -229,24 +286,24 @@ namespace ChessAI
                             #region BISHOP
                             case Piece.Type.Bishop:
                                 {
-                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
-                                        for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                        for (int i = 1; i <= sqrToProbe.Piece.Speed; i++)
                                         {
                                             Point tempCoord = new Point();
                                             switch (dir)
                                             {
                                                 case Piece.EnumDirection.NorthEast:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 case Piece.EnumDirection.SouthEast:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.SouthWest:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.NorthWest:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 default:
                                                     break;
@@ -261,13 +318,13 @@ namespace ChessAI
                                             {
                                                 if (item.Piece == null)
                                                 {
-                                                    tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                 }
                                                 else
                                                 {
-                                                    if (tempSquare.Piece.PieceColor != item.Piece.PieceColor)
+                                                    if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor)
                                                     {
-                                                        tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                        sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                     }
                                                     break;
                                                 }
@@ -280,36 +337,36 @@ namespace ChessAI
                             #region QUEEN
                             case Piece.Type.Queen:
                                 {
-                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
-                                        for (int i = 1; i <= tempSquare.Piece.Speed; i++)
+                                        for (int i = 1; i <= sqrToProbe.Piece.Speed; i++)
                                         {
                                             Point tempCoord = new Point();
                                             switch (dir)
                                             {
                                                 case Piece.EnumDirection.North:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 case Piece.EnumDirection.NorthEast:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 case Piece.EnumDirection.East:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y);
                                                     break;
                                                 case Piece.EnumDirection.SouthEast:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X + i, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X + i, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.South:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.SouthWest:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y + i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y + i);
                                                     break;
                                                 case Piece.EnumDirection.West:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y);
                                                     break;
                                                 case Piece.EnumDirection.NorthWest:
-                                                    tempCoord = new Point(tempSquare.Piece.Position.X - i, tempSquare.Piece.Position.Y - i);
+                                                    tempCoord = new Point(sqrToProbe.Piece.Position.X - i, sqrToProbe.Piece.Position.Y - i);
                                                     break;
                                                 default:
                                                     break;
@@ -324,13 +381,13 @@ namespace ChessAI
                                             {
                                                 if (item.Piece == null)
                                                 {
-                                                    tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                 }
                                                 else
                                                 {
-                                                    if (tempSquare.Piece.PieceColor != item.Piece.PieceColor)
+                                                    if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor)
                                                     {
-                                                        tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                        sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                     }
                                                     break;
                                                 }
@@ -343,34 +400,34 @@ namespace ChessAI
                             #region KING
                             case Piece.Type.King:
                                 {
-                                    foreach (var dir in tempSquare.Piece.ListDirections)
+                                    foreach (var dir in sqrToProbe.Piece.ListDirections)
                                     {
                                         Point tempCoord = new Point();
                                         switch (dir)
                                         {
                                             case Piece.EnumDirection.North:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y - 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y - 1);
                                                 break;
                                             case Piece.EnumDirection.NorthEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y - 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 1, sqrToProbe.Piece.Position.Y - 1);
                                                 break;
                                             case Piece.EnumDirection.East:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 1, sqrToProbe.Piece.Position.Y);
                                                 break;
                                             case Piece.EnumDirection.SouthEast:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X + 1, tempSquare.Piece.Position.Y + 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X + 1, sqrToProbe.Piece.Position.Y + 1);
                                                 break;
                                             case Piece.EnumDirection.South:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X, tempSquare.Piece.Position.Y + 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X, sqrToProbe.Piece.Position.Y + 1);
                                                 break;
                                             case Piece.EnumDirection.SouthWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y + 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 1, sqrToProbe.Piece.Position.Y + 1);
                                                 break;
                                             case Piece.EnumDirection.West:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 1, sqrToProbe.Piece.Position.Y);
                                                 break;
                                             case Piece.EnumDirection.NorthWest:
-                                                tempCoord = new Point(tempSquare.Piece.Position.X - 1, tempSquare.Piece.Position.Y - 1);
+                                                tempCoord = new Point(sqrToProbe.Piece.Position.X - 1, sqrToProbe.Piece.Position.Y - 1);
                                                 break;
                                             default:
                                                 break;
@@ -385,13 +442,13 @@ namespace ChessAI
                                         {
                                             if (item.Piece == null)
                                             {
-                                                tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                             }
                                             else
                                             {
-                                                if (tempSquare.Piece.PieceColor != item.Piece.PieceColor)
+                                                if (sqrToProbe.Piece.PieceColor != item.Piece.PieceColor)
                                                 {
-                                                    tempSquare.Piece.ListPossibleMoves.Add(tempCoord);
+                                                    sqrToProbe.Piece.ListPossibleMoves.Add(tempCoord);
                                                 }
                                                 continue;
                                             }
@@ -515,9 +572,9 @@ namespace ChessAI
                 }
             }
 
-            if(OffBoardPieces.Count > 0)
+            if (OffBoardPieces.Count > 0)
             {
-                foreach(Piece p in OffBoardPieces)
+                foreach (Piece p in OffBoardPieces)
                 {
                     SpriteBatch.Draw(p.PieceTexture, new Rectangle((int)(BoardSize * 1.5), (int)(BoardSize * 0.5), SquareSize, SquareSize), null, Color.White);
                 }
