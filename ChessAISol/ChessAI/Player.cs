@@ -27,7 +27,7 @@ namespace ChessAI
         private GameRun.PlayerTurn MovePiece(ChessBoard.BoardSquare tempSquare, GameRun.PlayerTurn pTurn)
         {
             Piece.NbMove += 1;
-            if (Piece.PieceType == Piece.Type.Pawn && Piece.Speed == 2)
+            if (Piece.PieceType == Piece.PieceTypes.Pawn && Piece.Speed == 2)
             {
                 Piece.Speed = 1;
             }

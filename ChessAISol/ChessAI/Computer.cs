@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ChessAI.Piece;
 
 namespace ChessAI
 {
@@ -15,12 +16,19 @@ namespace ChessAI
 
         public class PossibleMove
         {
+            public PieceLight Piece { get; set; }
             public Point From { get; set; }
             public Point To { get; set; }
             public bool WillEat { get; set; }
             public bool WillBeEaten { get; set; }
             public double Density { get; set; }
             public double Rate { get; set; }
+        }
+
+        public class PieceLight
+        {
+            public PieceColors PieceColor { get; set; }
+            public PieceTypes PieceType { get; set; }
         }
         #endregion
 
@@ -45,10 +53,11 @@ namespace ChessAI
                         switch (sqrToHarvest.Piece.PieceColor)
                         {
                             case Piece.PieceColors.Black:
-                                foreach(Point to in sqrToHarvest.Piece.ListPossibleMoves)
+                                foreach (Point to in sqrToHarvest.Piece.ListPossibleMoves)
                                 {
                                     ListPossibleBlackMoves.Add(new PossibleMove()
                                     {
+                                        Piece = new PieceLight() { PieceColor = sqrToHarvest.Piece.PieceColor, PieceType = sqrToHarvest.Piece.PieceType },
                                         From = sqrToHarvest.Piece.Position,
                                         To = to,
                                         Density = 0,
@@ -63,6 +72,7 @@ namespace ChessAI
                                 {
                                     ListPossibleWhiteMoves.Add(new PossibleMove()
                                     {
+                                        Piece = new PieceLight() { PieceColor = sqrToHarvest.Piece.PieceColor, PieceType = sqrToHarvest.Piece.PieceType },
                                         From = sqrToHarvest.Piece.Position,
                                         To = to,
                                         Density = 0,
