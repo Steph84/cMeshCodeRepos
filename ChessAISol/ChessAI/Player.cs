@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System.Diagnostics;
 
 namespace ChessAI
 {
@@ -53,14 +52,27 @@ namespace ChessAI
         {
             newState = Mouse.GetState();
 
+            // if we press right clic, the piece come back to the original position
+            // still the player turn and no more move consumption
+            if (newState.RightButton == ButtonState.Pressed && oldState.RightButton != ButtonState.Pressed)
+            {
+                if(Piece != null)
+                {
+                    ChessBoard.Board[Piece.Position.Y, Piece.Position.X].Piece = Piece;
+                    Piece = null;
+                }
+            }
+
             if (newState.LeftButton == ButtonState.Pressed && oldState.LeftButton != ButtonState.Pressed)
             {
                 ChessBoard.BoardSquare tempSquare = ChessBoard.InWhichSquareAreWeByPixel(newState);
 
                 // if the player don't have a piece in hand
-                if(Piece == null)
+                if (Piece == null)
                 {
-                    if (tempSquare != null && tempSquare.Piece != null && tempSquare.Piece.PieceColor == Piece.PieceColors.White)
+                    if (tempSquare != null && tempSquare.Piece != null &&
+                        tempSquare.Piece.PieceColor == Piece.PieceColors.White &&
+                        tempSquare.Piece.ListPossibleMoves.Count > 0)
                     {
                         Piece = tempSquare.Piece;
                         tempSquare.Piece = null;
