@@ -26,7 +26,7 @@ namespace ChessAI
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
         #endregion
-
+        
         public class BoardSquare
         {
             public Rectangle SquareDestination { get; set; }

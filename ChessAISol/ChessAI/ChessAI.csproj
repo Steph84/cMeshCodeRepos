@@ -46,6 +46,7 @@
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UtilFolder\CloneService.cs" />
     <Compile Include="UtilFolder\DebugToolBox.cs" />
     <Compile Include="UtilFolder\MouseManager.cs" />
     <Compile Include="UtilFolder\WindowDimension.cs" />

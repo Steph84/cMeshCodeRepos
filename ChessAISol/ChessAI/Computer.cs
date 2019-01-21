@@ -11,10 +11,11 @@ namespace ChessAI
     public class Computer
     {
         #region Attributes
-        public List<PossibleMove> ListPossibleBlackMoves { get; set; }
-        public List<PossibleMove> ListPossibleWhiteMoves { get; set; }
+        private List<PossibleMove> ListPossibleBlackMoves { get; set; }
+        private List<PossibleMove> ListPossibleWhiteMoves { get; set; }
+        private double OriginalDensity { get; set; }
 
-        public class PossibleMove
+        private class PossibleMove
         {
             public PieceLight Piece { get; set; }
             public Point From { get; set; }
@@ -30,12 +31,31 @@ namespace ChessAI
             public PieceColors PieceColor { get; set; }
             public PieceTypes PieceType { get; set; }
         }
+
+        Random pickMove;
+        int pickMoveSeed;
         #endregion
 
         public Computer()
         {
             ListPossibleBlackMoves = new List<PossibleMove>();
             ListPossibleWhiteMoves = new List<PossibleMove>();
+            OriginalDensity = ComputeDensity(ChessBoard.Board);
+        }
+
+        private double ComputeDensity(ChessBoard.BoardSquare[,] tempBoard)
+        {
+            double currentDensity = 0;
+            for (int row = 0; row < ChessBoard.RowNumber; row++)
+            {
+                ChessBoard.BoardSquare[] sqrRow = Enumerable.Range(0, ChessBoard.Board.GetLength(1))
+                .Select(x => tempBoard[row, x])
+                .ToArray();
+
+                int pieceNbByRow = sqrRow.Where(x => x.Piece != null && x.Piece.PieceColor == PieceColors.Black).Count();
+                currentDensity += (double)(pieceNbByRow * (row + 1)) / ChessBoard.ColumnNumber;
+            }
+            return currentDensity;
         }
 
         public GameRun.PlayerTurn ComputerUpdate(GameTime pGameTime, GameRun.PlayerTurn pTurn)
@@ -92,24 +112,22 @@ namespace ChessAI
             #endregion
 
             #region manage density
-            #region Current Density
-            var currentDensity = 0;
-            for (int row = 0; row < ChessBoard.RowNumber; row++)
+            if (ListPossibleBlackMoves.Count > 0)
             {
-                ChessBoard.BoardSquare[] sqrRow = Enumerable.Range(0, ChessBoard.Board.GetLength(1))
-                .Select(x => ChessBoard.Board[row, x])
-                .ToArray();
+                foreach (PossibleMove poMoDensity in ListPossibleBlackMoves)
+                {
+                    // change ChessBoard to possible (cannot clone because of Rectangle not serializable)
+                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece;
+                    ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = null;
 
-                int pieceNbByRow = sqrRow.Where(x => x.Piece != null && x.Piece.PieceColor == PieceColors.Black).Count();
-                currentDensity += (pieceNbByRow * (row + 1))/ ChessBoard.ColumnNumber;
+                    // compute density
+                    poMoDensity.Density = ComputeDensity(ChessBoard.Board);
+
+                    // ChessBoard back to original
+                    ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece;
+                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = null;
+                }
             }
-            #endregion
-            #region Possible Densities
-            // pour chaque possible move black
-            // créer nouveau chess board temporaire
-            // calculer la densité possible
-
-            #endregion
             #endregion
 
             #region check the booleans WillBeEaten and WillEat
@@ -134,11 +152,56 @@ namespace ChessAI
             #endregion
 
             #region Compute Probability Rate
-            // en fonction de la dnesité et des boolean et d'autres choses peut être...
+            // en fonction de la densité et des boolean et d'autres choses peut être...
+            if (ListPossibleBlackMoves.Count > 0)
+            {
+                foreach (PossibleMove poMoProbRate in ListPossibleBlackMoves)
+                {
+                    poMoProbRate.Rate = poMoProbRate.Density;
+                }
+            }
             #endregion
 
             #region Pick a Move
             // dans la liste, en fonction du taux, choisir un mouvement
+            if (ListPossibleBlackMoves.Count > 0)
+            {
+                // order by rate value
+                ListPossibleBlackMoves = ListPossibleBlackMoves.OrderByDescending(x => x.Rate).ToList();
+
+                // sum of the probability rates
+                double sum = ListPossibleBlackMoves.Sum(x => x.Rate);
+
+                // get a random number between the original density to the sum of densities
+                pickMoveSeed = Environment.TickCount + (int)sum;
+                pickMove = new Random(pickMoveSeed);
+                double pickValue = pickMove.Next((int)(OriginalDensity * 100), (int)(sum * 100)) / 100.0d;
+
+                // TODO FIX IT
+                // find the move and do it
+                double cumulDensity = 0;
+                foreach (PossibleMove poMoPickMove in ListPossibleBlackMoves)
+                {
+                    if(cumulDensity >= pickValue)
+                    {
+                        // move the Piece
+                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece = ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece;
+                        ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece = null;
+
+                        // update some properties of the Piece
+                        if (ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.PieceType == PieceTypes.Pawn
+                            && ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Speed == 2)
+                        {
+                            ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Speed = 1;
+                        }
+                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.NbMove++;
+                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Position = new Point(poMoPickMove.To.X, poMoPickMove.To.Y);
+
+                        break;
+                    }
+                    cumulDensity += poMoPickMove.Rate;
+                }
+            }
             #endregion
 
             pTurn = GameRun.PlayerTurn.Player;
