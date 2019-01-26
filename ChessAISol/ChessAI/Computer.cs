@@ -111,11 +111,20 @@ namespace ChessAI
             }
             #endregion
 
-            #region manage density
             if (ListPossibleBlackMoves.Count > 0)
             {
+                #region manage density
+                OriginalDensity = ComputeDensity(ChessBoard.Board);
                 foreach (PossibleMove poMoDensity in ListPossibleBlackMoves)
                 {
+                    // manage the possiblity that a white piece is already there
+                    Piece pieceToPutback = null;
+                    ChessBoard.BoardSquare targetSqr = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X];
+                    if (targetSqr.Piece != null)
+                    {
+                        pieceToPutback = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece;
+                    }
+
                     // change ChessBoard to possible (cannot clone because of Rectangle not serializable)
                     ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece;
                     ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = null;
@@ -125,47 +134,38 @@ namespace ChessAI
 
                     // ChessBoard back to original
                     ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece;
-                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = null;
+                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = pieceToPutback;
                 }
-            }
-            #endregion
+                #endregion
 
-            #region check the booleans WillBeEaten and WillEat
-            //if (ListPossibleBlackMoves.Count > 0)
-            //{
-            //    List<Point> listCurrentPosWhite = ListPossibleWhiteMoves.Select(x => x.From).Distinct().ToList();
-            //    //List<Point> listPossiblePosWhite = ListPossibleWhiteMoves.Select(x => x.To).Distinct().ToList();
+                #region check the booleans WillBeEaten and WillEat
+                //    List<Point> listCurrentPosWhite = ListPossibleWhiteMoves.Select(x => x.From).Distinct().ToList();
+                //    //List<Point> listPossiblePosWhite = ListPossibleWhiteMoves.Select(x => x.To).Distinct().ToList();
 
-            //    foreach (PossibleMove posMov in ListPossibleBlackMoves)
-            //    {
-            //        //if (listPossiblePosWhite.Contains(posMov.To))
-            //        //{
-            //        //    posMov.WillBeEaten = true;
-            //        //}
+                //    foreach (PossibleMove posMov in ListPossibleBlackMoves)
+                //    {
+                //        //if (listPossiblePosWhite.Contains(posMov.To))
+                //        //{
+                //        //    posMov.WillBeEaten = true;
+                //        //}
 
-            //        if (listCurrentPosWhite.Contains(posMov.To))
-            //        {
-            //            posMov.WillEat = true;
-            //        }
-            //    }
-            //}
-            #endregion
+                //        if (listCurrentPosWhite.Contains(posMov.To))
+                //        {
+                //            posMov.WillEat = true;
+                //        }
+                //    }
+                #endregion
 
-            #region Compute Probability Rate
-            // en fonction de la densité et des boolean et d'autres choses peut être...
-            if (ListPossibleBlackMoves.Count > 0)
-            {
+                #region Compute Probability Rate
+                // en fonction de la densité et des boolean et d'autres choses peut être...
                 foreach (PossibleMove poMoProbRate in ListPossibleBlackMoves)
                 {
                     poMoProbRate.Rate = poMoProbRate.Density;
                 }
-            }
-            #endregion
+                #endregion
 
-            #region Pick a Move
-            // dans la liste, en fonction du taux, choisir un mouvement
-            if (ListPossibleBlackMoves.Count > 0)
-            {
+                #region Pick a Move
+                // dans la liste, en fonction du taux, choisir un mouvement
                 // order by rate value
                 ListPossibleBlackMoves = ListPossibleBlackMoves.OrderByDescending(x => x.Rate).ToList();
 
@@ -179,11 +179,18 @@ namespace ChessAI
 
                 // TODO FIX IT
                 // find the move and do it
-                double cumulDensity = 0;
+                double cumulDensity = ListPossibleBlackMoves.First().Density;
                 foreach (PossibleMove poMoPickMove in ListPossibleBlackMoves)
                 {
-                    if(cumulDensity >= pickValue)
+                    if (cumulDensity >= pickValue)
                     {
+                        // if there is a piece on the target square, put off the board
+                        ChessBoard.BoardSquare targetSqr = ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X];
+                        if (targetSqr.Piece != null)
+                        {
+                            ChessBoard.OffBoardPieces.Add(targetSqr.Piece);
+                        }
+
                         // move the Piece
                         ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece = ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece;
                         ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece = null;
@@ -197,10 +204,16 @@ namespace ChessAI
                         ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.NbMove++;
                         ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Position = new Point(poMoPickMove.To.X, poMoPickMove.To.Y);
 
+                        ChessBoard.SearchPossibleMoves();
+
                         break;
                     }
                     cumulDensity += poMoPickMove.Rate;
                 }
+            }
+            else
+            {
+                // black game over
             }
             #endregion
 

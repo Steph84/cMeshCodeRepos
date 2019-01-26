@@ -591,6 +591,7 @@ namespace ChessAI
                     {
                         SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
                     }
+                    DebugToolBox.ShowLine(Content, SpriteBatch, tempSquare.SquareCoordinate.ToString(), new Vector2(tempSquare.SquareDestination.X + 15, tempSquare.SquareDestination.Y + 30));
                 }
             }
 
@@ -601,7 +602,6 @@ namespace ChessAI
                     SpriteBatch.Draw(p.PieceTexture, new Rectangle((int)(BoardSize * 1.5), (int)(BoardSize * 0.5), SquareSize, SquareSize), null, Color.White);
                 }
             }
-            //DebugToolBox.ShowLine(Content, SpriteBatch, DirectionMoving.ToString(), new Vector2(Position.X, Position.Y));
         }
         #endregion
     }

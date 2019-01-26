@@ -181,3 +181,9 @@
 /processorParam:TextureFormat=Color
 /build:w_rook_1x.png
 
+#begin Arial12
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:Arial12
+
