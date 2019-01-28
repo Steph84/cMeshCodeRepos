@@ -599,7 +599,7 @@ namespace ChessAI
             {
                 foreach (Piece p in OffBoardPieces)
                 {
-                    SpriteBatch.Draw(p.PieceTexture, new Rectangle((int)(BoardSize * 1.5), (int)(BoardSize * 0.5), SquareSize, SquareSize), null, Color.White);
+                    SpriteBatch.Draw(p.PieceTexture, new Rectangle(p.Position.X * SquareSize + BoardSize, p.Position.Y * SquareSize, SquareSize, SquareSize), null, Color.White);
                 }
             }
         }
