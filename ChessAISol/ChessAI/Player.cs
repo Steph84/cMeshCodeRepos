@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace ChessAI
 {
@@ -58,7 +59,7 @@ namespace ChessAI
             {
                 if(Piece != null)
                 {
-                    ChessBoard.Board[Piece.Position.Y, Piece.Position.X].Piece = Piece;
+                    ChessBoard.Board.Where(x => x.Row == Piece.Position.Y && x.Column == Piece.Position.X).Single().Piece = Piece;
                     Piece = null;
                 }
             }

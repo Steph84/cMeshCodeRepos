@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static ChessAI.Piece;
 
 namespace ChessAI
@@ -40,15 +39,31 @@ namespace ChessAI
         {
             ListPossibleBlackMoves = new List<PossibleMove>();
             ListPossibleWhiteMoves = new List<PossibleMove>();
-            OriginalDensity = ComputeDensity(ChessBoard.Board);
+            //OriginalDensity = ComputeDensity(ChessBoard.Board);
+            OriginalDensity = ComputeDensityInList(ChessBoard.Board);
         }
 
-        private double ComputeDensity(ChessBoard.BoardSquare[,] tempBoard)
+        private double ComputeDensityInList(List<ChessBoard.BoardSquare> tempBoard)
         {
             double currentDensity = 0;
             for (int row = 0; row < ChessBoard.RowNumber; row++)
             {
-                ChessBoard.BoardSquare[] sqrRow = Enumerable.Range(0, ChessBoard.Board.GetLength(1))
+                int pieceNbByRow = tempBoard
+                    .Where(x => x.Row == row)
+                    .Where(x => x.Piece != null && x.Piece.PieceColor == PieceColors.Black)
+                    .ToList().Count();
+                
+                currentDensity += (double)(pieceNbByRow * (row + 1)) / ChessBoard.ColumnNumber;
+            }
+            return currentDensity;
+        }
+
+        private double ComputeDensityInArray(ChessBoard.BoardSquare[,] tempBoard)
+        {
+            double currentDensity = 0;
+            for (int row = 0; row < ChessBoard.RowNumber; row++)
+            {
+                ChessBoard.BoardSquare[] sqrRow = Enumerable.Range(0, tempBoard.GetLength(1))
                 .Select(x => tempBoard[row, x])
                 .ToArray();
 
@@ -68,7 +83,8 @@ namespace ChessAI
             {
                 for (int column = 0; column < ChessBoard.ColumnNumber; column++)
                 {
-                    ChessBoard.BoardSquare sqrToHarvest = ChessBoard.Board[row, column];
+                    //ChessBoard.BoardSquare sqrToHarvest = ChessBoard.Board[row, column];
+                    ChessBoard.BoardSquare sqrToHarvest = ChessBoard.Board.Where(x => x.Row == row && x.Column == column).Single();
                     if (sqrToHarvest.Piece != null)
                     {
                         switch (sqrToHarvest.Piece.PieceColor)
@@ -114,27 +130,34 @@ namespace ChessAI
             if (ListPossibleBlackMoves.Count > 0)
             {
                 #region manage density
-                OriginalDensity = ComputeDensity(ChessBoard.Board);
+                OriginalDensity = ComputeDensityInList(ChessBoard.Board);
+
+                // Copy the Board from List to Array because cannot clone xna objects
+                ChessBoard.BoardSquare[,] CopyBoard = new ChessBoard.BoardSquare[ChessBoard.RowNumber, ChessBoard.ColumnNumber];
+                foreach(ChessBoard.BoardSquare item in ChessBoard.Board)
+                {
+                    CopyBoard[item.Row, item.Column] = item;
+                }
+
                 foreach (PossibleMove poMoDensity in ListPossibleBlackMoves)
                 {
-                    // manage the possiblity that a white piece is already there
                     Piece pieceToPutback = null;
-                    ChessBoard.BoardSquare targetSqr = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X];
+                    ChessBoard.BoardSquare targetSqr = CopyBoard[poMoDensity.To.Y, poMoDensity.To.X];
                     if (targetSqr.Piece != null)
                     {
-                        pieceToPutback = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece;
+                        pieceToPutback = CopyBoard[poMoDensity.To.Y, poMoDensity.To.X].Piece;
                     }
 
                     // change ChessBoard to possible (cannot clone because of Rectangle not serializable)
-                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece;
-                    ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = null;
+                    CopyBoard[poMoDensity.To.Y, poMoDensity.To.X].Piece = CopyBoard[poMoDensity.From.Y, poMoDensity.From.X].Piece;
+                    CopyBoard[poMoDensity.From.Y, poMoDensity.From.X].Piece = null;
 
                     // compute density
-                    poMoDensity.Density = ComputeDensity(ChessBoard.Board);
+                    poMoDensity.Density = ComputeDensityInArray(CopyBoard);
 
                     // ChessBoard back to original
-                    ChessBoard.Board[poMoDensity.From.Y, poMoDensity.From.X].Piece = ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece;
-                    ChessBoard.Board[poMoDensity.To.Y, poMoDensity.To.X].Piece = pieceToPutback;
+                    CopyBoard[poMoDensity.From.Y, poMoDensity.From.X].Piece = CopyBoard[poMoDensity.To.Y, poMoDensity.To.X].Piece;
+                    CopyBoard[poMoDensity.To.Y, poMoDensity.To.X].Piece = pieceToPutback;
                 }
                 #endregion
 
@@ -185,24 +208,24 @@ namespace ChessAI
                     if (cumulDensity >= pickValue)
                     {
                         // if there is a piece on the target square, put off the board
-                        ChessBoard.BoardSquare targetSqr = ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X];
+                        ChessBoard.BoardSquare targetSqr = ChessBoard.Board.Where(x => x.Row == poMoPickMove.To.Y && x.Column == poMoPickMove.To.X).Single();
                         if (targetSqr.Piece != null)
                         {
                             ChessBoard.OffBoardPieces.Add(targetSqr.Piece);
                         }
 
                         // move the Piece
-                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece = ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece;
-                        ChessBoard.Board[poMoPickMove.From.Y, poMoPickMove.From.X].Piece = null;
+                        ChessBoard.BoardSquare origSqr = ChessBoard.Board.Where(x => x.Row == poMoPickMove.From.Y && x.Column == poMoPickMove.From.X).Single();
+                        targetSqr.Piece = origSqr.Piece;
+                        origSqr.Piece = null;
 
                         // update some properties of the Piece
-                        if (ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.PieceType == PieceTypes.Pawn
-                            && ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Speed == 2)
+                        if (targetSqr.Piece.PieceType == PieceTypes.Pawn && targetSqr.Piece.Speed == 2)
                         {
-                            ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Speed = 1;
+                            targetSqr.Piece.Speed = 1;
                         }
-                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.NbMove++;
-                        ChessBoard.Board[poMoPickMove.To.Y, poMoPickMove.To.X].Piece.Position = new Point(poMoPickMove.To.X, poMoPickMove.To.Y);
+                        targetSqr.Piece.NbMove++;
+                        targetSqr.Piece.Position = new Point(poMoPickMove.To.X, poMoPickMove.To.Y);
 
                         ChessBoard.SearchPossibleMoves();
 
