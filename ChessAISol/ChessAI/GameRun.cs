@@ -36,7 +36,7 @@ namespace ChessAI
 
             ChessBoard = new ChessBoard(pGameWindow, pContent, pSpriteBatch);
             Player = new Player(pSpriteBatch);
-            Computer = new Computer();
+            Computer = new Computer(pContent, pSpriteBatch);
             Turn = PlayerTurn.Player;
         }
 
@@ -61,6 +61,7 @@ namespace ChessAI
         {
             ChessBoard.ChessBoardDraw(pGameTime);
             Player.PlayerDraw(pGameTime);
+            Computer.ComputerDraw(pGameTime);
         }
     }
 }

@@ -16,8 +16,7 @@ namespace ChessAI
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
 
-        private static int BoardSize { get; set; }
-
+        public static int BoardSize { get; set; }
         public static int RowNumber { get; set; }
         public static int ColumnNumber { get; set; }
         public int SquareNumbers { get; set; }

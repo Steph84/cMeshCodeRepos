@@ -17,6 +17,7 @@ namespace ChessAI
         public int NbMove { get; set; }
         public int Speed { get; set; }
         public List<EnumDirection> ListDirections { get; set; }
+        public int Value { get; set; }
         #endregion
 
         static Dictionary<PieceTypes, Texture2D> DictCorresWhitePieceText;
@@ -70,9 +71,35 @@ namespace ChessAI
             InitTexture();
             InitSpeed();
             InitListDirections();
+            InitValue();
         }
 
         #region Methods
+        private void InitValue()
+        {
+            switch (PieceType)
+            {
+                case PieceTypes.Pawn:
+                    Value = 1;
+                    break;
+                case PieceTypes.Rook:
+                    Value = 5;
+                    break;
+                case PieceTypes.Knight:
+                case PieceTypes.Bishop:
+                    Value = 3;
+                    break;
+                case PieceTypes.Queen:
+                    Value = 9;
+                    break;
+                case PieceTypes.King:
+                    Value = 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void InitListDirections()
         {
             switch (PieceType)
