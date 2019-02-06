@@ -91,11 +91,11 @@ namespace ChessAI
         public GameRun.PlayerTurn ComputerUpdate(GameTime pGameTime, GameRun.PlayerTurn pTurn)
         {
             ChessBoard.GetPossibleMovesForeachSide();
-            
+            ChessBoard.CheckEating();
+
             if (ChessBoard.ListPossibleBlackMoves.Count > 0)
             {
                 #region manage density
-                //OriginalDensity = ComputeDensityInList(ChessBoard.Board);
                 OriginalDensity = ComputeDensityInListWeighted(ChessBoard.Board);
 
                 // Copy the Board from List to Array because cannot clone xna objects
@@ -127,30 +127,21 @@ namespace ChessAI
                 }
                 #endregion
 
-                #region check the booleans WillBeEaten and WillEat
-                //    List<Point> listCurrentPosWhite = ListPossibleWhiteMoves.Select(x => x.From).Distinct().ToList();
-                //    //List<Point> listPossiblePosWhite = ListPossibleWhiteMoves.Select(x => x.To).Distinct().ToList();
-
-                //    foreach (PossibleMove posMov in ListPossibleBlackMoves)
-                //    {
-                //        //if (listPossiblePosWhite.Contains(posMov.To))
-                //        //{
-                //        //    posMov.WillBeEaten = true;
-                //        //}
-
-                //        if (listCurrentPosWhite.Contains(posMov.To))
-                //        {
-                //            posMov.WillEat = true;
-                //        }
-                //    }
-                #endregion
-
                 #region Compute Probability Rate
                 // en fonction de la densité et des boolean et d'autres choses peut être...
                 double sumDensity = ChessBoard.ListPossibleBlackMoves.Sum(x => x.Density);
                 foreach (ChessBoard.PossibleMove poMoProbRate in ChessBoard.ListPossibleBlackMoves)
                 {
-                    //poMoProbRate.Rate = poMoProbRate.Density / sumDensity;
+                    if(poMoProbRate.WillEat)
+                    {
+                        poMoProbRate.Density++;
+                    }
+
+                    if (poMoProbRate.WillBeEaten)
+                    {
+                        poMoProbRate.Density--;
+                    }
+
                     poMoProbRate.Rate = Math.Round(poMoProbRate.Density / sumDensity, 5);
                 }
                 #endregion
@@ -206,12 +197,8 @@ namespace ChessAI
                     }
                     cumulRate += poMoPickMove.Rate;
                 }
+                #endregion
             }
-            else
-            {
-                // black game over
-            }
-            #endregion
 
             if (pTurn == GameRun.PlayerTurn.Computer)
             {

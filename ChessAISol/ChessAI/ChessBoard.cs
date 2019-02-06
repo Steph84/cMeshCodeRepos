@@ -654,6 +654,55 @@ namespace ChessAI
                         break;
                 }
             }
+
+            CheckEating();
+        }
+
+        public static void CheckEating()
+        {
+            if (ListPossibleWhiteMoves.Count > 0)
+            {
+                foreach (PossibleMove white in ListPossibleWhiteMoves)
+                {
+                    List<PossibleMove> listBlackToEat = ListPossibleBlackMoves.Where(x => x.From == white.To).ToList();
+
+                    if(listBlackToEat.Count > 0)
+                    {
+                        foreach (PossibleMove blackToEat in listBlackToEat)
+                        {
+                            blackToEat.WillBeEaten = true;
+                        }
+
+                        white.WillEat = true;
+                    }
+                }
+            }
+
+            if (ListPossibleBlackMoves.Count > 0)
+            {
+                foreach (PossibleMove black in ListPossibleBlackMoves)
+                {
+                    List<PossibleMove> listWhiteToEat = ListPossibleWhiteMoves.Where(x => x.From == black.To).ToList();
+
+                    if (listWhiteToEat.Count > 0)
+                    {
+                        foreach (PossibleMove whiteToEat in listWhiteToEat)
+                        {
+                            whiteToEat.WillBeEaten = true;
+                        }
+
+                        black.WillEat = true;
+                    }
+                }
+            }
+
+            ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
+            ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
+
+            // TODO DEBUG possible moves for king
+
+            // TODO si le roi est menacé, le protéger
+
         }
         #endregion
 

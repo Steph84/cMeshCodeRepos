@@ -36,6 +36,8 @@ namespace ChessAI
             Piece = null;
             ChessBoard.SearchPossibleMoves();
 
+            ChessBoard.GetPossibleMovesForeachSide();
+
             switch (pTurn)
             {
                 case GameRun.PlayerTurn.Computer:
