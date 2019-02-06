@@ -61,7 +61,6 @@ namespace ChessAI
         {
             ChessBoard.ChessBoardDraw(pGameTime);
             Player.PlayerDraw(pGameTime);
-            Computer.ComputerDraw(pGameTime);
 
             // game over
             if(Turn == PlayerTurn.None)

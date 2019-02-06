@@ -23,6 +23,8 @@ namespace ChessAI
         public static int SquareSize { get; set; }
         public static List<BoardSquare> Board { get; set; }
         public static List<Piece> OffBoardPieces { get; set; }
+        public static List<PossibleMove> ListPossibleBlackMoves { get; set; }
+        public static List<PossibleMove> ListPossibleWhiteMoves { get; set; }
 
         private Texture2D DarkSquare { get; set; }
         private Texture2D LightSquare { get; set; }
@@ -38,6 +40,23 @@ namespace ChessAI
             public Piece Piece { get; set; }
         }
 
+        public class PossibleMove
+        {
+            public PieceLight Piece { get; set; }
+            public Point From { get; set; }
+            public Point To { get; set; }
+            public bool WillEat { get; set; }
+            public bool WillBeEaten { get; set; }
+            public double Density { get; set; }
+            public double Rate { get; set; }
+        }
+
+        public class PieceLight
+        {
+            public Piece.PieceColors PieceColor { get; set; }
+            public Piece.PieceTypes PieceType { get; set; }
+        }
+
         public ChessBoard(WindowDimension pGameWindow, ContentManager pContent, SpriteBatch pSpriteBatch)
         {
             GameWindow = pGameWindow;
@@ -48,6 +67,9 @@ namespace ChessAI
             ColumnNumber = 8;
             SquareNumbers = RowNumber * ColumnNumber;
             OffBoardPieces = new List<Piece>();
+
+            ListPossibleBlackMoves = new List<PossibleMove>();
+            ListPossibleWhiteMoves = new List<PossibleMove>();
 
             DarkSquare = Content.Load<Texture2D>("square brown dark_1x");
             LightSquare = Content.Load<Texture2D>("square brown light_1x");
@@ -588,6 +610,51 @@ namespace ChessAI
                 return null;
             }
         }
+
+        public static void GetPossibleMovesForeachSide()
+        {
+            ListPossibleBlackMoves = new List<PossibleMove>();
+            ListPossibleWhiteMoves = new List<PossibleMove>();
+
+            foreach (BoardSquare sqrToHarvest in Board.Where(x => x.Piece != null))
+            {
+                switch (sqrToHarvest.Piece.PieceColor)
+                {
+                    case Piece.PieceColors.Black:
+                        foreach (Point to in sqrToHarvest.Piece.ListPossibleMoves)
+                        {
+                            ListPossibleBlackMoves.Add(new PossibleMove()
+                            {
+                                Piece = new PieceLight() { PieceColor = sqrToHarvest.Piece.PieceColor, PieceType = sqrToHarvest.Piece.PieceType },
+                                From = sqrToHarvest.Piece.Position,
+                                To = to,
+                                Density = 0,
+                                Rate = 0,
+                                WillBeEaten = false,
+                                WillEat = false
+                            });
+                        }
+                        break;
+                    case Piece.PieceColors.White:
+                        foreach (Point to in sqrToHarvest.Piece.ListPossibleMoves)
+                        {
+                            ListPossibleWhiteMoves.Add(new PossibleMove()
+                            {
+                                Piece = new PieceLight() { PieceColor = sqrToHarvest.Piece.PieceColor, PieceType = sqrToHarvest.Piece.PieceType },
+                                From = sqrToHarvest.Piece.Position,
+                                To = to,
+                                Density = 0,
+                                Rate = 0,
+                                WillBeEaten = false,
+                                WillEat = false
+                            });
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         #endregion
 
         #region Game Methods
@@ -609,6 +676,18 @@ namespace ChessAI
                 {
                     SpriteBatch.Draw(p.PieceTexture, new Rectangle(p.Position.X * SquareSize + BoardSize, p.Position.Y * SquareSize, SquareSize, SquareSize), null, Color.White);
                 }
+            }
+
+            for (int i = 0; i < 10; i++)
+            {
+                if (i == ListPossibleBlackMoves.Count)
+                {
+                    break;
+                }
+                PossibleMove poMo = ListPossibleBlackMoves[i];
+                DebugToolBox.ShowLine(Content, SpriteBatch,
+                    poMo.Piece.PieceType + " / " + poMo.Rate * 100 + " %",
+                    new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * i));
             }
         }
         #endregion
