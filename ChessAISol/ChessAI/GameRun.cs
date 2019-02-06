@@ -62,6 +62,12 @@ namespace ChessAI
             ChessBoard.ChessBoardDraw(pGameTime);
             Player.PlayerDraw(pGameTime);
             Computer.ComputerDraw(pGameTime);
+
+            // game over
+            if(Turn == PlayerTurn.None)
+            {
+                DebugToolBox.ShowLine(Content, SpriteBatch, "GAME OVER", new Vector2(GameWindowWidth/2, GameWindowHeight/2));
+            }
         }
     }
 }

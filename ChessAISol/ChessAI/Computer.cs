@@ -47,7 +47,6 @@ namespace ChessAI
 
             ListPossibleBlackMoves = new List<PossibleMove>();
             ListPossibleWhiteMoves = new List<PossibleMove>();
-            //OriginalDensity = ComputeDensityInList(ChessBoard.Board);
             OriginalDensity = ComputeDensityInListWeighted(ChessBoard.Board);
         }
 
@@ -194,7 +193,6 @@ namespace ChessAI
                     CopyBoard[poMoDensity.From.Y, poMoDensity.From.X].Piece = null;
 
                     // compute density
-                    //poMoDensity.Density = ComputeDensityInArray(CopyBoard);
                     poMoDensity.Density = ComputeDensityInArrayWeighted(CopyBoard);
 
                     // ChessBoard back to original
@@ -256,6 +254,11 @@ namespace ChessAI
                         if (targetSqr.Piece != null)
                         {
                             ChessBoard.OffBoardPieces.Add(targetSqr.Piece);
+                            // if the king is dead, gameOver
+                            if(targetSqr.Piece.PieceType == PieceTypes.King)
+                            {
+                                pTurn = GameRun.PlayerTurn.None;
+                            }
                         }
 
                         // move the Piece
@@ -284,7 +287,10 @@ namespace ChessAI
             }
             #endregion
 
-            pTurn = GameRun.PlayerTurn.Player;
+            if(pTurn == GameRun.PlayerTurn.Computer)
+            {
+                pTurn = GameRun.PlayerTurn.Player;
+            }
             return pTurn;
         }
 

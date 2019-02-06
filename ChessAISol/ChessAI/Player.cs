@@ -95,7 +95,13 @@ namespace ChessAI
                             {
                                 case Piece.PieceColors.Black:
                                     ChessBoard.OffBoardPieces.Add(tempSquare.Piece);
+                                    // if the king is dead, gameOver
+                                    Piece.PieceTypes targetType = tempSquare.Piece.PieceType;
                                     pTurn = MovePiece(tempSquare, pTurn);
+                                    if(targetType == Piece.PieceTypes.King)
+                                    {
+                                        return GameRun.PlayerTurn.None;
+                                    }
                                     break;
                                 case Piece.PieceColors.White:
                                     // nothing to do
