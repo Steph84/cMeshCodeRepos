@@ -47,6 +47,8 @@ namespace ChessAI
             public Point To { get; set; }
             public bool WillEat { get; set; }
             public bool WillBeEaten { get; set; }
+            public bool CanEat { get; set; }
+            public bool CanBeEaten { get; set; }
             public double Density { get; set; }
             public double Rate { get; set; }
         }
@@ -660,44 +662,71 @@ namespace ChessAI
 
         public static void CheckEating()
         {
+            #region White moves
             if (ListPossibleWhiteMoves.Count > 0)
             {
                 foreach (PossibleMove white in ListPossibleWhiteMoves)
                 {
-                    List<PossibleMove> listBlackToEat = ListPossibleBlackMoves.Where(x => x.From == white.To).ToList();
-
-                    if(listBlackToEat.Count > 0)
+                    List<PossibleMove> listBlackToWillEat = ListPossibleBlackMoves.Where(x => x.From == white.To).ToList();
+                    if (listBlackToWillEat.Count > 0)
                     {
-                        foreach (PossibleMove blackToEat in listBlackToEat)
+                        foreach (PossibleMove blackToWillEat in listBlackToWillEat)
                         {
-                            blackToEat.WillBeEaten = true;
+                            blackToWillEat.WillBeEaten = true;
                         }
 
                         white.WillEat = true;
                     }
+
+                    List<PossibleMove> listBlackToCanEat = ListPossibleBlackMoves.Where(x => x.To == white.To).ToList();
+                    if (listBlackToCanEat.Count > 0)
+                    {
+                        foreach (PossibleMove blackToCanEat in listBlackToCanEat)
+                        {
+                            blackToCanEat.CanBeEaten = true;
+                        }
+
+                        white.CanEat = true;
+                    }
                 }
             }
+            #endregion
 
+            #region Black moves
             if (ListPossibleBlackMoves.Count > 0)
             {
                 foreach (PossibleMove black in ListPossibleBlackMoves)
                 {
-                    List<PossibleMove> listWhiteToEat = ListPossibleWhiteMoves.Where(x => x.From == black.To).ToList();
-
-                    if (listWhiteToEat.Count > 0)
+                    List<PossibleMove> listWhiteToWillEat = ListPossibleWhiteMoves.Where(x => x.From == black.To).ToList();
+                    if (listWhiteToWillEat.Count > 0)
                     {
-                        foreach (PossibleMove whiteToEat in listWhiteToEat)
+                        foreach (PossibleMove whiteToWillEat in listWhiteToWillEat)
                         {
-                            whiteToEat.WillBeEaten = true;
+                            whiteToWillEat.WillBeEaten = true;
                         }
 
                         black.WillEat = true;
                     }
+
+                    List<PossibleMove> listWhiteToCanEat = ListPossibleWhiteMoves.Where(x => x.To == black.To).ToList();
+                    if (listWhiteToCanEat.Count > 0)
+                    {
+                        foreach (PossibleMove whiteToCanEat in listWhiteToCanEat)
+                        {
+                            whiteToCanEat.CanBeEaten = true;
+                        }
+
+                        black.CanEat = true;
+                    }
                 }
             }
+            #endregion
 
             ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
             ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
+            ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.CanBeEaten == true);
+            ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.CanBeEaten == true);
+
 
             // TODO DEBUG possible moves for king
 

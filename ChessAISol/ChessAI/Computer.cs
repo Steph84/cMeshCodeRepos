@@ -134,10 +134,20 @@ namespace ChessAI
                 {
                     if(poMoProbRate.WillEat)
                     {
-                        poMoProbRate.Density++;
+                        poMoProbRate.Density += 2;
                     }
 
                     if (poMoProbRate.WillBeEaten)
+                    {
+                        poMoProbRate.Density -= 2;
+                    }
+
+                    if (poMoProbRate.CanEat)
+                    {
+                        poMoProbRate.Density++;
+                    }
+
+                    if (poMoProbRate.CanBeEaten)
                     {
                         poMoProbRate.Density--;
                     }
