@@ -14,7 +14,7 @@ namespace ChessAI
         private ContentManager Content { get; set; }
         private SpriteBatch SpriteBatch { get; set; }
         private double OriginalDensity { get; set; }
-        
+
         Random pickMove;
         int pickMoveSeed;
         #endregion
@@ -132,24 +132,24 @@ namespace ChessAI
                 double sumDensity = ChessBoard.ListPossibleBlackMoves.Sum(x => x.Density);
                 foreach (ChessBoard.PossibleMove poMoProbRate in ChessBoard.ListPossibleBlackMoves)
                 {
-                    if(poMoProbRate.WillEat)
+                    if (poMoProbRate.WillEat) // if take the move
                     {
                         poMoProbRate.Density += 2;
                     }
 
-                    if (poMoProbRate.WillBeEaten)
+                    if (poMoProbRate.WillBeEaten) // if stay there
                     {
-                        poMoProbRate.Density -= 2;
+                        poMoProbRate.Density += 4;
                     }
 
-                    if (poMoProbRate.CanEat)
+                    if (poMoProbRate.CanEat) // if the other chose the possible move
                     {
                         poMoProbRate.Density++;
                     }
 
                     if (poMoProbRate.CanBeEaten)
                     {
-                        poMoProbRate.Density--;
+                        poMoProbRate.Density -= 2;
                     }
 
                     poMoProbRate.Rate = Math.Round(poMoProbRate.Density / sumDensity, 5);

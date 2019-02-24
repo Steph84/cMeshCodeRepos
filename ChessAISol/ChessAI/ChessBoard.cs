@@ -722,11 +722,18 @@ namespace ChessAI
             }
             #endregion
 
-            ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
-            ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
+            //ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
+            //ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.WillBeEaten == true);
             ListPossibleBlackMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.CanBeEaten == true);
             ListPossibleWhiteMoves.RemoveAll(x => x.Piece.PieceType == Piece.PieceTypes.King && x.CanBeEaten == true);
 
+            var truc = ListPossibleBlackMoves.Where(x => x.WillBeEaten && x.Piece.PieceType == Piece.PieceTypes.King).ToList();
+
+            if(truc.Count > 0)
+            {
+                // on voit bien là où le roi peut être mangé
+                // mais ne tient pas compte du déplacement du roi...
+            }
 
             // TODO DEBUG possible moves for king
 
@@ -756,6 +763,7 @@ namespace ChessAI
                 }
             }
 
+            double sumRate = 0;
             for (int i = 0; i < 10; i++)
             {
                 if (i == ListPossibleBlackMoves.Count)
@@ -763,10 +771,14 @@ namespace ChessAI
                     break;
                 }
                 PossibleMove poMo = ListPossibleBlackMoves[i];
+                sumRate += poMo.Rate;
                 DebugToolBox.ShowLine(Content, SpriteBatch,
                     poMo.Piece.PieceType + " / " + poMo.Rate * 100 + " %",
                     new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * i));
             }
+            DebugToolBox.ShowLine(Content, SpriteBatch,
+                    sumRate * 100 + " %",
+                    new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * 11));
         }
         #endregion
     }
