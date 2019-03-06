@@ -752,7 +752,7 @@ namespace ChessAI
                 {
                     SpriteBatch.Draw(tempSquare.Piece.PieceTexture, tempSquare.SquareDestination, null, Color.White);
                 }
-                DebugToolBox.ShowLine(Content, SpriteBatch, tempSquare.SquareCoordinate.ToString(), new Vector2(tempSquare.SquareDestination.X + 15, tempSquare.SquareDestination.Y + 30));
+                //DebugToolBox.ShowLine(Content, SpriteBatch, tempSquare.SquareCoordinate.ToString(), new Vector2(tempSquare.SquareDestination.X + 15, tempSquare.SquareDestination.Y + 30));
             }
 
             if (OffBoardPieces.Count > 0)
@@ -763,22 +763,22 @@ namespace ChessAI
                 }
             }
 
-            double sumRate = 0;
-            for (int i = 0; i < 10; i++)
-            {
-                if (i == ListPossibleBlackMoves.Count)
-                {
-                    break;
-                }
-                PossibleMove poMo = ListPossibleBlackMoves[i];
-                sumRate += poMo.Rate;
-                DebugToolBox.ShowLine(Content, SpriteBatch,
-                    poMo.Piece.PieceType + " / " + poMo.Rate * 100 + " %",
-                    new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * i));
-            }
-            DebugToolBox.ShowLine(Content, SpriteBatch,
-                    sumRate * 100 + " %",
-                    new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * 11));
+            //double sumRate = 0;
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    if (i == ListPossibleBlackMoves.Count)
+            //    {
+            //        break;
+            //    }
+            //    PossibleMove poMo = ListPossibleBlackMoves[i];
+            //    sumRate += poMo.Rate;
+            //    DebugToolBox.ShowLine(Content, SpriteBatch,
+            //        poMo.Piece.PieceType + " / " + poMo.Rate * 100 + " %",
+            //        new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * i));
+            //}
+            //DebugToolBox.ShowLine(Content, SpriteBatch,
+            //        sumRate * 100 + " %",
+            //        new Vector2(ChessBoard.BoardSize + 15, 15 + 15 * 11));
         }
         #endregion
     }

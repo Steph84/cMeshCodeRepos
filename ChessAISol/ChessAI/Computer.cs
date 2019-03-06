@@ -167,8 +167,7 @@ namespace ChessAI
                 // get a random number between the original density to the sum of densities
                 pickMoveSeed = Environment.TickCount + (int)sum;
                 pickMove = new Random(pickMoveSeed);
-                //double pickValue = pickMove.Next((int)(OriginalDensity * 100), (int)(sum * 100)) / 100.0d;
-                double pickValue = pickMove.Next(0, 100) / 100.0d;
+                double pickValue = pickMove.Next(0, 30) / 100.0d;
 
                 // find the move and do it
                 double cumulRate = ChessBoard.ListPossibleBlackMoves.First().Rate;
