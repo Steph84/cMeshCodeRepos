@@ -4,8 +4,14 @@ using Microsoft.Xna.Framework.Input;
 
 public class Main : Game
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
+    public static GraphicsDeviceManager graphics;
+    public static SpriteBatch spriteBatch;
+    public static Viewport viewport;
+    public static GameWindow gameWindow;
+    public static DisplayMode currentDisplayMode;
+
+    public WindowDimension MyWindow { get; set; }
+    private string MyTitleGameWindow = "NeoBlock";
 
     public Main()
     {
@@ -15,7 +21,11 @@ public class Main : Game
     
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        Window.Title = MyTitleGameWindow;
+        currentDisplayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        viewport = GraphicsDevice.Viewport;
+        gameWindow = Window;
+        MyWindow = new WindowDimension();
 
         base.Initialize();
     }
