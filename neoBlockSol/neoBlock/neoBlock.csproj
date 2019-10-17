@@ -42,8 +42,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="Menu\Menu.cs" />
+    <Compile Include="Menu\LoadMenuData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\PersonnalColors.cs" />
+    <Compile Include="Utilities\TextAlignment.cs" />
     <Compile Include="Utilities\WindowDimension.cs" />
   </ItemGroup>
   <ItemGroup>

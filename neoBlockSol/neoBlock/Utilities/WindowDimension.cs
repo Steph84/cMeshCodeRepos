@@ -5,8 +5,8 @@ public class WindowDimension : Game
     #region Properties
     public int DisplayWidth { get; set; }
     public int DisplayHeight { get; set; }
-    public int GameWindowWidth { get; private set; }
-    public int GameWindowHeight { get; private set; }
+    public static int GameWindowWidth { get; private set; }
+    public static int GameWindowHeight { get; private set; }
     public double GameSizeCoefficient { get; set; }
 
     // initialize values
