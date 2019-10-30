@@ -5,12 +5,12 @@ using Microsoft.Xna.Framework.Input;
 
 public class Main : Game
 {
-    public static GraphicsDeviceManager graphics;
+    public static GraphicsDeviceManager GlobalGraphics;
     public static SpriteBatch GlobalSpriteBatch;
-    public static Viewport viewport;
-    public static GameWindow gameWindow;
-    public static DisplayMode currentDisplayMode;
-    public static ContentManager content;
+    public static Viewport GlobalViewport;
+    public static GameWindow GlobalGameWindow;
+    public static DisplayMode GlobalCurrentDisplayMode;
+    public static ContentManager GlobalContent;
 
     public WindowDimension MyWindow { get; set; }
     public Menu MyMenu { get; set; }
@@ -29,17 +29,17 @@ public class Main : Game
 
     public Main()
     {
-        graphics = new GraphicsDeviceManager(this);
-        content = Content;
-        content.RootDirectory = "Content";
+        GlobalGraphics = new GraphicsDeviceManager(this);
+        GlobalContent = Content;
+        GlobalContent.RootDirectory = "Content";
     }
 
     protected override void Initialize()
     {
         Window.Title = MyTitleGameWindow;
-        currentDisplayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
-        viewport = GraphicsDevice.Viewport;
-        gameWindow = Window;
+        GlobalCurrentDisplayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
+        GlobalViewport = GraphicsDevice.Viewport;
+        GlobalGameWindow = Window;
         MyWindow = new WindowDimension();
 
         base.Initialize();

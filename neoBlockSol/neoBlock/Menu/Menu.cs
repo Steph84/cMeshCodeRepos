@@ -49,8 +49,8 @@ public class Menu
         //soundHeadBack = Main.content.Load<SoundEffect>("headBack");
         //volumeSoundEffects = 0.25f;
 
-        StandardFontTitle = Main.content.Load<SpriteFont>("TimesNewRoman24");
-        StandardFontLines = Main.content.Load<SpriteFont>("TimesNewRoman12");
+        StandardFontTitle = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman24");
+        StandardFontLines = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman12");
 
         #region Manage the titles on the main screen
         //CreditsTitle = "The Credits";
@@ -59,7 +59,7 @@ public class Menu
             foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
             {
                 // Load the Font
-                item.Font = Main.content.Load<SpriteFont>(item.FontFileName);
+                item.Font = Main.GlobalContent.Load<SpriteFont>(item.FontFileName);
 
                 // Manage the alignments
                 TextAlignment.ApplyHorizontalAlignment(item);
@@ -82,7 +82,7 @@ public class Menu
             // Load the Font for the Selection
             if (MyMenuSelection.FontFileName != null)
             {
-                MyMenuSelection.Font = Main.content.Load<SpriteFont>(MyMenuSelection.FontFileName);
+                MyMenuSelection.Font = Main.GlobalContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
             }
             else { throw new Exception("Missing Data Error - FontFileName"); }
 

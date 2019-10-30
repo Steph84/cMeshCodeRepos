@@ -27,26 +27,26 @@ public class WindowDimension : Game
     public WindowDimension()
     {
         // get the different current dimensions
-        DisplayWidth = Main.currentDisplayMode.Width;
-        DisplayHeight = Main.currentDisplayMode.Height;
-        GameWindowWidth = Main.viewport.Width;
-        GameWindowHeight = Main.viewport.Height;
+        DisplayWidth = Main.GlobalCurrentDisplayMode.Width;
+        DisplayHeight = Main.GlobalCurrentDisplayMode.Height;
+        GameWindowWidth = Main.GlobalViewport.Width;
+        GameWindowHeight = Main.GlobalViewport.Height;
 
         // initialize gameWindow parameters
-        Main.gameWindow.AllowAltF4 = AllowAltF4;
-        Main.gameWindow.IsBorderless = IsBorderless;
+        Main.GlobalGameWindow.AllowAltF4 = AllowAltF4;
+        Main.GlobalGameWindow.IsBorderless = IsBorderless;
 
         if (IsFullScreen == true)
         {
-            Main.graphics.PreferredBackBufferWidth = DisplayWidth;
-            Main.graphics.PreferredBackBufferHeight = DisplayHeight;
-            Main.graphics.IsFullScreen = IsFullScreen;
+            Main.GlobalGraphics.PreferredBackBufferWidth = DisplayWidth;
+            Main.GlobalGraphics.PreferredBackBufferHeight = DisplayHeight;
+            Main.GlobalGraphics.IsFullScreen = IsFullScreen;
         }
         else
             ResizeGameWindow();
 
         // apply changes ;-)
-        Main.graphics.ApplyChanges();
+        Main.GlobalGraphics.ApplyChanges();
     }
     #endregion
 
@@ -75,7 +75,7 @@ public class WindowDimension : Game
             // if so, don t bother, switch to fullScreen
             newGameWindowWidth = DisplayWidth;
             newGameWindowHeight = DisplayHeight;
-            Main.graphics.IsFullScreen = true;
+            Main.GlobalGraphics.IsFullScreen = true;
         }
         else
         {
@@ -84,12 +84,12 @@ public class WindowDimension : Game
             int newPosY = 0;
             newPosX = (DisplayWidth - newGameWindowWidth) / 2;
             newPosY = (DisplayHeight - newGameWindowHeight) / 3;
-            Main.gameWindow.Position = new Point(newPosX, newPosY);
+            Main.GlobalGameWindow.Position = new Point(newPosX, newPosY);
         }
 
         // update the GameWindow
-        Main.graphics.PreferredBackBufferWidth = newGameWindowWidth;
-        Main.graphics.PreferredBackBufferHeight = newGameWindowHeight;
+        Main.GlobalGraphics.PreferredBackBufferWidth = newGameWindowWidth;
+        Main.GlobalGraphics.PreferredBackBufferHeight = newGameWindowHeight;
 
         // update the size in the object
         GameWindowWidth = newGameWindowWidth;
