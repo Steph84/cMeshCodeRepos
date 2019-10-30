@@ -7,12 +7,27 @@ using System.Collections.Generic;
 
 public class Menu
 {
+    LoadMenuData.MenuSelection MyMenuSelection;
+    List<LoadMenuData.TitleProperties> MyMenuTitles;
+
+    Color tempColor;
+
+    // keyboard stuff
+    //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
+    KeyboardState OldState = new KeyboardState();
+    KeyboardState NewState = new KeyboardState();
+
+    // prepare the tweening
+    //Tweening MyTweening;
+    bool MenuIn = true; // the selection items arrive
+    bool MenuOut = false; // for the selection items to go out
+    bool IsMenuStable = false; // at the beginning, the menu is not usable
+    Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
+
     #region Constructor Menu
     public Menu()
     {
         LoadMenuData.MenuData MyMenuData;
-        List<LoadMenuData.TitleProperties> MyMenuTitles;
-        LoadMenuData.MenuSelection MyMenuSelection;
         List<LoadMenuData.CreditsProperties> MyMenuCredits;
         List<LoadMenuData.InstructionsProperties> MyMenuInstructions;
 
@@ -164,6 +179,114 @@ public class Menu
         //}
         #endregion
 
+        #endregion
+    }
+    #endregion
+
+    #region MenuTitleUpdate
+    public Main.EnumMainState MenuTitleUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+    {
+        if (IsMenuStable == true)
+        {
+            NewState = Keyboard.GetState();
+
+            #region Manage the move through the selection menu
+
+            if (NewState.IsKeyDown(Keys.Down) && !OldState.IsKeyDown(Keys.Down))
+            {
+                //soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                MyMenuSelection.ItemSelected += 1;
+            }
+            if (NewState.IsKeyDown(Keys.Up) && !OldState.IsKeyDown(Keys.Up))
+            {
+                //soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                MyMenuSelection.ItemSelected -= 1;
+            }
+
+            if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
+            {
+                if (MyMenuSelection.ItemSelected < 0)
+                    MyMenuSelection.ItemSelected = MyMenuSelection.SelectionItems.Count - 1;
+                if (MyMenuSelection.ItemSelected > MyMenuSelection.SelectionItems.Count - 1)
+                    MyMenuSelection.ItemSelected = 0;
+            }
+            #endregion
+
+            #region Manage the MainState status
+            if (NewState.IsKeyDown(Keys.Enter) && !OldState.IsKeyDown(Keys.Enter))
+            {
+                //soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                { // wait for the sound to end then quit
+                    //System.Threading.Thread.Sleep(soundValidateSelect.Duration);
+                    pMyState = Main.EnumMainState.MenuQuit;
+                }
+
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
+                { // initialize tweening parameters
+                    MenuOut = true;
+                    IsMenuStable = false;
+                    //InitializeTweening();
+                    TargetState = Main.EnumMainState.MenuCredits;
+                }
+
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
+                { // initialize tweening parameters
+                    MenuOut = true;
+                    IsMenuStable = false;
+                    //InitializeTweening();
+                    TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                }
+
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Instructions")
+                { // initialize tweening parameters
+                    MenuOut = true;
+                    IsMenuStable = false;
+                    //InitializeTweening();
+                    TargetState = Main.EnumMainState.MenuInstructions;
+                }
+            }
+            #endregion
+
+            OldState = NewState;
+        }
+        else
+        { // call the tweening effect
+            //pMyState = TweeningSelectionLines(pGameTime, MenuIn, MenuOut, pMyState, TargetState);
+        }
+
+        return pMyState;
+    }
+    #endregion
+
+    #region MenuTitleDraw
+    public void MenuTitleDraw(GameTime pGameTime)
+    {
+        #region Draw the Titles of the main menu
+        if (MyMenuTitles != null)
+        {
+            foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
+                Main.GlobalSpriteBatch.DrawString(item.Font, item.Value, item.AnchorPosition, item.Color);
+        }
+        #endregion
+
+        #region Draw the selection menu
+        if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
+        {
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            {
+                tempColor = Color.SlateGray;
+                if (MyMenuSelection.ItemSelected == i)
+                {
+                    tempColor = Color.White;
+                    //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
+                }
+
+                Main.GlobalSpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
+            }
+            //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
+        }
         #endregion
     }
     #endregion

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 public class Main : Game
 {
     public static GraphicsDeviceManager graphics;
-    public static SpriteBatch spriteBatch;
+    public static SpriteBatch GlobalSpriteBatch;
     public static Viewport viewport;
     public static GameWindow gameWindow;
     public static DisplayMode currentDisplayMode;
@@ -33,7 +33,7 @@ public class Main : Game
         content = Content;
         content.RootDirectory = "Content";
     }
-    
+
     protected override void Initialize()
     {
         Window.Title = MyTitleGameWindow;
@@ -44,16 +44,16 @@ public class Main : Game
 
         base.Initialize();
     }
-    
+
     protected override void LoadContent()
     {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
+        GlobalSpriteBatch = new SpriteBatch(GraphicsDevice);
 
         MyMenu = new Menu();
     }
-    
+
     protected override void UnloadContent() { }
-    
+
     protected override void Update(GameTime gameTime)
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -62,7 +62,41 @@ public class Main : Game
         switch (MyState)
         {
             case EnumMainState.MenuTitle:
-                //MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
+                MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
+                break;
+            case EnumMainState.MenuInstructions:
+                //MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
+                break;
+            case EnumMainState.MenuCredits:
+                //MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
+                break;
+            case EnumMainState.MenuQuit:
+                Exit();
+                break;
+            case EnumMainState.GameAnimation:
+                // animation
+                break;
+            case EnumMainState.GamePlayable:
+                //MyGame.GameRunUpdate(gameTime, MyState);
+                break;
+            default:
+                break;
+        }
+
+        base.Update(gameTime);
+    }
+
+    protected override void Draw(GameTime gameTime)
+    {
+        GraphicsDevice.Clear(Color.LightGreen);
+
+        // SamplerState.PointClamp to avoid blur from rescaling pixel art
+        GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+
+        switch (MyState)
+        {
+            case EnumMainState.MenuTitle:
+                MyMenu.MenuTitleDraw(gameTime);
                 break;
             case EnumMainState.MenuInstructions:
                 break;
@@ -77,21 +111,8 @@ public class Main : Game
             default:
                 break;
         }
-
-        base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        // SamplerState.PointClamp to avoid blur from rescaling pixel art
-        spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
-
-
-
-
-        spriteBatch.End();
+        
+        GlobalSpriteBatch.End();
 
         base.Draw(gameTime);
     }
