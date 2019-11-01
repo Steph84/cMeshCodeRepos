@@ -56,19 +56,16 @@ public class Main : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
         switch (MyState)
         {
             case EnumMainState.MenuTitle:
                 MyState = MyMenu.MenuTitleUpdate(gameTime, MyState);
                 break;
             case EnumMainState.MenuInstructions:
-                //MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
+                MyState = MyMenu.MenuInstructionsUpdate(gameTime, MyState);
                 break;
             case EnumMainState.MenuCredits:
-                //MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
+                MyState = MyMenu.MenuCreditsUpdate(gameTime, MyState);
                 break;
             case EnumMainState.MenuQuit:
                 Exit();
@@ -99,8 +96,10 @@ public class Main : Game
                 MyMenu.MenuTitleDraw(gameTime);
                 break;
             case EnumMainState.MenuInstructions:
+                MyMenu.MenuInstructionsDraw(gameTime);
                 break;
             case EnumMainState.MenuCredits:
+                MyMenu.MenuCreditsDraw(gameTime);
                 break;
             case EnumMainState.MenuQuit:
                 break;

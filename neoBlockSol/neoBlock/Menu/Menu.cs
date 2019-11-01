@@ -7,29 +7,39 @@ using System.Collections.Generic;
 
 public class Menu
 {
-    LoadMenuData.MenuSelection MyMenuSelection;
-    List<LoadMenuData.TitleProperties> MyMenuTitles;
+    private LoadMenuData.MenuSelection MyMenuSelection;
+    private List<LoadMenuData.TitleProperties> MyMenuTitles;
+    private List<LoadMenuData.CreditsProperties> MyMenuCredits;
+    private List<LoadMenuData.InstructionsProperties> MyMenuInstructions;
 
-    Color tempColor;
+    private Color tempColor;
 
     // keyboard stuff
     //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
-    KeyboardState OldState = new KeyboardState();
-    KeyboardState NewState = new KeyboardState();
+    private KeyboardState OldState = new KeyboardState();
+    private KeyboardState NewState = new KeyboardState();
+
+    // Credits stuff
+    private string CreditsTitle;
+    private Vector2 CreditsTitlePosition;
+    private SpriteFont CreditsFontTitle, CreditsFontLines;
+
+    // Instructions stuff
+    private string InstructionsTitle;
+    private Vector2 InstructionsTitlePosition;
+    private SpriteFont InstructionsFontTitle, InstructionsFontLines;
 
     // prepare the tweening
     //Tweening MyTweening;
-    bool MenuIn = true; // the selection items arrive
-    bool MenuOut = false; // for the selection items to go out
-    bool IsMenuStable = false; // at the beginning, the menu is not usable
-    Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
+    private bool MenuIn = true; // the selection items arrive
+    private bool MenuOut = false; // for the selection items to go out
+    private bool IsMenuStable = true; // at the beginning, the menu is not usable
+    private Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
 
     #region Constructor Menu
     public Menu()
     {
         LoadMenuData.MenuData MyMenuData;
-        List<LoadMenuData.CreditsProperties> MyMenuCredits;
-        List<LoadMenuData.InstructionsProperties> MyMenuInstructions;
 
         LoadMenuData LoadMenuData = new LoadMenuData();
         SpriteFont StandardFontTitle, StandardFontLines;
@@ -53,7 +63,7 @@ public class Menu
         StandardFontLines = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman12");
 
         #region Manage the titles on the main screen
-        //CreditsTitle = "The Credits";
+        CreditsTitle = "The Credits";
         if (MyMenuTitles != null)
         {
             foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
@@ -111,75 +121,77 @@ public class Menu
         //backArrowText = "Esc";
 
         #region Manage the Credits
-
         // Load fonts
-        //CreditsFontTitle = StandardFontTitle;
-        //CreditsFontLines = StandardFontLines;
+        CreditsFontTitle = StandardFontTitle;
+        CreditsFontLines = StandardFontLines;
 
-        //// measure size text
-        //Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
-        //Vector2 sizeCreditsLine = new Vector2();
-        //if (MyMenuCredits != null && MyMenuCredits.Count != 0)
-        //    sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
+        // measure size text
+        Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
+        Vector2 sizeCreditsLine = new Vector2();
+        if (MyMenuCredits != null && MyMenuCredits.Count != 0)
+            sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
 
-        //// manage the centered title
-        //float tempNewXCreditsTitle = (GameWindowWidth - sizeCreditsTitle.X) / 2;
-        //CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, GameWindowHeight / 12);
+        // manage the centered title
+        float tempNewXCreditsTitle = (WindowDimension.GameWindowWidth - sizeCreditsTitle.X) / 2;
+        CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, WindowDimension.GameWindowHeight / 12);
 
-        //// manage the positions of the credits
-        //if (MyMenuCredits != null)
-        //{
-        //    for (int i = 0; i < MyMenuCredits.Count; i++)
-        //    {
-        //        var credit = MyMenuCredits[i];
-        //        for (int j = 0; j < credit.AnchorPosition.Count; j++)
-        //        {
-        //            var anchor = credit.AnchorPosition[j];
-        //            MyMenuCredits[i].AnchorPosition[j] =
-        //                new Vector2(GameWindowWidth / 12, sizeCreditsTitle.Y * 3 // anchor of the whole credits
-        //                                                + j * sizeCreditsLine.Y // anchor of each lines
-        //                                                + i * sizeCreditsLine.Y * 4); // anchor of each block
-        //        }
-        //    }
-        //}
+        // manage the positions of the credits
+        if (MyMenuCredits != null)
+        {
+            for (int i = 0; i < MyMenuCredits.Count; i++)
+            {
+                var credit = MyMenuCredits[i];
+                for (int j = 0; j < credit.AnchorPosition.Count; j++)
+                {
+                    var anchor = credit.AnchorPosition[j];
+                    MyMenuCredits[i].AnchorPosition[j] =
+                        new Vector2(WindowDimension.GameWindowHeight / 12,
+                                    sizeCreditsTitle.Y * 3 // anchor of the whole credits
+                                    + j * sizeCreditsLine.Y // anchor of each lines
+                                    + i * sizeCreditsLine.Y * 4); // anchor of each block
+                }
+            }
+        }
+
+        #endregion
 
         #region Manage the Instructions part
 
-        //InstructionsTitle = "The Instructions";
+        InstructionsTitle = "The Instructions";
 
-        //// Load fonts
-        //InstructionsFontTitle = StandardFontTitle;
-        //InstructionsFontLines = StandardFontLines;
+        // Load fonts
+        InstructionsFontTitle = StandardFontTitle;
+        InstructionsFontLines = StandardFontLines;
 
-        //// measure size text
-        //Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
-        //Vector2 sizeInstructionsLine = new Vector2();
-        //if (MyMenuInstructions != null && MyMenuInstructions.Count != 0)
-        //    sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
+        // measure size text
+        Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
+        Vector2 sizeInstructionsLine = new Vector2();
+        if (MyMenuInstructions != null && MyMenuInstructions.Count != 0)
+            sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
 
-        //// manage the centered title
-        //float tempNewXInstructionsTitle = (GameWindowWidth - sizeInstructionsTitle.X) / 2;
-        //InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, GameWindowHeight / 12);
+        // manage the centered title
+        float tempNewXInstructionsTitle = (WindowDimension.GameWindowWidth - sizeInstructionsTitle.X) / 2;
+        InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, WindowDimension.GameWindowHeight / 12);
 
-        //// manage the positions of the instructions
-        //if (MyMenuInstructions != null)
-        //{
-        //    for (int i = 0; i < MyMenuInstructions.Count; i++)
-        //    {
-        //        var instruction = MyMenuInstructions[i];
-        //        for (int j = 0; j < instruction.AnchorPosition.Count; j++)
-        //        {
-        //            var anchor = instruction.AnchorPosition[j];
-        //            MyMenuInstructions[i].AnchorPosition[j] =
-        //                new Vector2(GameWindowWidth / 12, sizeInstructionsTitle.Y * 3 // anchor of the whole credits
-        //                                                + j * sizeInstructionsLine.Y // anchor of each lines
-        //                                                + i * sizeInstructionsLine.Y * 4); // anchor of each block
-        //        }
-        //    }
-        //}
+        // manage the positions of the instructions
+        if (MyMenuInstructions != null)
+        {
+            for (int i = 0; i < MyMenuInstructions.Count; i++)
+            {
+                var instruction = MyMenuInstructions[i];
+                for (int j = 0; j < instruction.AnchorPosition.Count; j++)
+                {
+                    var anchor = instruction.AnchorPosition[j];
+                    MyMenuInstructions[i].AnchorPosition[j] =
+                        new Vector2(WindowDimension.GameWindowHeight / 12,
+                                    sizeInstructionsTitle.Y * 3 // anchor of the whole credits
+                                    + j * sizeInstructionsLine.Y // anchor of each lines
+                                    + i * sizeInstructionsLine.Y * 4); // anchor of each block
+                }
+            }
+        }
         #endregion
 
-        #endregion
     }
     #endregion
 
@@ -225,26 +237,28 @@ public class Menu
 
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
                 { // initialize tweening parameters
-                    MenuOut = true;
-                    IsMenuStable = false;
+                    //MenuOut = true;
+                    //IsMenuStable = false;
                     //InitializeTweening();
                     TargetState = Main.EnumMainState.MenuCredits;
+                    return Main.EnumMainState.MenuCredits; // TO REMOVE
                 }
 
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
                 { // initialize tweening parameters
-                    MenuOut = true;
-                    IsMenuStable = false;
+                    //MenuOut = true;
+                    //IsMenuStable = false;
                     //InitializeTweening();
                     TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
                 }
 
                 if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Instructions")
                 { // initialize tweening parameters
-                    MenuOut = true;
-                    IsMenuStable = false;
+                    //MenuOut = true;
+                    //IsMenuStable = false;
                     //InitializeTweening();
                     TargetState = Main.EnumMainState.MenuInstructions;
+                    return Main.EnumMainState.MenuInstructions; // TO REMOVE
                 }
             }
             #endregion
@@ -255,6 +269,48 @@ public class Menu
         { // call the tweening effect
             //pMyState = TweeningSelectionLines(pGameTime, MenuIn, MenuOut, pMyState, TargetState);
         }
+
+        return pMyState;
+    }
+    #endregion
+
+    #region MenuInstructionsUpdate
+    public Main.EnumMainState MenuInstructionsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+    {
+        NewState = Keyboard.GetState();
+
+        if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
+        {
+            //soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+            // initialize the tweening parameters
+            //InitializeTweening();
+            //IsMenuStable = false;
+            //MenuIn = true;
+            pMyState = Main.EnumMainState.MenuTitle;
+        }
+
+        OldState = NewState;
+
+        return pMyState;
+    }
+    #endregion
+
+    #region MenuCreditsUpdate
+    public Main.EnumMainState MenuCreditsUpdate(GameTime pGameTime, Main.EnumMainState pMyState)
+    {
+        NewState = Keyboard.GetState();
+
+        if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
+        {
+            //soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+            // initialize the tweening parameters
+            //InitializeTweening();
+            //IsMenuStable = false;
+            //MenuIn = true;
+            pMyState = Main.EnumMainState.MenuTitle;
+        }
+
+        OldState = NewState;
 
         return pMyState;
     }
@@ -288,6 +344,45 @@ public class Menu
             //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
         }
         #endregion
+    }
+    #endregion
+
+    #region MenuInstructionsDraw
+    public void MenuInstructionsDraw(GameTime pGameTime)
+    {
+        // Draw Instructions title
+        Main.GlobalSpriteBatch.DrawString(InstructionsFontTitle, InstructionsTitle, InstructionsTitlePosition, Color.White);
+
+        // Draw Instructions themselves
+        foreach (var instruction in MyMenuInstructions)
+        {
+            Main.GlobalSpriteBatch.DrawString(InstructionsFontLines, instruction.Action, instruction.AnchorPosition[0], Color.White);
+            Main.GlobalSpriteBatch.DrawString(InstructionsFontLines, instruction.Control, instruction.AnchorPosition[1], Color.White);
+        }
+
+        // Draw the BackArrow pic
+        //SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
+        //SpriteBatch.DrawString(InstructionsFontTitle, backArrowText, backArrowTextPos, Color.White);
+    }
+    #endregion
+
+    #region MenuCreditsDraw
+    public void MenuCreditsDraw(GameTime pGameTime)
+    {
+        // Draw Credits title
+        Main.GlobalSpriteBatch.DrawString(CreditsFontTitle, CreditsTitle, CreditsTitlePosition, Color.White);
+
+        // Draw Credits themselves
+        foreach (var credit in MyMenuCredits)
+        {
+            Main.GlobalSpriteBatch.DrawString(CreditsFontLines, credit.Assets, credit.AnchorPosition[0], Color.White);
+            Main.GlobalSpriteBatch.DrawString(CreditsFontLines, credit.Name, credit.AnchorPosition[1], Color.White);
+            Main.GlobalSpriteBatch.DrawString(CreditsFontLines, credit.Source, credit.AnchorPosition[2], Color.White);
+        }
+
+        // Draw the BackArrow pic
+        //SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
+        //SpriteBatch.DrawString(CreditsFontTitle, backArrowText, backArrowTextPos, Color.White);
     }
     #endregion
 }
