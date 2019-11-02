@@ -109,7 +109,7 @@ public class LoadMenuData
         MenuData.MenuSelection.SelectionItems = new List<Tuple<EnumMenuItem, string>>
             {
                 new Tuple<EnumMenuItem, string>(EnumMenuItem.NewGame, "New game"),
-                //new Tuple<EnumMenuItem, string>(EnumMenuItem.Instructions, "Instructions"),
+                new Tuple<EnumMenuItem, string>(EnumMenuItem.Instructions, "Instructions"),
                 new Tuple<EnumMenuItem, string>(EnumMenuItem.Credits, "Credits"),
                 new Tuple<EnumMenuItem, string>(EnumMenuItem.Quit, "Quit"),
             };

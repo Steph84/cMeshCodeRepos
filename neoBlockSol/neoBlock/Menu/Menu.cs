@@ -62,10 +62,9 @@ public class Menu
         StandardFontTitle = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman24");
         StandardFontLines = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman12");
 
-        #region Manage the titles on the main screen
-        CreditsTitle = "The Credits";
         if (MyMenuTitles != null)
         {
+            #region Manage the titles on the main screen
             foreach (LoadMenuData.TitleProperties item in MyMenuTitles)
             {
                 // Load the Font
@@ -82,13 +81,9 @@ public class Menu
                 else
                     item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
             }
-        }
-        else { throw new Exception("Loading Error - MyMenuTitles"); }
-        #endregion
+            #endregion
 
-        #region Manage the Selection part
-        if (MyMenuSelection != null)
-        {
+            #region Manage the Selection part
             // Load the Font for the Selection
             if (MyMenuSelection.FontFileName != null)
             {
@@ -111,9 +106,9 @@ public class Menu
                 }
             }
             else { throw new Exception("Missing Data Error - SelectionItems"); }
+            #endregion
         }
         else { throw new Exception("Loading Error - MyMenuSelection"); }
-        #endregion
 
         //backArrowPic = Main.content.Load<Texture2D>("backArrow");
         //backArrowTarget = new Rectangle(5, 5, 32, 32);
@@ -121,26 +116,25 @@ public class Menu
         //backArrowText = "Esc";
 
         #region Manage the Credits
-
-        // TODO test if we have Credits
-
-        // Load fonts
-        CreditsFontTitle = StandardFontTitle;
-        CreditsFontLines = StandardFontLines;
-
-        // measure size text
-        Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
-        Vector2 sizeCreditsLine = new Vector2();
-        if (MyMenuCredits != null && MyMenuCredits.Count != 0)
-            sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
-
-        // manage the centered title
-        float tempNewXCreditsTitle = (WindowDimension.GameWindowWidth - sizeCreditsTitle.X) / 2;
-        CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, WindowDimension.GameWindowHeight / 12);
-
-        // manage the positions of the credits
         if (MyMenuCredits != null)
         {
+            CreditsTitle = "The Credits";
+
+            // Load fonts
+            CreditsFontTitle = StandardFontTitle;
+            CreditsFontLines = StandardFontLines;
+
+            // measure size text
+            Vector2 sizeCreditsTitle = CreditsFontTitle.MeasureString(CreditsTitle);
+            Vector2 sizeCreditsLine = new Vector2();
+            if (MyMenuCredits.Count != 0)
+                sizeCreditsLine = CreditsFontLines.MeasureString(MyMenuCredits[0].Assets);
+
+            // manage the centered title
+            float tempNewXCreditsTitle = (WindowDimension.GameWindowWidth - sizeCreditsTitle.X) / 2;
+            CreditsTitlePosition = new Vector2(tempNewXCreditsTitle, WindowDimension.GameWindowHeight / 12);
+
+            // manage the positions of the credits
             for (int i = 0; i < MyMenuCredits.Count; i++)
             {
                 var credit = MyMenuCredits[i];
@@ -159,28 +153,25 @@ public class Menu
         #endregion
 
         #region Manage the Instructions part
-
-        // TODO test if we have Instructions
-
-        InstructionsTitle = "The Instructions";
-
-        // Load fonts
-        InstructionsFontTitle = StandardFontTitle;
-        InstructionsFontLines = StandardFontLines;
-
-        // measure size text
-        Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
-        Vector2 sizeInstructionsLine = new Vector2();
-        if (MyMenuInstructions != null && MyMenuInstructions.Count != 0)
-            sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
-
-        // manage the centered title
-        float tempNewXInstructionsTitle = (WindowDimension.GameWindowWidth - sizeInstructionsTitle.X) / 2;
-        InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, WindowDimension.GameWindowHeight / 12);
-
-        // manage the positions of the instructions
         if (MyMenuInstructions != null)
         {
+            InstructionsTitle = "The Instructions";
+
+            // Load fonts
+            InstructionsFontTitle = StandardFontTitle;
+            InstructionsFontLines = StandardFontLines;
+
+            // measure size text
+            Vector2 sizeInstructionsTitle = InstructionsFontTitle.MeasureString(InstructionsTitle);
+            Vector2 sizeInstructionsLine = new Vector2();
+            if (MyMenuInstructions.Count != 0)
+                sizeInstructionsLine = InstructionsFontLines.MeasureString(MyMenuInstructions[0].Action);
+
+            // manage the centered title
+            float tempNewXInstructionsTitle = (WindowDimension.GameWindowWidth - sizeInstructionsTitle.X) / 2;
+            InstructionsTitlePosition = new Vector2(tempNewXInstructionsTitle, WindowDimension.GameWindowHeight / 12);
+
+            // manage the positions of the instructions
             for (int i = 0; i < MyMenuInstructions.Count; i++)
             {
                 var instruction = MyMenuInstructions[i];
@@ -196,7 +187,6 @@ public class Menu
             }
         }
         #endregion
-
     }
     #endregion
 
@@ -208,7 +198,6 @@ public class Menu
             NewState = Keyboard.GetState();
 
             #region Manage the move through the selection menu
-
             if (NewState.IsKeyDown(Keys.Down) && !OldState.IsKeyDown(Keys.Down))
             {
                 //soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
@@ -235,37 +224,38 @@ public class Menu
                 //soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
 
                 // TODO put a switch now we have Enum
-
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Quit)
-                { // wait for the sound to end then quit
-                    //System.Threading.Thread.Sleep(soundValidateSelect.Duration);
-                    pMyState = Main.EnumMainState.MenuQuit;
-                }
-
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Credits)
-                { // initialize tweening parameters
-                    //MenuOut = true;
-                    //IsMenuStable = false;
-                    //InitializeTweening();
-                    TargetState = Main.EnumMainState.MenuCredits;
-                    return Main.EnumMainState.MenuCredits; // TO REMOVE
-                }
-
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.NewGame)
-                { // initialize tweening parameters
-                    //MenuOut = true;
-                    //IsMenuStable = false;
-                    //InitializeTweening();
-                    TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
-                }
-
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Instructions)
-                { // initialize tweening parameters
-                    //MenuOut = true;
-                    //IsMenuStable = false;
-                    //InitializeTweening();
-                    TargetState = Main.EnumMainState.MenuInstructions;
-                    return Main.EnumMainState.MenuInstructions; // TO REMOVE
+                switch (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1)
+                {
+                    case LoadMenuData.EnumMenuItem.NewGame:
+                        // initialize tweening parameters
+                        //MenuOut = true;
+                        //IsMenuStable = false;
+                        //InitializeTweening();
+                        TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
+                        break;
+                    case LoadMenuData.EnumMenuItem.Instructions:
+                        // initialize tweening parameters
+                        //MenuOut = true;
+                        //IsMenuStable = false;
+                        //InitializeTweening();
+                        TargetState = Main.EnumMainState.MenuInstructions;
+                        return Main.EnumMainState.MenuInstructions; // TO REMOVE
+                        break;
+                    case LoadMenuData.EnumMenuItem.Credits:
+                        // initialize tweening parameters
+                        //MenuOut = true;
+                        //IsMenuStable = false;
+                        //InitializeTweening();
+                        TargetState = Main.EnumMainState.MenuCredits;
+                        return Main.EnumMainState.MenuCredits; // TO REMOVE
+                        break;
+                    case LoadMenuData.EnumMenuItem.Quit:
+                        // wait for the sound to end then quit
+                        //System.Threading.Thread.Sleep(soundValidateSelect.Duration);
+                        pMyState = Main.EnumMainState.MenuQuit;
+                        break;
+                    default:
+                        break;
                 }
             }
             #endregion
@@ -274,7 +264,7 @@ public class Menu
         }
         else
         { // call the tweening effect
-            //pMyState = TweeningSelectionLines(pGameTime, MenuIn, MenuOut, pMyState, TargetState);
+          //pMyState = TweeningSelectionLines(pGameTime, MenuIn, MenuOut, pMyState, TargetState);
         }
 
         return pMyState;
