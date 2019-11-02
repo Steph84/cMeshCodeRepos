@@ -14,8 +14,11 @@ public class Menu
 
     private Color tempColor;
 
+    // sound stuff
+    SoundEffect SoundHeadBack, SoundMoveSelect, SoundValidateSelect;
+    float SoundVolumeEffects;
+
     // keyboard stuff
-    //KeyBoardManager MyKeyBoardManager = new KeyBoardManager();
     private KeyboardState OldState = new KeyboardState();
     private KeyboardState NewState = new KeyboardState();
 
@@ -60,10 +63,10 @@ public class Menu
         }
         else { throw new Exception("Loading Error - MyMenuData"); }
 
-        //soundMoveSelect = Main.content.Load<SoundEffect>("moveSelect");
-        //soundValidateSelect = Main.content.Load<SoundEffect>("validateSelect");
-        //soundHeadBack = Main.content.Load<SoundEffect>("headBack");
-        //volumeSoundEffects = 0.25f;
+        SoundMoveSelect = Main.GlobalContent.Load<SoundEffect>("moveSelect");
+        SoundValidateSelect = Main.GlobalContent.Load<SoundEffect>("validateSelect");
+        SoundHeadBack = Main.GlobalContent.Load<SoundEffect>("headBack");
+        SoundVolumeEffects = 0.25f;
 
         StandardFontTitle = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman24");
         StandardFontLines = Main.GlobalContent.Load<SpriteFont>("TimesNewRoman12");
@@ -207,12 +210,12 @@ public class Menu
             #region Manage the move through the selection menu
             if (NewState.IsKeyDown(Keys.Down) && !OldState.IsKeyDown(Keys.Down))
             {
-                //soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                SoundMoveSelect.Play(SoundVolumeEffects, 0.0f, 0.0f);
                 MyMenuSelection.ItemSelected += 1;
             }
             if (NewState.IsKeyDown(Keys.Up) && !OldState.IsKeyDown(Keys.Up))
             {
-                //soundMoveSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                SoundMoveSelect.Play(SoundVolumeEffects, 0.0f, 0.0f);
                 MyMenuSelection.ItemSelected -= 1;
             }
 
@@ -228,7 +231,7 @@ public class Menu
             #region Manage the MainState status
             if (NewState.IsKeyDown(Keys.Enter) && !OldState.IsKeyDown(Keys.Enter))
             {
-                //soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
+                SoundValidateSelect.Play(SoundVolumeEffects, 0.0f, 0.0f);
 
                 // TODO put a switch now we have Enum
                 switch (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1)
@@ -258,7 +261,7 @@ public class Menu
                         break;
                     case LoadMenuData.EnumMenuItem.Quit:
                         // wait for the sound to end then quit
-                        //System.Threading.Thread.Sleep(soundValidateSelect.Duration);
+                        System.Threading.Thread.Sleep(SoundValidateSelect.Duration);
                         pMyState = Main.EnumMainState.MenuQuit;
                         break;
                     default:
@@ -285,7 +288,7 @@ public class Menu
 
         if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
         {
-            //soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+            SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
             // initialize the tweening parameters
             //InitializeTweening();
             //IsMenuStable = false;
@@ -306,7 +309,7 @@ public class Menu
 
         if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
         {
-            //soundHeadBack.Play(volumeSoundEffects, 0.0f, 0.0f);
+            SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
             // initialize the tweening parameters
             //InitializeTweening();
             //IsMenuStable = false;

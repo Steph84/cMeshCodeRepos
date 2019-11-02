@@ -39,6 +39,18 @@
 /processorParam:TextureFormat=Compressed
 /build:Capture_it.spritefont
 
+#begin headBack.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:headBack.wav
+
+#begin moveSelect.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:moveSelect.wav
+
 #begin Pacifico.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -59,4 +71,10 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:TimesNewRoman24.spritefont
+
+#begin validateSelect.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:validateSelect.wav
 
