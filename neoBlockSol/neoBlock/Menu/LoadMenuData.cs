@@ -103,13 +103,14 @@ public class LoadMenuData
                 "Credits",
                 "Quit"
             };
-        MenuData.MenuSelection.AnchorItems = new List<Vector2>
-            {
-                new Vector2(0, 0),
-                new Vector2(0, 0),
-                new Vector2(0, 0),
-                new Vector2(0, 0),
-            };
+
+        // dynamic allocation if there's change in item menu list
+        MenuData.MenuSelection.AnchorItems = new List<Vector2>(MenuData.MenuSelection.SelectionItems.Count);
+        for (int i = 0; i < MenuData.MenuSelection.SelectionItems.Count; i++)
+        {
+            MenuData.MenuSelection.AnchorItems.Add(new Vector2(0, 0));
+        }
+
         MenuData.MenuSelection.AnchorPosition = new Vector2(0, 7);
         MenuData.MenuSelection.Alignment = TextAlignment.EnumLineAlignment.Center;
         MenuData.MenuSelection.EnumColor = PersonnalColors.EnumColorName.White;
