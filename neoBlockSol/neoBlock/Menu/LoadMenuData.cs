@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class LoadMenuData
 {
@@ -28,7 +30,7 @@ public class LoadMenuData
 
     public class MenuSelection
     {
-        public List<string> SelectionItems { get; set; }
+        public List<Tuple<EnumMenuItem, string>> SelectionItems { get; set; }
         public List<Vector2> AnchorItems { get; set; }
         public Vector2 AnchorPosition { get; set; }
         public PersonnalColors.EnumColorName EnumColor { get; set; }
@@ -53,6 +55,14 @@ public class LoadMenuData
         public List<Vector2> AnchorPosition { get; set; }
         public string Action { get; set; }
         public string Control { get; set; }
+    }
+
+    public enum EnumMenuItem
+    {
+        NewGame,
+        Instructions,
+        Credits,
+        Quit
     }
     #endregion
 
@@ -96,12 +106,12 @@ public class LoadMenuData
 
         #region MenuSelection
         MenuData.MenuSelection = new MenuSelection();
-        MenuData.MenuSelection.SelectionItems = new List<string>
+        MenuData.MenuSelection.SelectionItems = new List<Tuple<EnumMenuItem, string>>
             {
-                "New game",
-                "Instructions",
-                "Credits",
-                "Quit"
+                new Tuple<EnumMenuItem, string>(EnumMenuItem.NewGame, "New game"),
+                //new Tuple<EnumMenuItem, string>(EnumMenuItem.Instructions, "Instructions"),
+                new Tuple<EnumMenuItem, string>(EnumMenuItem.Credits, "Credits"),
+                new Tuple<EnumMenuItem, string>(EnumMenuItem.Quit, "Quit"),
             };
 
         // dynamic allocation if there's change in item menu list
@@ -119,55 +129,61 @@ public class LoadMenuData
         #endregion
 
         #region Credits
-        MenuData.Credits = new List<CreditsProperties>();
-        MenuData.Credits.Add(new CreditsProperties
+        if (MenuData.MenuSelection.SelectionItems.Where(x => x.Item1 == EnumMenuItem.Credits).Count() > 0)
         {
-            AnchorPosition = new List<Vector2>
+            MenuData.Credits = new List<CreditsProperties>();
+            MenuData.Credits.Add(new CreditsProperties
+            {
+                AnchorPosition = new List<Vector2>
                 {
                     new Vector2(0, 300),
                     new Vector2(0, 300),
                     new Vector2(0, 300),
                 },
-            Assets = "Background picture",
-            Name = "Alexander Ovechkin",
-            Source = "http://"
-        });
-        MenuData.Credits.Add(new CreditsProperties
-        {
-            AnchorPosition = new List<Vector2>
+                Assets = "Background picture",
+                Name = "Alexander Ovechkin",
+                Source = "http://"
+            });
+            MenuData.Credits.Add(new CreditsProperties
+            {
+                AnchorPosition = new List<Vector2>
                 {
                     new Vector2(0, 300),
                     new Vector2(0, 300),
                     new Vector2(0, 300),
                 },
-            Assets = "Sound effect",
-            Name = "Teemu Selanne",
-            Source = "http://"
-        });
+                Assets = "Sound effect",
+                Name = "Teemu Selanne",
+                Source = "http://"
+            });
+        }
         #endregion
 
         #region Instructions
-        MenuData.Instructions = new List<InstructionsProperties>();
-        MenuData.Instructions.Add(new InstructionsProperties
+        if (MenuData.MenuSelection.SelectionItems.Where(x => x.Item1 == EnumMenuItem.Instructions).Count() > 0)
         {
-            AnchorPosition = new List<Vector2>
+            MenuData.Instructions = new List<InstructionsProperties>();
+            MenuData.Instructions.Add(new InstructionsProperties
+            {
+                AnchorPosition = new List<Vector2>
                 {
                     new Vector2(0, 300),
                     new Vector2(0, 300)
                 },
-            Action = "Direction",
-            Control = "WASD arrow keys"
-        });
-        MenuData.Instructions.Add(new InstructionsProperties
-        {
-            AnchorPosition = new List<Vector2>
+                Action = "Direction",
+                Control = "WASD arrow keys"
+            });
+            MenuData.Instructions.Add(new InstructionsProperties
+            {
+                AnchorPosition = new List<Vector2>
                 {
                     new Vector2(0, 300),
                     new Vector2(0, 300)
                 },
-            Action = "Jump",
-            Control = "Space key"
-        });
+                Action = "Jump",
+                Control = "Space key"
+            });
+        }
         #endregion
 
         return MenuData;

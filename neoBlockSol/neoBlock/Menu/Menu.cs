@@ -102,7 +102,7 @@ public class Menu
                 {
                     // determine positions for the selection lines
                     float availableSpaceCenter = (WindowDimension.GameWindowWidth - MyMenuSelection.AnchorItems[i].X);
-                    Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(MyMenuSelection.SelectionItems[i]);
+                    Vector2 sizeCenter = MyMenuSelection.Font.MeasureString(MyMenuSelection.SelectionItems[i].Item2);
 
                     MyMenuSelection.AnchorItems[i] =
                         new Vector2((availableSpaceCenter - sizeCenter.X) / 2,
@@ -121,6 +121,9 @@ public class Menu
         //backArrowText = "Esc";
 
         #region Manage the Credits
+
+        // TODO test if we have Credits
+
         // Load fonts
         CreditsFontTitle = StandardFontTitle;
         CreditsFontLines = StandardFontLines;
@@ -156,6 +159,8 @@ public class Menu
         #endregion
 
         #region Manage the Instructions part
+
+        // TODO test if we have Instructions
 
         InstructionsTitle = "The Instructions";
 
@@ -229,13 +234,15 @@ public class Menu
             {
                 //soundValidateSelect.Play(volumeSoundEffects, 0.0f, 0.0f);
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Quit")
+                // TODO put a switch now we have Enum
+
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Quit)
                 { // wait for the sound to end then quit
                     //System.Threading.Thread.Sleep(soundValidateSelect.Duration);
                     pMyState = Main.EnumMainState.MenuQuit;
                 }
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Credits")
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Credits)
                 { // initialize tweening parameters
                     //MenuOut = true;
                     //IsMenuStable = false;
@@ -244,7 +251,7 @@ public class Menu
                     return Main.EnumMainState.MenuCredits; // TO REMOVE
                 }
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "New game")
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.NewGame)
                 { // initialize tweening parameters
                     //MenuOut = true;
                     //IsMenuStable = false;
@@ -252,7 +259,7 @@ public class Menu
                     TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
                 }
 
-                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected] == "Instructions")
+                if (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1 == LoadMenuData.EnumMenuItem.Instructions)
                 { // initialize tweening parameters
                     //MenuOut = true;
                     //IsMenuStable = false;
@@ -339,7 +346,7 @@ public class Menu
                     //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
                 }
 
-                Main.GlobalSpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i], MyMenuSelection.AnchorItems[i], tempColor);
+                Main.GlobalSpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i].Item2, MyMenuSelection.AnchorItems[i], tempColor);
             }
             //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
         }
