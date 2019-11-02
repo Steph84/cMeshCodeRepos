@@ -29,6 +29,12 @@ public class Menu
     private Vector2 InstructionsTitlePosition;
     private SpriteFont InstructionsFontTitle, InstructionsFontLines;
 
+    // backArrow stuff
+    private Texture2D BackArrowPic;
+    private Rectangle BackArrowTarget;
+    private Vector2 BackArrowTextPos;
+    private string BackArrowText;
+
     // prepare the tweening
     //Tweening MyTweening;
     private bool MenuIn = true; // the selection items arrive
@@ -109,12 +115,7 @@ public class Menu
             #endregion
         }
         else { throw new Exception("Loading Error - MyMenuSelection"); }
-
-        //backArrowPic = Main.content.Load<Texture2D>("backArrow");
-        //backArrowTarget = new Rectangle(5, 5, 32, 32);
-        //backArrowTextPos = new Vector2(50, 5);
-        //backArrowText = "Esc";
-
+        
         #region Manage the Credits
         if (MyMenuCredits != null)
         {
@@ -187,6 +188,12 @@ public class Menu
             }
         }
         #endregion
+
+        // Initialize back arrow data
+        BackArrowPic = Main.GlobalContent.Load<Texture2D>("backArrow");
+        BackArrowTarget = new Rectangle(5, 5, 32, 32);
+        BackArrowTextPos = new Vector2(50, 5);
+        BackArrowText = "Esc";
     }
     #endregion
 
@@ -358,8 +365,8 @@ public class Menu
         }
 
         // Draw the BackArrow pic
-        //SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
-        //SpriteBatch.DrawString(InstructionsFontTitle, backArrowText, backArrowTextPos, Color.White);
+        Main.GlobalSpriteBatch.Draw(BackArrowPic, BackArrowTarget, Color.White);
+        Main.GlobalSpriteBatch.DrawString(InstructionsFontTitle, BackArrowText, BackArrowTextPos, Color.White);
     }
     #endregion
 
@@ -378,8 +385,8 @@ public class Menu
         }
 
         // Draw the BackArrow pic
-        //SpriteBatch.Draw(backArrowPic, backArrowTarget, Color.White);
-        //SpriteBatch.DrawString(CreditsFontTitle, backArrowText, backArrowTextPos, Color.White);
+        Main.GlobalSpriteBatch.Draw(BackArrowPic, BackArrowTarget, Color.White);
+        Main.GlobalSpriteBatch.DrawString(CreditsFontTitle, BackArrowText, BackArrowTextPos, Color.White);
     }
     #endregion
 }
