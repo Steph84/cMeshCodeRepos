@@ -38,12 +38,21 @@ public class Menu
     private Vector2 BackArrowTextPos;
     private string BackArrowText;
 
-    // prepare the tweening
-    //Tweening MyTweening;
+    #region Data for the tweening
+    private double InitTime = 0;
+    private double InitDuration = 1.5;
+    private Tweening MyTweening = new Tweening();
     private bool MenuIn = true; // the selection items arrive
     private bool MenuOut = false; // for the selection items to go out
-    private bool IsMenuStable = true; // at the beginning, the menu is not usable
+    private bool IsMenuStable = false; // at the beginning, the menu is not usable
     private Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
+
+    // List of positions for each selection item
+    List<float> tweeningTargetPosIn;
+    List<float> tweeningOriginPosIn;
+    List<float> tweeningTargetPosOut;
+    List<float> tweeningOriginPosOut;
+    #endregion
 
     #region Constructor Menu
     public Menu()
@@ -99,6 +108,12 @@ public class Menu
                 MyMenuSelection.Font = Main.GlobalContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
             }
             else { throw new Exception("Missing Data Error - FontFileName"); }
+            
+            // Manage the position of each selection item
+            tweeningOriginPosIn = new List<float>();
+            tweeningTargetPosIn = new List<float>();
+            tweeningOriginPosOut = new List<float>();
+            tweeningTargetPosOut = new List<float>();
 
             if (MyMenuSelection.SelectionItems != null)
             {
@@ -112,6 +127,11 @@ public class Menu
                         new Vector2((availableSpaceCenter - sizeCenter.X) / 2,
                                     (MyMenuSelection.AnchorPosition.Y / 12) * WindowDimension.GameWindowHeight + (i - 1) * sizeCenter.Y);
 
+                    // determine positions for the tweening
+                    tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
+                    tweeningOriginPosIn.Add(-100 * (i + 1));
+                    tweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
+                    tweeningTargetPosOut.Add(WindowDimension.GameWindowWidth + (100 * ((3 - i) + 1)));
                 }
             }
             else { throw new Exception("Missing Data Error - SelectionItems"); }
@@ -197,6 +217,9 @@ public class Menu
         BackArrowTarget = new Rectangle(5, 5, 32, 32);
         BackArrowTextPos = new Vector2(50, 5);
         BackArrowText = "Esc";
+
+        // initialize the tweening
+        MyTweening = new Tweening(InitTime, InitDuration);
     }
     #endregion
 
@@ -238,26 +261,24 @@ public class Menu
                 {
                     case LoadMenuData.EnumMenuItem.NewGame:
                         // initialize tweening parameters
-                        //MenuOut = true;
-                        //IsMenuStable = false;
-                        //InitializeTweening();
+                        MenuOut = true;
+                        IsMenuStable = false;
+                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
                         break;
                     case LoadMenuData.EnumMenuItem.Instructions:
                         // initialize tweening parameters
-                        //MenuOut = true;
-                        //IsMenuStable = false;
-                        //InitializeTweening();
+                        MenuOut = true;
+                        IsMenuStable = false;
+                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuInstructions;
-                        return Main.EnumMainState.MenuInstructions; // TO REMOVE
                         break;
                     case LoadMenuData.EnumMenuItem.Credits:
                         // initialize tweening parameters
-                        //MenuOut = true;
-                        //IsMenuStable = false;
-                        //InitializeTweening();
+                        MenuOut = true;
+                        IsMenuStable = false;
+                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuCredits;
-                        return Main.EnumMainState.MenuCredits; // TO REMOVE
                         break;
                     case LoadMenuData.EnumMenuItem.Quit:
                         // wait for the sound to end then quit
@@ -273,8 +294,9 @@ public class Menu
             OldState = NewState;
         }
         else
-        { // call the tweening effect
-          //pMyState = TweeningSelectionLines(pGameTime, MenuIn, MenuOut, pMyState, TargetState);
+        {   
+            // call the tweening effect
+            pMyState = TweeningSelectionLines(pGameTime, pMyState, TargetState);
         }
 
         return pMyState;
@@ -290,9 +312,9 @@ public class Menu
         {
             SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
             // initialize the tweening parameters
-            //InitializeTweening();
-            //IsMenuStable = false;
-            //MenuIn = true;
+            MyTweening.InitializeTweening(InitTime, InitDuration);
+            IsMenuStable = false;
+            MenuIn = true;
             pMyState = Main.EnumMainState.MenuTitle;
         }
 
@@ -311,9 +333,9 @@ public class Menu
         {
             SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
             // initialize the tweening parameters
-            //InitializeTweening();
-            //IsMenuStable = false;
-            //MenuIn = true;
+            MyTweening.InitializeTweening(InitTime, InitDuration);
+            IsMenuStable = false;
+            MenuIn = true;
             pMyState = Main.EnumMainState.MenuTitle;
         }
 
@@ -390,6 +412,56 @@ public class Menu
         // Draw the BackArrow pic
         Main.GlobalSpriteBatch.Draw(BackArrowPic, BackArrowTarget, Color.White);
         Main.GlobalSpriteBatch.DrawString(CreditsFontTitle, BackArrowText, BackArrowTextPos, Color.White);
+    }
+    #endregion
+
+    #region Methode to do the tweening on the selection lines In and Out
+    private Main.EnumMainState TweeningSelectionLines(GameTime pGameTime,
+                                                      Main.EnumMainState pMyState,
+                                                      Main.EnumMainState pTargetState)
+    {
+        Main.EnumMainState temp = pMyState;
+
+        if (MyTweening.Time < MyTweening.Duration)
+            MyTweening.Time = MyTweening.Time + pGameTime.ElapsedGameTime.TotalSeconds;
+        else
+        {
+            IsMenuStable = true;
+            if (MenuIn)
+                MenuIn = false;
+            if (MenuOut)
+            {
+                MenuOut = false;
+                temp = pTargetState;
+            }
+        }
+
+        if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
+        {
+            for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
+            {
+                if (MenuIn)
+                {
+                    MyMenuSelection.AnchorItems[i] =
+                                        new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
+                                                                          tweeningOriginPosIn[i],
+                                                                          tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
+                                                                          MyTweening.Duration),
+                                                    MyMenuSelection.AnchorItems[i].Y);
+                }
+
+                if (MenuOut)
+                {
+                    MyMenuSelection.AnchorItems[i] =
+                                        new Vector2(MyTweening.EaseInSin(MyTweening.Time,
+                                                                          tweeningOriginPosOut[i],
+                                                                          tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
+                                                                          MyTweening.Duration),
+                                                    MyMenuSelection.AnchorItems[i].Y);
+                }
+            }
+        }
+        return temp;
     }
     #endregion
 }
