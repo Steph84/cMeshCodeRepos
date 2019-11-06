@@ -49,6 +49,7 @@ public class Main : Game
     {
         GlobalSpriteBatch = new SpriteBatch(GraphicsDevice);
 
+        // TODO make the menu with or without tweening with a bool var
         MyMenu = new Menu();
     }
 

@@ -40,18 +40,18 @@ public class Menu
 
     #region Data for the tweening
     private double InitTime = 0;
-    private double InitDuration = 1.5;
+    private double InitDuration = 1.25;
     private Tweening MyTweening = new Tweening();
-    private bool MenuIn = true; // the selection items arrive
-    private bool MenuOut = false; // for the selection items to go out
+    // the selection items arrive or to go out
+    private Tweening.DirectionObject DirectionMenu = Tweening.DirectionObject.In;
     private bool IsMenuStable = false; // at the beginning, the menu is not usable
     private Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
 
     // List of positions for each selection item
-    List<float> tweeningTargetPosIn;
-    List<float> tweeningOriginPosIn;
-    List<float> tweeningTargetPosOut;
-    List<float> tweeningOriginPosOut;
+    List<float> TweeningTargetPosIn;
+    List<float> TweeningOriginPosIn;
+    List<float> TweeningTargetPosOut;
+    List<float> TweeningOriginPosOut;
     #endregion
 
     #region Constructor Menu
@@ -110,10 +110,10 @@ public class Menu
             else { throw new Exception("Missing Data Error - FontFileName"); }
             
             // Manage the position of each selection item
-            tweeningOriginPosIn = new List<float>();
-            tweeningTargetPosIn = new List<float>();
-            tweeningOriginPosOut = new List<float>();
-            tweeningTargetPosOut = new List<float>();
+            TweeningOriginPosIn = new List<float>();
+            TweeningTargetPosIn = new List<float>();
+            TweeningOriginPosOut = new List<float>();
+            TweeningTargetPosOut = new List<float>();
 
             if (MyMenuSelection.SelectionItems != null)
             {
@@ -128,10 +128,10 @@ public class Menu
                                     (MyMenuSelection.AnchorPosition.Y / 12) * WindowDimension.GameWindowHeight + (i - 1) * sizeCenter.Y);
 
                     // determine positions for the tweening
-                    tweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
-                    tweeningOriginPosIn.Add(-100 * (i + 1));
-                    tweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
-                    tweeningTargetPosOut.Add(WindowDimension.GameWindowWidth + (100 * ((3 - i) + 1)));
+                    TweeningTargetPosIn.Add(MyMenuSelection.AnchorItems[i].X);
+                    TweeningOriginPosIn.Add(-100 * (i + 1));
+                    TweeningOriginPosOut.Add(MyMenuSelection.AnchorItems[i].X);
+                    TweeningTargetPosOut.Add(WindowDimension.GameWindowWidth + (100 * ((3 - i) + 1)));
                 }
             }
             else { throw new Exception("Missing Data Error - SelectionItems"); }
@@ -255,27 +255,26 @@ public class Menu
             if (NewState.IsKeyDown(Keys.Enter) && !OldState.IsKeyDown(Keys.Enter))
             {
                 SoundValidateSelect.Play(SoundVolumeEffects, 0.0f, 0.0f);
-
-                // TODO put a switch now we have Enum
+                
                 switch (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1)
                 {
                     case LoadMenuData.EnumMenuItem.NewGame:
                         // initialize tweening parameters
-                        MenuOut = true;
+                        DirectionMenu = Tweening.DirectionObject.Out;
                         IsMenuStable = false;
                         MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
                         break;
                     case LoadMenuData.EnumMenuItem.Instructions:
                         // initialize tweening parameters
-                        MenuOut = true;
+                        DirectionMenu = Tweening.DirectionObject.Out;
                         IsMenuStable = false;
                         MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuInstructions;
                         break;
                     case LoadMenuData.EnumMenuItem.Credits:
                         // initialize tweening parameters
-                        MenuOut = true;
+                        DirectionMenu = Tweening.DirectionObject.Out;
                         IsMenuStable = false;
                         MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuCredits;
@@ -314,7 +313,7 @@ public class Menu
             // initialize the tweening parameters
             MyTweening.InitializeTweening(InitTime, InitDuration);
             IsMenuStable = false;
-            MenuIn = true;
+            DirectionMenu = Tweening.DirectionObject.In;
             pMyState = Main.EnumMainState.MenuTitle;
         }
 
@@ -335,7 +334,7 @@ public class Menu
             // initialize the tweening parameters
             MyTweening.InitializeTweening(InitTime, InitDuration);
             IsMenuStable = false;
-            MenuIn = true;
+            DirectionMenu = Tweening.DirectionObject.In;
             pMyState = Main.EnumMainState.MenuTitle;
         }
 
@@ -427,37 +426,38 @@ public class Menu
         else
         {
             IsMenuStable = true;
-            if (MenuIn)
-                MenuIn = false;
-            if (MenuOut)
+            if (DirectionMenu == Tweening.DirectionObject.Out)
             {
-                MenuOut = false;
                 temp = pTargetState;
             }
+            DirectionMenu = Tweening.DirectionObject.None;
         }
 
         if (MyMenuSelection != null && MyMenuSelection.SelectionItems != null)
         {
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
-                if (MenuIn)
+                switch (DirectionMenu)
                 {
-                    MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
-                                                                          tweeningOriginPosIn[i],
-                                                                          tweeningTargetPosIn[i] - tweeningOriginPosIn[i],
-                                                                          MyTweening.Duration),
-                                                    MyMenuSelection.AnchorItems[i].Y);
-                }
-
-                if (MenuOut)
-                {
-                    MyMenuSelection.AnchorItems[i] =
-                                        new Vector2(MyTweening.EaseInSin(MyTweening.Time,
-                                                                          tweeningOriginPosOut[i],
-                                                                          tweeningTargetPosOut[i] - tweeningOriginPosOut[i],
-                                                                          MyTweening.Duration),
-                                                    MyMenuSelection.AnchorItems[i].Y);
+                    case Tweening.DirectionObject.In:
+                        MyMenuSelection.AnchorItems[i] =
+                            new Vector2(MyTweening.EaseOutSin(MyTweening.Time,
+                                                              TweeningOriginPosIn[i],
+                                                              TweeningTargetPosIn[i] - TweeningOriginPosIn[i],
+                                                              MyTweening.Duration),
+                                        MyMenuSelection.AnchorItems[i].Y);
+                        break;
+                    case Tweening.DirectionObject.Out:
+                        MyMenuSelection.AnchorItems[i] =
+                            new Vector2(MyTweening.EaseInSin(MyTweening.Time,
+                                                             TweeningOriginPosOut[i],
+                                                             TweeningTargetPosOut[i] - TweeningOriginPosOut[i],
+                                                             MyTweening.Duration),
+                                        MyMenuSelection.AnchorItems[i].Y);
+                        break;
+                    case Tweening.DirectionObject.None:
+                    default:
+                        break;
                 }
             }
         }

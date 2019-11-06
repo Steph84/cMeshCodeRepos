@@ -5,6 +5,13 @@ class Tweening
     public double Time { get; set; }
     public double Duration { get; set; }
 
+    public enum DirectionObject
+    {
+        None,
+        In,
+        Out
+    }
+
     public Tweening(double pTime = 0, double pDuration = 1)
     {
         InitializeTweening(pTime, pDuration);
