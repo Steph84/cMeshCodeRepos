@@ -356,15 +356,14 @@ public class Menu
             for (int i = 0; i < MyMenuSelection.SelectionItems.Count; i++)
             {
                 tempColor = Color.SlateGray;
+
                 if (MyMenuSelection.ItemSelected == i)
                 {
                     tempColor = Color.White;
-                    //MyMenuSelection.SelectionItems[i] = string.Format("> {0} <", MyMenuSelection.SelectionItems[i]);
                 }
 
                 Main.GlobalSpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[i].Item2, MyMenuSelection.AnchorItems[i], tempColor);
             }
-            //SpriteBatch.DrawString(MyMenuSelection.Font, MyMenuSelection.SelectionItems[0], tweeningPos, tempColor);
         }
         #endregion
     }
