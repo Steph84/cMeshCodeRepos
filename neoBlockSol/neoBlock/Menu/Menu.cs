@@ -15,8 +15,8 @@ public class Menu
     private Color tempColor;
 
     // sound stuff
-    SoundEffect SoundHeadBack, SoundMoveSelect, SoundValidateSelect;
-    float SoundVolumeEffects;
+    private SoundEffect SoundHeadBack, SoundMoveSelect, SoundValidateSelect;
+    private float SoundVolumeEffects;
 
     // keyboard stuff
     private KeyboardState OldState = new KeyboardState();
@@ -39,12 +39,13 @@ public class Menu
     private string BackArrowText;
 
     #region Data for the tweening
+    private bool HaveTweening = false;
     private double InitTime = 0;
     private double InitDuration = 1.25;
     private Tweening MyTweening = new Tweening();
     // the selection items arrive or to go out
     private Tweening.DirectionObject DirectionMenu = Tweening.DirectionObject.In;
-    private bool IsMenuStable = false; // at the beginning, the menu is not usable
+    private bool IsMenuStable = true; // at the beginning, the menu is not usable
     private Main.EnumMainState TargetState = Main.EnumMainState.MenuTitle; // target state for the tweening
 
     // List of positions for each selection item
@@ -55,8 +56,9 @@ public class Menu
     #endregion
 
     #region Constructor Menu
-    public Menu()
+    public Menu(bool pHaveTweening)
     {
+        HaveTweening = pHaveTweening;
         LoadMenuData.MenuData MyMenuData;
 
         LoadMenuData LoadMenuData = new LoadMenuData();
@@ -108,7 +110,7 @@ public class Menu
                 MyMenuSelection.Font = Main.GlobalContent.Load<SpriteFont>(MyMenuSelection.FontFileName);
             }
             else { throw new Exception("Missing Data Error - FontFileName"); }
-            
+
             // Manage the position of each selection item
             TweeningOriginPosIn = new List<float>();
             TweeningTargetPosIn = new List<float>();
@@ -138,7 +140,7 @@ public class Menu
             #endregion
         }
         else { throw new Exception("Loading Error - MyMenuSelection"); }
-        
+
         #region Manage the Credits
         if (MyMenuCredits != null)
         {
@@ -219,7 +221,11 @@ public class Menu
         BackArrowText = "Esc";
 
         // initialize the tweening
-        MyTweening = new Tweening(InitTime, InitDuration);
+        if (HaveTweening)
+        {
+            IsMenuStable = false;
+            MyTweening = new Tweening(InitTime, InitDuration);
+        }
     }
     #endregion
 
@@ -255,36 +261,26 @@ public class Menu
             if (NewState.IsKeyDown(Keys.Enter) && !OldState.IsKeyDown(Keys.Enter))
             {
                 SoundValidateSelect.Play(SoundVolumeEffects, 0.0f, 0.0f);
-                
+
                 switch (MyMenuSelection.SelectionItems[MyMenuSelection.ItemSelected].Item1)
                 {
                     case LoadMenuData.EnumMenuItem.NewGame:
-                        // initialize tweening parameters
-                        DirectionMenu = Tweening.DirectionObject.Out;
-                        IsMenuStable = false;
-                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.GamePlayable; // or GameAnimation maybe
-                        break;
+                        goto default;
                     case LoadMenuData.EnumMenuItem.Instructions:
-                        // initialize tweening parameters
-                        DirectionMenu = Tweening.DirectionObject.Out;
-                        IsMenuStable = false;
-                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuInstructions;
-                        break;
+                        goto default;
                     case LoadMenuData.EnumMenuItem.Credits:
-                        // initialize tweening parameters
-                        DirectionMenu = Tweening.DirectionObject.Out;
-                        IsMenuStable = false;
-                        MyTweening.InitializeTweening(InitTime, InitDuration);
                         TargetState = Main.EnumMainState.MenuCredits;
-                        break;
+                        goto default;
                     case LoadMenuData.EnumMenuItem.Quit:
                         // wait for the sound to end then quit
                         System.Threading.Thread.Sleep(SoundValidateSelect.Duration);
                         pMyState = Main.EnumMainState.MenuQuit;
                         break;
                     default:
+                        if (HaveTweening) { InitMenuTwweening(Tweening.DirectionObject.Out); }
+                        else { pMyState = TargetState; }
                         break;
                 }
             }
@@ -293,8 +289,7 @@ public class Menu
             OldState = NewState;
         }
         else
-        {   
-            // call the tweening effect
+        {
             pMyState = TweeningSelectionLines(pGameTime, pMyState, TargetState);
         }
 
@@ -310,11 +305,11 @@ public class Menu
         if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
         {
             SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
-            // initialize the tweening parameters
-            MyTweening.InitializeTweening(InitTime, InitDuration);
-            IsMenuStable = false;
-            DirectionMenu = Tweening.DirectionObject.In;
             pMyState = Main.EnumMainState.MenuTitle;
+            if (HaveTweening)
+            {
+                InitMenuTwweening(Tweening.DirectionObject.In);
+            }
         }
 
         OldState = NewState;
@@ -331,11 +326,11 @@ public class Menu
         if (NewState.IsKeyDown(Keys.Escape) && !OldState.IsKeyDown(Keys.Escape))
         {
             SoundHeadBack.Play(SoundVolumeEffects, 0.0f, 0.0f);
-            // initialize the tweening parameters
-            MyTweening.InitializeTweening(InitTime, InitDuration);
-            IsMenuStable = false;
-            DirectionMenu = Tweening.DirectionObject.In;
             pMyState = Main.EnumMainState.MenuTitle;
+            if (HaveTweening)
+            {
+                InitMenuTwweening(Tweening.DirectionObject.In);
+            }
         }
 
         OldState = NewState;
@@ -411,6 +406,16 @@ public class Menu
         // Draw the BackArrow pic
         Main.GlobalSpriteBatch.Draw(BackArrowPic, BackArrowTarget, Color.White);
         Main.GlobalSpriteBatch.DrawString(CreditsFontTitle, BackArrowText, BackArrowTextPos, Color.White);
+    }
+    #endregion
+
+    #region Initialize the tweening parameters for moving the menu
+    private void InitMenuTwweening(Tweening.DirectionObject pDirectionMenu)
+    {
+        // initialize the tweening parameters
+        MyTweening.InitializeTweening(InitTime, InitDuration);
+        IsMenuStable = false;
+        DirectionMenu = pDirectionMenu;
     }
     #endregion
 

@@ -14,6 +14,7 @@ public class Main : Game
 
     public WindowDimension MyWindow { get; set; }
     public Menu MyMenu { get; set; }
+    private bool MenuHaveTweening = true;
     private string MyTitleGameWindow = "NeoBlock";
     private EnumMainState MyState = EnumMainState.MenuTitle;
 
@@ -48,9 +49,8 @@ public class Main : Game
     protected override void LoadContent()
     {
         GlobalSpriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO make the menu with or without tweening with a bool var
-        MyMenu = new Menu();
+        
+        MyMenu = new Menu(MenuHaveTweening);
     }
 
     protected override void UnloadContent() { }
