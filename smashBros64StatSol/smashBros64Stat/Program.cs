@@ -27,6 +27,11 @@ class Program
         List<DataByStage> FullData = new List<DataByStage>();
         foreach (Stage stage in Enum.GetValues(typeof(Stage)))
         {
+            if (stage == Stage.None)
+            {
+                continue;
+            }
+
             DataByStage tempDataByStage = new DataByStage()
             {
                 Stage = stage,
@@ -54,10 +59,11 @@ class Program
         using (var reader = new StreamReader("../../data.csv"))
         {
             int line_count = 0;
+            Stage currentStage = Stage.None;
+
             while (!reader.EndOfStream)
             {
                 line_count++;
-                Stage currentStage = Stage.None;
                 
                 var line = reader.ReadLine();
                 var values = line.Split(';');
@@ -65,12 +71,17 @@ class Program
                 // first line or multiple of 14
                 if (line_count == 1 || line_count % 14 == 0)
                 {
-                    currentStage = DictDataToStage[values[0]];
+                    currentStage = DictDataToStage[values[0].Split('_')[0]];
                 }
                 else
                 {
-                    DataByStage dataToUpdate = FullData.Where(x => x.Stage == currentStage).First();
+                    int idChar = line_count % 14;
+                    DataByStage dataStageToUpdate = FullData.Where(x => x.Stage == currentStage).First();
+                    DataByCharacter dataCharToUpdate = dataStageToUpdate.ListDataByCharacter.Where(x => x.Character == (Character)idChar).First();
 
+                    // TODO wrong. do by line isatead of by column
+
+                    int a = 2;
                 }
 
 

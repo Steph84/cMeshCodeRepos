@@ -18,7 +18,7 @@ class ExtractionTools
 
     public enum Character
     {
-        Luigi = 1,
+        Luigi = 2,
         Mario,
         DonkeyKong,
         Link,
