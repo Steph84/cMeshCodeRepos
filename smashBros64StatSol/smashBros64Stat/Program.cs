@@ -31,7 +31,7 @@ class Program
 
     public enum Character
     {
-        Luigi = 1,
+        Luigi,
         Mario,
         DonkeyKong,
         Link,

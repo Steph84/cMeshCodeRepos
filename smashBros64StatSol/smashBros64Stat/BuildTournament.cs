@@ -9,13 +9,66 @@ class BuildTournament
 {
     public BuildTournament()
     {
-        List<TournByCharacter> FinalData = new List<TournByCharacter>();
+        List<TournByCharacter> FinalData = InitData();
+        List<Tuple<Character, Character, Character, Character>> ListGames = new List<Tuple<Character, Character, Character, Character>>();
+
+        int iter = 0;
+        while (iter < 12)
+        {
+            List<TournByCharacter> sortedList = FinalData.OrderBy(x => x.GamePlayed).ToList();
+
+            List<TournByCharacter> listCharToUpdate = new List<TournByCharacter>();
+            listCharToUpdate.Add(sortedList[0]);
+
+            foreach (TournByCharacter charcToLook in sortedList.Skip(1))
+            {
+                List<CoupleCharGP> oppToLook = charcToLook.ListCouple.OrderBy(y => y.OppGP).Take(6).ToList();
+                CoupleCharGP hypoOppToKeep = oppToLook.Where(z => z.Opponent == sortedList[0].Character).FirstOrDefault();
+                if (hypoOppToKeep != null)
+                {
+                    listCharToUpdate.Add(charcToLook);
+                }
+
+                if (listCharToUpdate.Count == 4)
+                {
+                    break;
+                }
+            }
+
+            List<Character> listCharInvolved = listCharToUpdate.Select(x => x.Character).ToList();
+            foreach (TournByCharacter item in listCharToUpdate)
+            {
+                item.GamePlayed++;
+                foreach (Character thisChar in listCharInvolved.Where(y => y != item.Character))
+                {
+                    item.ListCouple.Where(z => z.Opponent == thisChar).Single().OppGP++;
+                }
+            }
+
+            ListGames.Add(new Tuple<Character, Character, Character, Character>
+                (
+                    listCharToUpdate[0].Character,
+                    listCharToUpdate[1].Character,
+                    listCharToUpdate[2].Character,
+                    listCharToUpdate[3].Character
+                ));
+
+            iter++;
+        }
+
+        int machin = 2;
+    }
+
+    private List<TournByCharacter> InitData()
+    {
+        List<TournByCharacter> tempFinalData = new List<TournByCharacter>();
         foreach (Character charac in Enum.GetValues(typeof(Character)))
         {
             TournByCharacter tempTournByCharacter = new TournByCharacter()
             {
                 Character = charac,
-                DictGames = new Dictionary<Character, int>()
+                GamePlayed = 0,
+                ListCouple = new List<CoupleCharGP>()
             };
 
             foreach (Character subCharac in Enum.GetValues(typeof(Character)))
@@ -24,23 +77,29 @@ class BuildTournament
                 {
                     continue;
                 }
-                tempTournByCharacter.DictGames.Add(subCharac, 0);
+                tempTournByCharacter.ListCouple.Add(new CoupleCharGP()
+                {
+                    Opponent = subCharac,
+                    OppGP = 0
+                });
             }
 
-            FinalData.Add(tempTournByCharacter);
+            tempFinalData.Add(tempTournByCharacter);
         }
 
-        int x = 2;
-    }
-
-    class TournData
-    {
-        List<TournByCharacter> ListTournByCharacter { get; set; }
+        return tempFinalData;
     }
 
     class TournByCharacter
     {
         public Character Character { get; set; }
-        public Dictionary<Character, int> DictGames { get; set; }
+        public int GamePlayed { get; set; }
+        public List<CoupleCharGP> ListCouple { get; set; }
+    }
+
+    class CoupleCharGP
+    {
+        public Character Opponent { get; set; }
+        public int OppGP { get; set; }
     }
 }
