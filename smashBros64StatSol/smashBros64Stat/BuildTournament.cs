@@ -9,11 +9,13 @@ class BuildTournament
 {
     public BuildTournament()
     {
+        // TODO make simple version with 8 characters
+
         List<TournByCharacter> FinalData = InitData();
         List<Tuple<Character, Character, Character, Character>> ListGames = new List<Tuple<Character, Character, Character, Character>>();
 
         int iter = 0;
-        while (iter < 12)
+        while (iter < 24)
         {
             List<TournByCharacter> sortedList = FinalData.OrderBy(x => x.GamePlayed).ToList();
 
@@ -22,7 +24,7 @@ class BuildTournament
 
             foreach (TournByCharacter charcToLook in sortedList.Skip(1))
             {
-                List<CoupleCharGP> oppToLook = charcToLook.ListCouple.OrderBy(y => y.OppGP).Take(6).ToList();
+                List<CoupleCharGP> oppToLook = charcToLook.ListCouple.OrderBy(y => y.OppGP).Take(8).ToList();
                 CoupleCharGP hypoOppToKeep = oppToLook.Where(z => z.Opponent == sortedList[0].Character).FirstOrDefault();
                 if (hypoOppToKeep != null)
                 {
