@@ -8,7 +8,8 @@ class Program
     {
         Console.WriteLine("Compute N64 Smash Bros data");
 
-        ExtractData MyExtraction = new ExtractData();
+        //ExtractData MyExtraction = new ExtractData();
+        BuildTournament MyTournament = new BuildTournament();
 
 
         Console.ReadKey();
