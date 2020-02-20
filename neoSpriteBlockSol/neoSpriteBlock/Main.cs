@@ -39,7 +39,7 @@ public class Main : Game
         GlobalCurrentDisplayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
         GlobalViewport = GraphicsDevice.Viewport;
         GlobalGameWindow = Window;
-        MyWindow = new WindowDimension();
+        MyWindow = new WindowDimension(true);
 
         base.Initialize();
     }

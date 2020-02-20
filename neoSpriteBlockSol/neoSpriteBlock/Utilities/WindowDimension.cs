@@ -8,29 +8,30 @@ public class WindowDimension : Game
     public static int GameWindowWidth { get; private set; }
     public static int GameWindowHeight { get; private set; }
     public double GameSizeCoefficient { get; set; }
+    private bool IsFullScreen { get; set; }
 
     // initialize values
     bool AllowAltF4 = true;
     bool IsBorderless = false;
-    bool IsFullScreen = false;
 
     // Array for the GameWindow in relation to the resolution
-    int[,] ArrayResolution = new int[4, 5] {  // displayRes / gameWindowRes
-                                                { 1024, 768, 1152, 576, 10 },
-                                                { 1920, 1080, 1728, 864, 15 },
-                                                { 2560, 1440, 2304, 1152, 20 },
-                                                { 3840, 2160, 3456, 1728, 30 }
+    int[,] ArrayResolution = new int[4, 5] {  // displayRes/gameWindowRes/GameSizeCoefficient/nb tiles 32x32
+                                                { 1024, 768, 1152, 576, 10 }, // 36x18
+                                                { 1920, 1080, 1728, 864, 15 }, // 54x27
+                                                { 2560, 1440, 2304, 1152, 20 }, // 72x36
+                                                { 3840, 2160, 3456, 1728, 30 } // 108x54
                                             };
     #endregion
 
     #region WindowDimension Constructor     
-    public WindowDimension()
+    public WindowDimension(bool pIsFullScreen = false)
     {
         // get the different current dimensions
         DisplayWidth = Main.GlobalCurrentDisplayMode.Width;
         DisplayHeight = Main.GlobalCurrentDisplayMode.Height;
         GameWindowWidth = Main.GlobalViewport.Width;
         GameWindowHeight = Main.GlobalViewport.Height;
+        IsFullScreen = pIsFullScreen;
 
         // initialize gameWindow parameters
         Main.GlobalGameWindow.AllowAltF4 = AllowAltF4;
@@ -44,6 +45,10 @@ public class WindowDimension : Game
         }
         else
             ResizeGameWindow();
+
+        // update the size in the object
+        GameWindowWidth = Main.GlobalGraphics.PreferredBackBufferWidth;
+        GameWindowHeight = Main.GlobalGraphics.PreferredBackBufferHeight;
 
         // apply changes ;-)
         Main.GlobalGraphics.ApplyChanges();
@@ -90,10 +95,6 @@ public class WindowDimension : Game
         // update the GameWindow
         Main.GlobalGraphics.PreferredBackBufferWidth = newGameWindowWidth;
         Main.GlobalGraphics.PreferredBackBufferHeight = newGameWindowHeight;
-
-        // update the size in the object
-        GameWindowWidth = newGameWindowWidth;
-        GameWindowHeight = newGameWindowHeight;
     }
     #endregion
 }
