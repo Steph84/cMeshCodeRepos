@@ -45,6 +45,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteFolder\SpriteObject.cs" />
+    <Compile Include="SpriteFolder\TileObject.cs" />
     <Compile Include="Utilities\DebugToolBox.cs" />
     <Compile Include="Utilities\PersonnalColors.cs" />
     <Compile Include="Utilities\WindowDimension.cs" />
