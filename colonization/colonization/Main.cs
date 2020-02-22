@@ -13,7 +13,7 @@ public class Main : Game
 
     public WindowDimension MyWindow { get; set; }
     private bool MenuHaveTweening = true;
-    private string MyTitleGameWindow = "NeoSpriteBlock";
+    private string MyTitleGameWindow = "Colonization Processus";
     private EnumMainState MyState = EnumMainState.GamePlayable;
 
     public enum EnumMainState
@@ -39,7 +39,7 @@ public class Main : Game
         GlobalCurrentDisplayMode = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode;
         GlobalViewport = GraphicsDevice.Viewport;
         GlobalGameWindow = Window;
-        MyWindow = new WindowDimension(true);
+        MyWindow = new WindowDimension();
 
         base.Initialize();
     }
@@ -79,7 +79,9 @@ public class Main : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.LightGreen);
+        //GraphicsDevice.Clear(Color.LightGreen);
+        Vector4 testColor = PersonnalColors.GetRGBFromColorName(PersonnalColors.EnumColorName.Blue);
+        GraphicsDevice.Clear(ClearOptions.Target, testColor, 1.0f, 1);
 
         // SamplerState.PointClamp to avoid blur from rescaling pixel art
         GlobalSpriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
