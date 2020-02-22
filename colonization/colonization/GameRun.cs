@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xna.Framework;
 
-class GameRun
+public class GameRun
 {
     public Map MyMap { get; set; }
 
     public GameRun()
     {
-        MyMap = new Map("testMapBitMap", "wallsTopDownTileSet", 96, 96);
+        MyMap = new Map("map");
     }
 
     public Main.EnumMainState GameRunUpdate(GameTime pGameTime, Main.EnumMainState pMyState)

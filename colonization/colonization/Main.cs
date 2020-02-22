@@ -12,6 +12,7 @@ public class Main : Game
     public static ContentManager GlobalContent;
 
     public WindowDimension MyWindow { get; set; }
+    public GameRun MyGame { get; set; }
     private bool MenuHaveTweening = true;
     private string MyTitleGameWindow = "Colonization Processus";
     private EnumMainState MyState = EnumMainState.GamePlayable;
@@ -40,6 +41,7 @@ public class Main : Game
         GlobalViewport = GraphicsDevice.Viewport;
         GlobalGameWindow = Window;
         MyWindow = new WindowDimension();
+        MyGame = new GameRun();
 
         base.Initialize();
     }
