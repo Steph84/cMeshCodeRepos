@@ -9,8 +9,8 @@
     <ProjectGuid>{8ED2163B-83FB-490D-8F92-7B139533EC5C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>neoBlock</RootNamespace>
-    <AssemblyName>neoBlock</AssemblyName>
+    <RootNamespace>colonization</RootNamespace>
+    <AssemblyName>colonization</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
