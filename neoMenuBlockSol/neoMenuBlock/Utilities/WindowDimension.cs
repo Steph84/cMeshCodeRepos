@@ -16,10 +16,10 @@ public class WindowDimension : Game
 
     // Array for the GameWindow in relation to the resolution
     int[,] ArrayResolution = new int[4, 5] {  // displayRes/gameWindowRes/GameSizeCoefficient/nb tiles 32x32
-                                                { 1024, 768, 1152, 576, 10 }, // 36x18
-                                                { 1920, 1080, 1728, 864, 15 }, // 54x27
-                                                { 2560, 1440, 2304, 1152, 20 }, // 72x36
-                                                { 3840, 2160, 3456, 1728, 30 } // 108x54
+                                                { 1366, 768, 1152, 640, 10 }, // 36x20
+                                                { 1920, 1080, 1728, 960, 15 }, // 54x30
+                                                { 2560, 1440, 2304, 1280, 20 }, // 72x40
+                                                { 3840, 2160, 3456, 1920, 30 } // 108x60
                                             };
     #endregion
 
