@@ -95,11 +95,11 @@ public class Menu
                 TextAlignment.ApplyVerticalAlignment(item);
 
                 // set the color of each item
-                Tuple<int, int, int, int> tempColor = PersonnalColors.SetPersonnalColor(item.EnumColor);
+                Vector4 tempColor = PersonnalColors.GetRGBFromColorName(item.EnumColor);
                 if (item.EnumColor == PersonnalColors.EnumColorName.White)
                     item.Color = Color.White;
                 else
-                    item.Color = new Color(tempColor.Item1, tempColor.Item2, tempColor.Item3, tempColor.Item4);
+                    item.Color = new Color(tempColor.X, tempColor.Y, tempColor.Z, tempColor.W);
             }
             #endregion
 
