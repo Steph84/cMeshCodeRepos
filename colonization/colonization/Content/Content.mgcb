@@ -25,6 +25,11 @@
 /processorParam:TextureFormat=Color
 /build:map.bmp
 
+#begin map02.xml
+/importer:XmlImporter
+/processor:PassThroughProcessor
+/build:map02.xml
+
 #begin TimesNewRoman12.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
