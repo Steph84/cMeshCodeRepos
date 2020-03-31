@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:ns="Microsoft.Xna.Framework">
+  <Asset Type="System.Collections.Generic.List[Tuile]">
+	  <Item>
+		  <Id>1</Id>
+		  <LeftSide>
+			<CrownNb>0</CrownNb>
+			<Nature>1</Nature>
+		  </LeftSide>
+		  <RightSide>
+			<CrownNb>1</CrownNb>
+			<Nature>2</Nature>
+		  </RightSide>
+		  <Side>1</Side>
+		  <Rectangle>0</Rectangle>
+		</Item>
+  </Asset>
+</XnaContent>
