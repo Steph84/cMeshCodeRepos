@@ -13,8 +13,8 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin testFile.xml
+#begin TileSet.xml
 /importer:XmlImporter
 /processor:PassThroughProcessor
-/build:testFile.xml
+/build:TileSet.xml
 

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Generic:List[string]">
+    <Item>Audi</Item>
+    <Item>BMW</Item>
+    <Item>Nissan</Item>
+    <Item>Volvo</Item>
+  </Asset>
+</XnaContent>

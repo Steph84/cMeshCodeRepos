@@ -3,54 +3,57 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
-public class Game1 : Game
+namespace Machin
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
-    public List<Tuile> XmlData { get; set; }
-
-    public Game1()
+    public class Game1 : Game
     {
-        graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
-    }
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        public List<Tuile> XmlData { get; set; }
 
-    protected override void Initialize()
-    {
-        // TODO: Add your initialization logic here
+        public Game1()
+        {
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+        }
 
-        base.Initialize();
-    }
+        protected override void Initialize()
+        {
+            // TODO: Add your initialization logic here
 
-    protected override void LoadContent()
-    {
-        spriteBatch = new SpriteBatch(GraphicsDevice);
+            base.Initialize();
+        }
 
-        XmlData = Content.Load<List<Tuile>>("");
+        protected override void LoadContent()
+        {
+            spriteBatch = new SpriteBatch(GraphicsDevice);
 
-    }
+            XmlData = Content.Load<List<Tuile>>("");
 
-    protected override void UnloadContent()
-    {
-        // TODO: Unload any non ContentManager content here
-    }
+        }
 
-    protected override void Update(GameTime gameTime)
-    {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+        protected override void UnloadContent()
+        {
+            // TODO: Unload any non ContentManager content here
+        }
 
-        // TODO: Add your update logic here
+        protected override void Update(GameTime gameTime)
+        {
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+                Exit();
 
-        base.Update(gameTime);
-    }
+            // TODO: Add your update logic here
 
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+            base.Update(gameTime);
+        }
 
-        // TODO: Add your drawing code here
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        base.Draw(gameTime);
+            // TODO: Add your drawing code here
+
+            base.Draw(gameTime);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<XnaContent xmlns:ns="Microsoft.Xna.Framework">
-  <Asset Type="System.Collections.Generic.List[Tuile]">
+<XnaContent xmlns:Generic="System.Collections.Generic">
+  <Asset Type="Generic[Machin.Tuile]">
 	  <Item>
 		  <Id>1</Id>
 		  <LeftSide>
