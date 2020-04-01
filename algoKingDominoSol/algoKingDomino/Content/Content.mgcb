@@ -13,8 +13,3 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin TileSet.xml
-/importer:XmlImporter
-/processor:PassThroughProcessor
-/build:TileSet.xml
-
