@@ -2,11 +2,15 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using static TileSetData;
 
 public class Game1 : Game
 {
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
+
+    TileSetData MyTileSetData;
+    List<Tuile> TuilesDeDepart;
 
     public Game1()
     {
@@ -25,6 +29,10 @@ public class Game1 : Game
     {
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        MyTileSetData = new TileSetData();
+
+        // initialization tile set
+        List<Tuile> TuilesDeDepart = MyTileSetData.LoadHardData();
     }
 
     protected override void UnloadContent()
