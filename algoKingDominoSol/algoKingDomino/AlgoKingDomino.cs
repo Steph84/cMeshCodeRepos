@@ -10,6 +10,7 @@ public class AlgoKingDomino : Game
     SpriteBatch spriteBatch;
 
     TileSetData MyTileSetData;
+    Plateau MyPlateau;
     List<Tuile> TuilesDeDepart;
     List<Tuile> TileSetToUse;
 
@@ -31,6 +32,7 @@ public class AlgoKingDomino : Game
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
         MyTileSetData = new TileSetData();
+        MyPlateau = new Plateau();
 
         // initialization tile set
         TuilesDeDepart = MyTileSetData.LoadHardData();
