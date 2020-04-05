@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TileSetData
 {
@@ -375,4 +377,14 @@ public class TileSetData
         return result;
     }
     #endregion
+
+    public List<Tuile> TilesShuffle(List<Tuile> pTuilesDeDepart)
+    {
+        List<Tuile> result = new List<Tuile>();
+
+        //result = pTuilesDeDepart.OrderBy(x => Random.value).ToList();
+
+
+        return result;
+    }
 }

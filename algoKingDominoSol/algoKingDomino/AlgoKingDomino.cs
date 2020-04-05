@@ -4,15 +4,16 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using static TileSetData;
 
-public class Game1 : Game
+public class AlgoKingDomino : Game
 {
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
 
     TileSetData MyTileSetData;
     List<Tuile> TuilesDeDepart;
+    List<Tuile> TileSetToUse;
 
-    public Game1()
+    public AlgoKingDomino()
     {
         graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
@@ -32,7 +33,9 @@ public class Game1 : Game
         MyTileSetData = new TileSetData();
 
         // initialization tile set
-        List<Tuile> TuilesDeDepart = MyTileSetData.LoadHardData();
+        TuilesDeDepart = MyTileSetData.LoadHardData();
+
+        TileSetToUse = MyTileSetData.TilesShuffle(TuilesDeDepart);
     }
 
     protected override void UnloadContent()
