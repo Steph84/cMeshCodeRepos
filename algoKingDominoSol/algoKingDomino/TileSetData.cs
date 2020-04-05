@@ -383,7 +383,8 @@ public class TileSetData
         List<Tuile> result = new List<Tuile>();
 
         //result = pTuilesDeDepart.OrderBy(x => Random.value).ToList();
-
+        var rnd = new Random();
+        result = pTuilesDeDepart.OrderBy(item => rnd.Next()).ToList();
 
         return result;
     }
