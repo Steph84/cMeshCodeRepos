@@ -27,7 +27,9 @@ public class TileSetData
         Water = 3,
         Grass = 4,
         Swamp = 5,
-        Mine = 6
+        Mine = 6,
+        Empty = 10,
+        Forbidden = 11
     }
     #endregion
 

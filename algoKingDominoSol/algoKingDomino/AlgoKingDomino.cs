@@ -38,6 +38,8 @@ public class AlgoKingDomino : Game
         TuilesDeDepart = MyTileSetData.LoadHardData();
 
         TileSetToUse = MyTileSetData.TilesShuffle(TuilesDeDepart);
+
+        MyPlateau.ComputePossibleCases(MyPlateau.BluePlayer);
     }
 
     protected override void UnloadContent()
@@ -47,8 +49,8 @@ public class AlgoKingDomino : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
+
+
 
         // TODO: Add your update logic here
 
