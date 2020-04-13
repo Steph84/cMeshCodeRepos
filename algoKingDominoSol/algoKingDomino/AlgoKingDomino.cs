@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using static Plateau;
 using static TileSetData;
 
 public class AlgoKingDomino : Game
@@ -39,7 +40,8 @@ public class AlgoKingDomino : Game
 
         TileSetToUse = MyTileSetData.TilesShuffle(TuilesDeDepart);
 
-        MyPlateau.ComputePossibleCases(MyPlateau.BluePlayer);
+        List<PossibleMatch> myList = MyPlateau.ComputePossibleCases(MyPlateau.BluePlayer);
+        int x = 3;
     }
 
     protected override void UnloadContent()

@@ -17,6 +17,14 @@ public class TileSetData
     {
         public int CrownNb { get; set; }
         public EnumNature Nature { get; set; }
+
+        public Side() { }
+
+        public Side(Side pOrigin)
+        {
+            CrownNb = pOrigin.CrownNb;
+            Nature = pOrigin.Nature;
+        }
     }
 
     public enum EnumNature
@@ -29,7 +37,7 @@ public class TileSetData
         Swamp = 5,
         Mine = 6,
         Empty = 10,
-        Forbidden = 11
+        Forbidden = 20
     }
     #endregion
 

@@ -25,6 +25,23 @@ public class Plateau
         public Rectangle SquareDestination { get; set; }
         public Point SquareCoordinate { get; set; }
         public Side SidePlaced { get; set; }
+
+        public Case() { }
+
+        public Case(Case pOrigin)
+        {
+            Row = pOrigin.Row;
+            Column = pOrigin.Column;
+            SquareDestination = new Rectangle(pOrigin.SquareDestination.X, pOrigin.SquareDestination.Y, pOrigin.SquareDestination.Width, pOrigin.SquareDestination.Height);
+            SquareCoordinate = new Point(pOrigin.SquareCoordinate.X, pOrigin.SquareCoordinate.Y);
+            SidePlaced = new Side(pOrigin.SidePlaced);
+        }
+    }
+
+    public class PossibleMatch
+    {
+        public Case DestinationCase { get; set; }
+        public List<Case> AroundCases { get; set; }
     }
 
     public Plateau()
@@ -82,10 +99,9 @@ public class Plateau
     }
 
     // Method to get a list of playable actions in a plateau
-    public void ComputePossibleCases(List<Case> pPlayerPlateau)
+    public List<PossibleMatch> ComputePossibleCases(List<Case> pPlayerPlateau)
     {
-        // TODO make a custom object
-        List<Case> result = new List<Case>();
+        List<PossibleMatch> result = new List<PossibleMatch>();
 
         // check the empty cases
         foreach (Case elt in pPlayerPlateau.Where(x => x.SidePlaced.Nature == EnumNature.Empty))
@@ -93,13 +109,18 @@ public class Plateau
             // foreach case, check if there is at least one terrain case around
             List<Case> casesAround = CheckTerrainAround(elt, pPlayerPlateau);
 
-            // if so, the actual case is a possible match
-            if (casesAround.Count != 0)
+            // if so AND if ther is at least 1 case empty, the actual case is a possible match
+            if (casesAround.Where(x => (int)x.SidePlaced.Nature < 10).ToList().Count > 0 && casesAround.Where(x => x.SidePlaced.Nature == EnumNature.Empty).ToList().Count > 0)
             {
-                //result.Add()
-                int x = 2;
+                PossibleMatch tempPosMat = new PossibleMatch()
+                {
+                    DestinationCase = new Case(elt),
+                    AroundCases = casesAround
+                };
+                result.Add(tempPosMat);
             }
         }
+        return result;
     }
 
     // Method to check around specific case into one plateau if there is a terrain
@@ -134,7 +155,7 @@ public class Plateau
 
             if (caseCorresp != null)
             {
-                if ((int)caseCorresp.SidePlaced.Nature < 10)
+                if ((int)caseCorresp.SidePlaced.Nature <= 10)
                 {
                     result.Add(caseCorresp);
                 }
