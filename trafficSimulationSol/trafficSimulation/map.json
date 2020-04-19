@@ -1,0 +1,15 @@
+﻿{
+	"Id": 1,
+	"Row": 0,
+	"Column": 0,
+	"SquareDestination": {
+		"X": 1,
+		"Y": 1,
+		"Width": 32,
+		"Height": 32
+	},
+	"SquareCoordinate": {
+		"X": 1,
+		"Y": 1,
+	}
+}

@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "trafficSimulation", "trafficSimulation\trafficSimulation.csproj", "{381AC5AD-2E39-4509-93F7-AAFDE7AEE9B3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{381AC5AD-2E39-4509-93F7-AAFDE7AEE9B3}.Debug|x86.ActiveCfg = Debug|x86
+		{381AC5AD-2E39-4509-93F7-AAFDE7AEE9B3}.Debug|x86.Build.0 = Debug|x86
+		{381AC5AD-2E39-4509-93F7-AAFDE7AEE9B3}.Release|x86.ActiveCfg = Release|x86
+		{381AC5AD-2E39-4509-93F7-AAFDE7AEE9B3}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {865195C5-278C-4CE6-87EC-AA6AD3214121}
+	EndGlobalSection
+EndGlobal
