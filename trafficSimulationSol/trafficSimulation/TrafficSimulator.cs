@@ -14,6 +14,7 @@ public class TrafficSimulator : Game
 {
     GraphicsDeviceManager graphics;
     SpriteBatch spriteBatch;
+    public static Map MyMap;
 
     public TrafficSimulator()
     {
@@ -33,6 +34,8 @@ public class TrafficSimulator : Game
         graphics.PreferredBackBufferHeight = 640;
         graphics.ApplyChanges();
 
+        MyMap = new Map();
+
         base.Initialize();
     }
 
@@ -45,19 +48,9 @@ public class TrafficSimulator : Game
         // Create a new SpriteBatch, which can be used to draw textures.
         spriteBatch = new SpriteBatch(GraphicsDevice);
 
-        #region Load json file for map
-        string myDirectory = "";
-        // if exe has the json file in the same location
-        myDirectory = Environment.CurrentDirectory;
-        if (!File.Exists(myDirectory + "/map.json"))
-        {
-            // if the exe is in the release or debug directories
-            myDirectory = Directory.GetParent(myDirectory).Parent.Parent.Parent.FullName;
-        }
-        MemoryStream stream = new MemoryStream(Encoding.UTF8.GetBytes(File.ReadAllText(myDirectory + "/map.json")));
-        DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(Map));
-        Map MyMap = (Map)ser.ReadObject(stream);
-        #endregion
+        MyMap.InitializeMap();
+
+        int a = 2;
     }
 
     /// <summary>
