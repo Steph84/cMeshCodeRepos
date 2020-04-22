@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,10 @@ public partial class Map
     [DataMember]
     public List<Tile> ListTiles;
 
+    private Texture2D TileSetMap { get; set; }
+    private Vector2 SpriteOrigin { get; set; }
+    private SpriteEffects SpriteDirection { get; set; }
+    
     public void InitializeMap()
     {
         #region Load json file for map
@@ -28,6 +33,10 @@ public partial class Map
         TrafficSimulator.MyMap = (Map)ser.ReadObject(stream);
         #endregion
 
+        TrafficSimulator.MyMap.SpriteOrigin = new Vector2();
+        TrafficSimulator.MyMap.SpriteDirection = SpriteEffects.None;
+        TrafficSimulator.MyMap.TileSetMap = TrafficSimulator.GlobalContent.Load<Texture2D>("roadTileSet");
+
         CompleteInitMap();
     }
 
@@ -43,7 +52,9 @@ public partial class Map
             t.SquareCoordinate = new Point(tempColumn, tempRow);
             t.Row = tempRow;
             t.Column = tempColumn;
-            
+
+            t.SourceQuad = new Rectangle(t.FlagTile * Constantes.SquareSize, 0, Constantes.SquareSize, Constantes.SquareSize);
+
             if (tempColumn < Constantes.ColumnNumber - 1)
             {
                 tempColumn++;
@@ -53,8 +64,15 @@ public partial class Map
                 tempColumn = 0;
                 tempRow++;
             }
-
             tempId++;
+        }
+    }
+
+    public void MapDraw(GameTime pGameTime)
+    {
+        foreach (Tile t in TrafficSimulator.MyMap.ListTiles)
+        {
+            TrafficSimulator.spriteBatch.Draw(TileSetMap, t.SquareDestination, t.SourceQuad, Color.White, 0, SpriteOrigin, SpriteDirection, 0);
         }
     }
 }
@@ -68,8 +86,9 @@ public partial class Tile
     public int? Id;
     public int? Row { get; set; }
     public int? Column { get; set; }
-    public Rectangle? SquareDestination { get; set; }
-    public Point? SquareCoordinate { get; set; }
+    public Rectangle SquareDestination { get; set; }
+    public Point SquareCoordinate { get; set; }
+    public Rectangle SourceQuad { get; set; }
 }
 
 public static class Constantes

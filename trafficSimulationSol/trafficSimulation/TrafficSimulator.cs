@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -12,14 +13,16 @@ using System.Text;
 /// </summary>
 public class TrafficSimulator : Game
 {
-    GraphicsDeviceManager graphics;
-    SpriteBatch spriteBatch;
+    public static GraphicsDeviceManager graphics;
+    public static SpriteBatch spriteBatch;
+    public static ContentManager GlobalContent;
     public static Map MyMap;
 
     public TrafficSimulator()
     {
         graphics = new GraphicsDeviceManager(this);
-        Content.RootDirectory = "Content";
+        GlobalContent = Content;
+        GlobalContent.RootDirectory = "Content";
     }
 
     /// <summary>
@@ -85,7 +88,12 @@ public class TrafficSimulator : Game
     {
         GraphicsDevice.Clear(Color.Black);
 
-        // TODO: Add your drawing code here
+        // SamplerState.PointClamp to avoid blur from rescaling pixel art
+        spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
+
+        MyMap.MapDraw(gameTime);
+
+        spriteBatch.End();
 
         base.Draw(gameTime);
     }
