@@ -53,7 +53,7 @@ public partial class Map
             t.Row = tempRow;
             t.Column = tempColumn;
 
-            t.SourceQuad = new Rectangle(t.FlagTile * Constantes.SquareSize, 0, Constantes.SquareSize, Constantes.SquareSize);
+            t.SourceQuad = new Rectangle(t.Flag * Constantes.SquareSize, 0, Constantes.SquareSize, Constantes.SquareSize);
 
             if (tempColumn < Constantes.ColumnNumber - 1)
             {
@@ -81,7 +81,7 @@ public partial class Map
 public partial class Tile
 {
     [DataMember]
-    public int FlagTile { get; set; }
+    public int Flag { get; set; }
 
     public int? Id;
     public int? Row { get; set; }
