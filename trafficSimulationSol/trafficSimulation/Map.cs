@@ -83,7 +83,7 @@ public partial class Tile
     [DataMember]
     public int Flag { get; set; }
 
-    public int? Id;
+    public int Id;
     public int? Row { get; set; }
     public int? Column { get; set; }
     public Rectangle SquareDestination { get; set; }

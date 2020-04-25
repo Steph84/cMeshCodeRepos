@@ -26,16 +26,51 @@ public class Fleet
             
         for (int i = 1; i < CarNumbers + 1; i++)
         {
-            Car tempCar = new Car()
-            {
-                Id = i,
-                TileId = Constantes.SquareNumbers,
-                Direction = EnumDirection.North,
-                Speed = 0,
-                PositionOnTile = new Rectangle(19, Constantes.SquareSize - CarTexture.Height, CarTexture.Width, CarTexture.Height)
-            };
+            Car tempCar = new Car(i, CarTexture);
 
             ListCars.Add(tempCar);
+        }
+    }
+
+    public void FleetUpdate(GameTime pGameTime)
+    {
+        double tempSecond = pGameTime.ElapsedGameTime.Milliseconds / 1000.0d;
+
+        foreach (Car c in ListCars)
+        {
+            // movement
+            switch (c.Direction)
+            {
+                case EnumDirection.North:
+                    c.PositionOnTile = new Rectangle(c.PositionOnTile.X, c.PositionOnTile.Y - (int)(c.Speed * tempSecond), c.PositionOnTile.Width, c.PositionOnTile.Height);
+                    break;
+                case EnumDirection.East:
+                    break;
+                case EnumDirection.South:
+                    break;
+                case EnumDirection.West:
+                    break;
+                default:
+                    break;
+            }
+
+            // update tile location
+            // check if the car get out of the tile
+            if (c.PositionOnTile.X < 0 || c.PositionOnTile.X > Constantes.SquareSize || c.PositionOnTile.Y < 0 || c.PositionOnTile.Y > Constantes.SquareSize)
+            {
+                // if so search for the new tile
+                Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == c.TileId).First();
+                Rectangle actualPosition = c.ComputeActualPositionOnMap(c);
+                Tile newTile = TrafficSimulator.MyMap.ListTiles
+                    .Where(x => actualPosition.X > x.SquareDestination.X && actualPosition.X < x.SquareDestination.X + Constantes.SquareSize)
+                    .Where(x => actualPosition.Y > x.SquareDestination.Y && actualPosition.Y < x.SquareDestination.Y + Constantes.SquareSize)
+                    .First();
+
+                c.TileId = newTile.Id;
+
+                // update PositionOnTile to be back inside and under
+            }
+
         }
     }
 
@@ -45,13 +80,7 @@ public class Fleet
         {
             // compute position by translation
             Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == c.TileId).First();
-            c.PositionOnMap = new Rectangle()
-            {
-                Width = c.PositionOnTile.Width,
-                Height = c.PositionOnTile.Height,
-                X = actualTile.SquareDestination.X + c.PositionOnTile.X,
-                Y = actualTile.SquareDestination.Y + c.PositionOnTile.Y
-            };
+            c.PositionOnMap = c.ComputeActualPositionOnMap(c);
             TrafficSimulator.spriteBatch.Draw(CarTexture, c.PositionOnMap, null, Color.White, 0.0f, SpriteOrigin, SpriteDirection, 0.0f);
         }
     }
@@ -62,9 +91,30 @@ public class Car
     public int Id { get; set; }
     public int TileId { get; set; }
     public EnumDirection Direction { get; set; }
-    public int Speed { get; set; }
+    public double Speed { get; set; }
     public Rectangle PositionOnTile { get; set; }
     public Rectangle PositionOnMap { get; set; }
+
+    public Car(int pId, Texture2D pCarTexture)
+    {
+        Id = pId;
+        TileId = Constantes.SquareNumbers;
+        Direction = EnumDirection.North;
+        Speed = 100;
+        PositionOnTile = new Rectangle(19, Constantes.SquareSize - pCarTexture.Height, pCarTexture.Width, pCarTexture.Height);
+    }
+
+    protected internal Rectangle ComputeActualPositionOnMap(Car pC)
+    {
+        Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == pC.TileId).First();
+        return new Rectangle()
+        {
+            Width = pC.PositionOnTile.Width,
+            Height = pC.PositionOnTile.Height,
+            X = actualTile.SquareDestination.X + pC.PositionOnTile.X,
+            Y = actualTile.SquareDestination.Y + pC.PositionOnTile.Y
+        };
+    }
 }
 
 public enum EnumDirection
