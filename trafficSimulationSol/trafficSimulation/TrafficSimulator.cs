@@ -13,14 +13,15 @@ using System.Text;
 /// </summary>
 public class TrafficSimulator : Game
 {
-    public static GraphicsDeviceManager graphics;
+    public static GraphicsDeviceManager GlobalGraphics;
     public static SpriteBatch spriteBatch;
     public static ContentManager GlobalContent;
     public static Map MyMap;
+    public static Fleet MyFleet;
 
     public TrafficSimulator()
     {
-        graphics = new GraphicsDeviceManager(this);
+        GlobalGraphics = new GraphicsDeviceManager(this);
         GlobalContent = Content;
         GlobalContent.RootDirectory = "Content";
     }
@@ -33,11 +34,12 @@ public class TrafficSimulator : Game
     /// </summary>
     protected override void Initialize()
     {
-        graphics.PreferredBackBufferWidth = 1152;
-        graphics.PreferredBackBufferHeight = 640;
-        graphics.ApplyChanges();
+        GlobalGraphics.PreferredBackBufferWidth = 1152;
+        GlobalGraphics.PreferredBackBufferHeight = 640;
+        GlobalGraphics.ApplyChanges();
 
         MyMap = new Map();
+        MyFleet = new Fleet(1);
 
         base.Initialize();
     }
@@ -92,6 +94,7 @@ public class TrafficSimulator : Game
         spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp);
 
         MyMap.MapDraw(gameTime);
+        MyFleet.FleetDraw(gameTime);
 
         spriteBatch.End();
 

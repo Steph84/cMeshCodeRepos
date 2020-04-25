@@ -95,6 +95,6 @@ public static class Constantes
 {
     public const int RowNumber = 20;
     public const int ColumnNumber = 32; // 36 - 4 (hud)
-    public const int SquareNumbers = 720;
+    public const int SquareNumbers = RowNumber * ColumnNumber;
     public const int SquareSize = 32;
 }
