@@ -90,11 +90,3 @@ public partial class Tile
     public Point SquareCoordinate { get; set; }
     public Rectangle SourceQuad { get; set; }
 }
-
-public static class Constantes
-{
-    public const int RowNumber = 20;
-    public const int ColumnNumber = 32; // 36 - 4 (hud)
-    public const int SquareNumbers = RowNumber * ColumnNumber;
-    public const int SquareSize = 32;
-}

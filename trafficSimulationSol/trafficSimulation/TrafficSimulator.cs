@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -100,4 +101,15 @@ public class TrafficSimulator : Game
 
         base.Draw(gameTime);
     }
+}
+
+public static class Constantes
+{
+    public const int RowNumber = 20;
+    public const int ColumnNumber = 32; // 36 - 4 (hud)
+    public const int SquareNumbers = RowNumber * ColumnNumber;
+    public const int SquareSize = 32;
+    public static readonly int[] TilesTurn = { 3, 6, 9, 12 };
+    public static readonly int[] TilesTurnAround = { 1, 2, 4, 8 };
+    public static readonly int[] TilesTTurn = { 3, 6, 9, 12 };
 }

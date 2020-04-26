@@ -38,7 +38,7 @@ public class Fleet
 
         foreach (Car c in ListCars)
         {
-            // movement in relation to the direction and the tile flag
+            // movement in relation to the direction
             switch (c.Direction)
             {
                 case EnumDirection.North:
@@ -53,12 +53,42 @@ public class Fleet
                 default:
                     break;
             }
-            
-            // if the car get out of the tile
+
+            Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == c.TileId).First();
+
+            #region Movement in relation to the tile flag
+            // crossroads
+            if (actualTile.Flag == 15)
+            {
+                // threshold to make a turn
+                // move then pick a direction and continue
+            }
+            // turns
+            else if (Array.Exists(Constantes.TilesTurn, x => x == actualTile.Flag))
+            {
+                // threshold to make a turn
+                // move then turn
+                // change direction mandatory
+            }
+            // turnarounds
+            else if (Array.Exists(Constantes.TilesTurnAround, x => x == actualTile.Flag))
+            {
+                // threshold
+                // move to the end
+                // then turn around and change direction opposite
+            }
+            // t-shape crossroads
+            else if (Array.Exists(Constantes.TilesTTurn, x => x == actualTile.Flag))
+            {
+                // threshold to make a turn
+                // move then pick a direction and continue
+            }
+            #endregion
+
+            #region The car changes tile
             if (c.PositionOnTile.X < 0 || c.PositionOnTile.X > Constantes.SquareSize || c.PositionOnTile.Y < 0 || c.PositionOnTile.Y > Constantes.SquareSize)
             {
                 // if so search for the new tile
-                Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == c.TileId).First();
                 Rectangle actualPosition = c.ComputeActualPositionOnMap(c);
                 Tile newTile = TrafficSimulator.MyMap.ListTiles
                     .Where(x => actualPosition.X > x.SquareDestination.X && actualPosition.X < x.SquareDestination.X + Constantes.SquareSize)
@@ -73,6 +103,7 @@ public class Fleet
                 if (c.PositionOnTile.Y < 0 || c.PositionOnTile.Y > Constantes.SquareSize)
                     c.PositionOnTile = c.UpdateActualPositionOnTile(c, 0, -Math.Sign(c.PositionOnTile.Y));
             }
+            #endregion
 
         }
     }
