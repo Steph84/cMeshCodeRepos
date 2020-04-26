@@ -23,7 +23,7 @@ public class Fleet
         CarTexture = TrafficSimulator.GlobalContent.Load<Texture2D>("carTest");
         SpriteDirection = SpriteEffects.None;
         SpriteOrigin = new Vector2();
-            
+
         for (int i = 1; i < CarNumbers + 1; i++)
         {
             Car tempCar = new Car(i, CarTexture);
@@ -38,7 +38,7 @@ public class Fleet
 
         foreach (Car c in ListCars)
         {
-            // movement
+            // movement in relation to the direction and the tile flag
             switch (c.Direction)
             {
                 case EnumDirection.North:
@@ -53,9 +53,8 @@ public class Fleet
                 default:
                     break;
             }
-
-            // update tile location
-            // check if the car get out of the tile
+            
+            // if the car get out of the tile
             if (c.PositionOnTile.X < 0 || c.PositionOnTile.X > Constantes.SquareSize || c.PositionOnTile.Y < 0 || c.PositionOnTile.Y > Constantes.SquareSize)
             {
                 // if so search for the new tile
@@ -68,7 +67,11 @@ public class Fleet
 
                 c.TileId = newTile.Id;
 
-                // update PositionOnTile to be back inside and under
+                // update PositionOnTile to be back inside
+                if (c.PositionOnTile.X < 0 || c.PositionOnTile.X > Constantes.SquareSize)
+                    c.PositionOnTile = c.UpdateActualPositionOnTile(c, -Math.Sign(c.PositionOnTile.X), 0);
+                if (c.PositionOnTile.Y < 0 || c.PositionOnTile.Y > Constantes.SquareSize)
+                    c.PositionOnTile = c.UpdateActualPositionOnTile(c, 0, -Math.Sign(c.PositionOnTile.Y));
             }
 
         }
@@ -113,6 +116,17 @@ public class Car
             Height = pC.PositionOnTile.Height,
             X = actualTile.SquareDestination.X + pC.PositionOnTile.X,
             Y = actualTile.SquareDestination.Y + pC.PositionOnTile.Y
+        };
+    }
+
+    protected internal Rectangle UpdateActualPositionOnTile(Car pC, int pXupdate, int pYupdate)
+    {
+        return new Rectangle()
+        {
+            Width = pC.PositionOnTile.Width,
+            Height = pC.PositionOnTile.Height,
+            X = pC.PositionOnTile.X + pXupdate * Constantes.SquareSize,
+            Y = pC.PositionOnTile.Y + pYupdate * Constantes.SquareSize
         };
     }
 }
