@@ -22,7 +22,7 @@ public class Fleet
         CarNumbers = pCarNumbers;
         CarTexture = TrafficSimulator.GlobalContent.Load<Texture2D>("carTest");
         SpriteDirection = SpriteEffects.None;
-        SpriteOrigin = new Vector2();
+        SpriteOrigin = new Vector2(CarTexture.Bounds.Width/2, CarTexture.Bounds.Height/2);
 
         for (int i = 1; i < CarNumbers + 1; i++)
         {
@@ -49,6 +49,7 @@ public class Fleet
                 case EnumDirection.South:
                     break;
                 case EnumDirection.West:
+                    c.PositionOnTile = new Rectangle(c.PositionOnTile.X - (int)(c.Speed * tempSecond), c.PositionOnTile.Y, c.PositionOnTile.Width, c.PositionOnTile.Height);
                     break;
                 default:
                     break;
@@ -69,6 +70,11 @@ public class Fleet
                 // threshold to make a turn
                 // move then turn
                 // change direction mandatory
+                if (c.PositionOnTile.Y < 17) // find the right threshold
+                {
+                    c.Direction = EnumDirection.West;
+                    c.Speed = 100;
+                }
             }
             // turnarounds
             else if (Array.Exists(Constantes.TilesTurnAround, x => x == actualTile.Flag))
@@ -115,7 +121,8 @@ public class Fleet
             // compute position by translation
             Tile actualTile = TrafficSimulator.MyMap.ListTiles.Where(x => x.Id == c.TileId).First();
             c.PositionOnMap = c.ComputeActualPositionOnMap(c);
-            TrafficSimulator.spriteBatch.Draw(CarTexture, c.PositionOnMap, null, Color.White, 0.0f, SpriteOrigin, SpriteDirection, 0.0f);
+            
+            TrafficSimulator.spriteBatch.Draw(CarTexture, c.PositionOnMap, null, Color.White, Convert.ToSingle((int)c.Direction * Math.PI / 2.0d), SpriteOrigin, SpriteDirection, 0.0f);
         }
     }
 }
@@ -134,8 +141,8 @@ public class Car
         Id = pId;
         TileId = Constantes.SquareNumbers;
         Direction = EnumDirection.North;
-        Speed = 100;
-        PositionOnTile = new Rectangle(19, Constantes.SquareSize - pCarTexture.Height, pCarTexture.Width, pCarTexture.Height);
+        Speed = 500;
+        PositionOnTile = new Rectangle(19 + 3, Constantes.SquareSize - pCarTexture.Height, pCarTexture.Width, pCarTexture.Height);
     }
 
     protected internal Rectangle ComputeActualPositionOnMap(Car pC)
@@ -164,8 +171,8 @@ public class Car
 
 public enum EnumDirection
 {
-    North = 1, // cts x=19
-    East = 2, // cts y=
-    South = 3, // cts x=7
-    West = 4, // cts y=
+    North = 0, // cts x=19
+    East = 1, // cts y=
+    South = 2, // cts x=7
+    West = 3, // cts y=
 }
