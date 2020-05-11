@@ -12,12 +12,27 @@ public class Program
         
         List<CoffeePlant> Plantation = new List<CoffeePlant>();
         int TotDaysAvail = 56;
+        int GrowthTime = 10;
         int BeanStock = 1;
 
         for (int day = 1; day <= TotDaysAvail; day++) // 56 = 2 seasons of 28 days
         {
+            // check the plantation if we can harvest
+            foreach (CoffeePlant plant in Plantation)
+            {
+                plant.Age++; // aging
+                if (plant.Age >= 10) // if mature
+                {
+                    if (IsEven(plant.Age)) // if even age
+                    {
+                        plant.Production = plant.Production + 4;
+                        BeanStock = BeanStock + 4;
+                    }
+                }
+            }
+
             // if we have bean in stock AND if we have more than 10 days before the end, then plant it
-            if (BeanStock > 0 && day < TotDaysAvail - 10)
+            if (BeanStock > 0 && day < TotDaysAvail - GrowthTime)
             {
                 for (int bean = 1; bean <= BeanStock; bean++)
                 {
@@ -26,22 +41,20 @@ public class Program
                 }
                 BeanStock = 0;
             }
-
-            // check the plantation if we can harvest
-            foreach (CoffeePlant plant in Plantation)
-            {
-                // check the day
-
-                // harvest and put in the stock
-
-            }
         }
 
         Console.ReadKey();
+    }
+
+    // if the number is even (pair)
+    static public bool IsEven(int value)
+    {
+        return value % 2 == 0;
     }
 }
 
 public class CoffeePlant
 {
-
+    public int Age { get; set; }
+    public int Production { get; set; }
 }
